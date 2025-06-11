@@ -50,3 +50,5 @@ On Windows:
   - Value: your_db_password_here
 Done!
 
+### Step 5: Start mariaDB
+Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
