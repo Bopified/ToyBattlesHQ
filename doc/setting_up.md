@@ -16,7 +16,8 @@ This section configures your authentication server, which handles player logins.
 **Port**: The port used by the Auth Server, default is 13000.
 
 ### [MainServer_N]
-MainServer_1, MainServer_2, ..., up to MainServer_9
+Examples: MainServer_1, MainServer_2, ..., up to MainServer_9
+
 You can run multiple Main Servers, each handling player data, inventory, shops, trades, rooms, and more.
 
 **LocalIp**: Local IPv4 address of the machine it's running on. This is needed to differentiate multiple servers running in different machines.
