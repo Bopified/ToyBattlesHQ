@@ -9,13 +9,13 @@ That experience is one of the main reasons I decided to make this project open s
 
 I really hope this encourages more devs to get involved with the game and keep it alive in their own way.
 
-# Reason for open sourceness
+## Reason for open sourceness
 - Give an idea on how the emulator is written, and possibly inspire new people to create their own better version.
 - Learning purposes.
 - Make sure that the game stays alive even in the future.
 - Allow people to further enhance the game's possibilities.
 
-# Demonstration
+## Demonstration
 This is one of the first videos I ever nade around 2 years ago, at the first stages of this emulator:
 
 https://github.com/user-attachments/assets/24b7a12a-517d-42a9-9554-fe90d8a9f5a9
