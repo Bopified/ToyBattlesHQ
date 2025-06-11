@@ -5,6 +5,7 @@ A new `config.ini` file was now added inside the `Setup` folder (in the root dir
 
 ## 🔧 config.ini Configuration Guide
 This file contains all the key configuration values used by the servers (Auth, Main, Cast) and supporting components (database, client, website). Here's how to fill it out correctly:
+Note: the file is inside the `Setup` folder. It should already contain most of the things that will enable it to work for localhost (`127.0.0.1`).
 
 ### [AuthServer]
 This section configures your authentication server, which handles player logins.
