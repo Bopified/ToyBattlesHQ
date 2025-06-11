@@ -26,3 +26,6 @@ Examples:
 - https://www.youtube.com/watch?v=_P41fWD7Qag
 - https://www.youtube.com/watch?v=3xJT4yMjj6Q
 - https://www.youtube.com/watch?v=qme0okRUlwE
+
+## Next
+[1.2 Overview of the different projects (MainServer, CastServer, AuthServer, Common)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro2.md)
