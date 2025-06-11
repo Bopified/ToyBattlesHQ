@@ -34,14 +34,14 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [4.3 Config setup for multiple servers across different VPSs](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_multiple_vps.md)
 
 ### 5. 🗃️ Database
-- [5.1 Tour of database tables](https://example.com)
+- [5.1 Tour of database tables](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/database_tour.md)
 
 ### 6. 🌐 Website API
 - [6.1 Website API overview and communication with MainServer](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/website_info.md)
 
 ### 7. 🚀 Updater & Client Tools
 - [7.1 The Updater: How the launcher retrieves updates](https://example.com)
-- [7.2 Changing the client version (using the client version tool)](https://example.com)
+- [7.2 Changing the client version (using the client version tool)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_version_tool.md)
 - [7.3 Changing the CGD password (using the password tool)](https://example.com)
 
 ### 8. 🐞 Reporting Issues
