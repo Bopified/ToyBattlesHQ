@@ -20,7 +20,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [1.2 Overview of the different projects (MainServer, CastServer, AuthServer, Common)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro2.md)
 
 ### 2. 🔄 Version History
-- [2.1 Changelog from version 1.0 to version 2.0](https://example.com)
+- [2.1 Changelog from version 1.0 to version 2.0](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
 
 ### 3. ⚙️ Installation & Setup
 - [3.1 Requirements & Installation](https://example.com)
