@@ -66,3 +66,7 @@ This archive is essential for the Main Server — it contains key client data li
 
 Without it, the server won’t be able to function properly when handling anything related to (for example) game items, capsule info, etc. 
 So always make sure you’re using the most up-to-date and correctly unpacked version of `cgd.dip`.
+
+
+## Next
+[2.1 Changelog from version 1.0 to version 2.0](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
