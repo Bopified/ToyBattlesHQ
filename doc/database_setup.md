@@ -23,7 +23,7 @@ Once MariaDB is installed:
 - Run this command to create the database: `CREATE DATABASE microvolts-db;`
 
 ### Step 3: Import the Tables
-You’ve been provided with a file called `microvolts-db.` in the root directory. This file contains the entire database structure and necessary insertions. You can find it in the root directory.
+You’ve been provided with a file called `microvolts-db.`. This file contains the entire database structure and necessary insertions. You can find it in the root directory.
 
 To import it:
 #### Option A – Using Command Line
