@@ -10,7 +10,7 @@ Note: the file is inside the `Setup` folder. It should already contain most of t
 ### [AuthServer]
 This section configures your authentication server, which handles player logins.
 
-**LocalIp**: Your machine’s local IPv4 address (e.g., 192.168.x.x).
+**LocalIp**: Your machine’s local IPv4 address (e.g., 192.168.x.x). To find it, use `ipconfig` on a terminal. (Note: if you have services like RadminVPN, you may have to use their IP). 
 
 **Ip**: Your public IP or just 127.0.0.1 if everything runs locally.
 
