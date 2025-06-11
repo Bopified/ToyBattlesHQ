@@ -3,10 +3,14 @@
 A lot of things changed and the list is simply too big to fit in a page. I will try to focus on the most important aspects to give an idea how much work was put in the last year (thanks to the community who helped testing too, of course!)
 
 ## 2.1.1 Complete code refactoring
-The whole code base (Main, cast, auth servers and Common) were refactored. Version 1.0 had a lot of issues regarding mantainability, code readibility and lifetime issues related to how ASIO things were handled.
+One of the main goals of version 2.0 was to clean up the entire codebase — that includes the Main Server, Cast Server, Auth Server, and the Common library.
 
-### Code organization & readibility
-Version 2.0 provides a much better organized and readable code. This makes newcomers experience easier to grasp the whole code base, as the logic in version 1.0 was **really** too complicated.
+The code from version 1.0 worked, but it had a lot of problems when it came to maintainability and readability. It was messy in some places, hard to follow, and had some tricky lifetime issues, especially with how ASIO was used. It just wasn’t easy to work with, especially for anyone new coming into the project.
+
+### Code Organization & Readability
+Version 2.0 changes all that. Things are now much more organized, and the code is way easier to read. If you’re opening the project for the first time, it should be a lot more approachable now.
+
+In 1.0, the logic was often all over the place and pretty hard to understand without spending a lot of time digging. With this new version, I tried to make everything feel more structured and easier to follow, so it’s not just me who can work on this — but anyone who’s interested.
 
 ### Networking performance
 Version 2.0 offers better networking performance with ASIO. Also, most of the server handlers & session management was rewritten with optimization in mind. Many data strucutres were changed:
@@ -68,10 +72,16 @@ I also added a lot of new features in version 2.0!
 - Added capsule sale events, event missions start and end dates inside the database. The trade system can now be enabled by date as well.
  ...and so much more!
 
-## 2.1.3 Database changes
-Version 1.0 used SQLite. The new version 2.0 now uses MariaDB, which is much more flexible and serious for this project. 
+## Miscellaneous
+### 2.1.3 Database Changes
+Back in version 1.0, the emulator relied on SQLite — which worked, but wasn’t really ideal for a more serious setup. With version 2.0, everything has been moved over to MariaDB, which is a big step up in terms of flexibility and reliability.
 
-This means that the whole database operations were all refactored. And it also means that multiple servers can now use the same database!
+This switch meant a full refactor of how database operations are handled. The cool part? Now you can have multiple servers (Auth, Main, Cast, etc.) all sharing the same database — something that wasn’t really possible or safe before.
 
-## 2.1.4 Client Updater
-In version 2.0 I also decided to make the client updater open source. This means that you're now able to use this updater to force everyone to update their client with the latest content that you decide.
+### 2.1.4 Client Updater
+Another big change: the client updater is now open source. That means you can use it to make sure every player is running the latest version of your client. It gives you full control over pushing updates, whether it’s bug fixes, new content, or any other change you want players to have before they launch the game.
+
+### 2.1.5 External Admin Panel Support
+Version 2.0 also introduces support for external admin panels. In other words, the Main Server now has an API that allows communication with a website or web-based admin interface.
+
+Everything is protected with proper authentication — including user grades and JWT tokens — so only authorized users can access it. Through this system, you can do things like kick, ban, or mute players directly from your panel, without needing to log into the server manually. It’s all covered in the “Website API” chapter coming up.
