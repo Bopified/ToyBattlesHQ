@@ -25,6 +25,12 @@ Here’s how to get everything set up:
    - ⚠️ Important: Only Release mode is fully set up with the right paths. If you want to compile in Debug mode, you’ll need to manually copy over the paths from Release
 10. Once everything is configured, build the projects in this order: Common first, and then the servers right after (MainServer / AuthServer / CastServer).
 
+⚠️ Note: if your main server fails to compile with an error `python (...) generate_command_includes.py exited with code 1`:
+- right click on the main server => properties
+- Go to "Compilation Events"
+- change `python "$(ProjectDir)generate_command_includes.py"` to just `"$(ProjectDir)generate_command_includes.py"`
+- If this fix does not work for you, please open up a new Issue.
+
 The resulting .exe files will be placed in your project's x64 output folder.
 
 
