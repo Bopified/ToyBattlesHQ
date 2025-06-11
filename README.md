@@ -23,7 +23,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [2.1 Changelog from version 1.0 to version 2.0](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
 
 ### 3. ⚙️ Installation & Setup
-- [3.1 Requirements & Installation](https://example.com)
+- [3.1 Requirements & Installation](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
 - [3.2 Setting up the emulator](https://example.com)
 - [3.3 Setting up the database](https://example.com)
 - [3.4 Setting up the client](https://example.com)
