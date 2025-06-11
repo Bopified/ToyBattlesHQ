@@ -49,4 +49,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [8.1 How to create bug reports via GitHub Issues](https://example.com)
 
 ### 9. 🙌 Acknowledgements
-- [9.1 Credits and community contributions (thanks to the ToyBattles project)](https://example.com)
+- [9.1 Credits and community contributions](https://example.com)
+
+### 10. 🔮 Future steps
+- [What's next?](https://example.com)
