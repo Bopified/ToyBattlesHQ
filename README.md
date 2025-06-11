@@ -40,8 +40,13 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 ### 6. 🌐 Website API
 - [6.1 Website API overview and communication with MainServer](https://example.com)
 
-### 7. 🐞 Reporting Issues
-- [7.1 How to create bug reports via GitHub Issues](https://example.com)
+### 7. 🚀 Updater & Client Tools
+- [7.1 The Updater: How the launcher retrieves updates](https://example.com)
+- [7.2 Changing the client version (using the client version tool)](https://example.com)
+- [7.3 Changing the CGD password (using the password tool)](https://example.com)
 
-### 8. 🙌 Acknowledgements
-- [8.1 Credits and community contributions (thanks to the ToyBattles project)](https://example.com)
+### 8. 🐞 Reporting Issues
+- [8.1 How to create bug reports via GitHub Issues](https://example.com)
+
+### 9. 🙌 Acknowledgements
+- [9.1 Credits and community contributions (thanks to the ToyBattles project)](https://example.com)
