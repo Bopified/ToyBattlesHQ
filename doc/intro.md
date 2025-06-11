@@ -1,4 +1,4 @@
-# What is this project about?
+# 1.1 What is this project about?
 This is the first public server emulator for MicroVolts, fully written in C++.
 
 It all started about three years ago. I wanted to challenge myself, learn more about reverse engineering, and work on something that actually meant something to me. MicroVolts was a big part of my childhood, so I figured—why not try building an emulator for it?
