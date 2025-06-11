@@ -78,3 +78,7 @@ I’ll also provide example setup.ini files for different setups in later chapte
 - Single local server (for testing everything on one machine)
 - Single VPS server
 - Multiple regional VPS servers (e.g., NA, EU, ASIA)
+
+
+## Next
+[3.3 Setting up the database](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/database_setup.md)
