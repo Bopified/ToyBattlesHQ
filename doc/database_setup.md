@@ -6,6 +6,23 @@ Starting from version 2.0, I introduce MariaDB. This is much better since it all
 ## How to Set Up the MariaDB Database
 Before running the servers, you’ll need a MariaDB database properly configured with the right tables and data. Don’t worry — it’s not hard. Here's how to do it step by step:
 
+### Step 0 (Optional but recommended for an easy setup)
+- Find `my.ini` inside your MariaDB folder. (Usually it can be found in `"C:\Program Files\MariaDB 11.6\data\my.ini"`
+- Replace its contents with the following:
+```cpp
+[mysqld]
+skip-grant-tables
+datadir="C:/Program Files/MariaDB 11.6/data"
+port=3305
+innodb_buffer_pool_size=1967M
+
+[client]
+port=3305
+plugin-dir="C:/Program Files/MariaDB 11.6/lib/plugin"
+```
+
+Of course, make sure the paths are correct for you and that you have the necessary things installed (like innoDB).
+
 ### Step 1: Install MariaDB
 If you haven’t already installed MariaDB:
 
@@ -50,24 +67,8 @@ On Windows:
   - Value: your_db_password_here
 Done!
 
-### Step 5 (Optional but recommended for an easy setup)
-- Find `my.ini` inside your MariaDB folder. (Usually it can be found in `"C:\Program Files\MariaDB 11.6\data\my.ini"`
-- Replace its contents with the following:
-```cpp
-[mysqld]
-skip-grant-tables
-datadir="C:/Program Files/MariaDB 11.6/data"
-port=3305
-innodb_buffer_pool_size=1967M
 
-[client]
-port=3305
-plugin-dir="C:/Program Files/MariaDB 11.6/lib/plugin"
-```
-
-Of course, make sure the paths are correct for you and that you have the necessary things installed (like innoDB).
-
-### Step 6: Start mariaDB
+### Step 5: Start mariaDB
 Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
 
 
