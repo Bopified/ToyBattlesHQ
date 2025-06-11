@@ -49,7 +49,7 @@ To import it:
 
 #### Option B – Using GUI (e.g., HeidiSQL)
 - Open your database in the GUI
-- Open the SQL file microvolts-db.md
+- Open the SQL file `microvolts-db`
 - Run the whole script
 This will create all tables and insert initial data (like items, shop content, etc.)
 
