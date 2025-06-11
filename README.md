@@ -29,9 +29,9 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [3.4 Setting up the client](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_setup.md)
 
 ### 4. 🧪 Configuration Examples
-- [4.1 Config setup for localhost](https://example.com)
-- [4.2 Config setup for VPS](https://example.com)
-- [4.3 Config setup for multiple servers across different VPSs](https://example.com)
+- [4.1 Config setup for localhost](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_localhost.md)
+- [4.2 Config setup for VPS](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_vps.md)
+- [4.3 Config setup for multiple servers across different VPSs](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_multiple_vps.md)
 
 ### 5. 🗃️ Database
 - [5.1 Tour of database tables](https://example.com)
