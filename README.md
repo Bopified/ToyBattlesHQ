@@ -24,7 +24,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 
 ### 3. ⚙️ Installation & Setup
 - [3.1 Requirements & Installation](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
-- [3.2 Setting up the emulator](https://example.com)
+- [3.2 Setting up the emulator](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/setting_up.md)
 - [3.3 Setting up the database](https://example.com)
 - [3.4 Setting up the client](https://example.com)
 
