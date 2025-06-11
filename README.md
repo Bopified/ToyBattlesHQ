@@ -16,7 +16,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 ## Appendix
 
 ### 1. 📘 Project Overview
-- [1.1 What is this project about?](https://example.com)
+- [1.1 What is this project about?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
 - [1.2 Overview of the different projects (MainServer, CastServer, AuthServer, Common)](https://example.com)
 
 ### 2. 🔄 Version History
