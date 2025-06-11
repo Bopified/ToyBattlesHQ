@@ -85,3 +85,7 @@ Another big change: the client updater is now open source. That means you can us
 Version 2.0 also introduces support for external admin panels. In other words, the Main Server now has an API that allows communication with a website or web-based admin interface.
 
 Everything is protected with proper authentication — including user grades and JWT tokens — so only authorized users can access it. Through this system, you can do things like kick, ban, or mute players directly from your panel, without needing to log into the server manually. It’s all covered in the “Website API” chapter coming up.
+
+
+## Next
+[3.1 Requirements & Installation](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
