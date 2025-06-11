@@ -25,3 +25,7 @@ Here’s how to get everything set up:
 
 The resulting .exe files will be placed in your project's x64 output folder.
 
+
+## Next
+[3.2 Setting up the emulator](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/setting_up.md)
+
