@@ -14,8 +14,6 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 
 
 
-
-
 ## Appendix
 
 ### 1. 📘 Project Overview
@@ -29,6 +27,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [3.1 Requirements & Installation](https://example.com)
 - [3.2 Setting up the emulator](https://example.com)
 - [3.3 Setting up the database](https://example.com)
+- [3.4 Setting up the client](https://example.com)
 
 ### 4. 🧪 Configuration Examples
 - [4.1 Config setup for localhost](https://example.com)
@@ -38,8 +37,11 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 ### 5. 🗃️ Database
 - [5.1 Tour of database tables](https://example.com)
 
-### 6. 🐞 Reporting Issues
-- [6.1 How to create bug reports via GitHub Issues](https://example.com)
+### 6. 🌐 Website API
+- [6.1 Website API overview and communication with MainServer](https://example.com)
 
-### 7. 🙌 Acknowledgements
-- [7.1 Credits and community contributions (thanks to the ToyBattles project)](https://example.com)
+### 7. 🐞 Reporting Issues
+- [7.1 How to create bug reports via GitHub Issues](https://example.com)
+
+### 8. 🙌 Acknowledgements
+- [8.1 Credits and community contributions (thanks to the ToyBattles project)](https://example.com)
