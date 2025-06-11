@@ -69,3 +69,7 @@ Of course, make sure the paths are correct for you and that you have the necessa
 
 ### Step 6: Start mariaDB
 Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
+
+
+## Next
+[3.4 Setting up the client](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_setup.md)
