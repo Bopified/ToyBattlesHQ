@@ -15,6 +15,7 @@ This will allow your client to connect to your localhost (127.0.0.1) server.
 
 ✅ Note: This archive is pre-configured to work with the provided config.ini file. You don’t need to change the ports — everything should match up automatically.
 
+When done, make sure to replace the `cgd.dip` you have in your game folder / `data` with this one. (Take a backup of the original one just in case)
 
 ### Start the client
 To launch the game, you have two options:
@@ -34,3 +35,7 @@ If everything’s in place and running correctly, you should be able to log in u
 
 Username: test
 Password: test
+
+
+## Next
+[4.1 Config setup for localhost](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_localhost.md)
