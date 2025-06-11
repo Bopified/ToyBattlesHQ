@@ -25,7 +25,7 @@ You can run multiple Main Servers, each handling player data, inventory, shops, 
 
 **Ip**: Public IP or localhost (127.0.0.1)
 
-**Port**: Port the server listens on (e.g., 13005)
+**Port**: Port the server listens on (e.g., default 13005)
 
 **IpcPort**: Port used for internal server communication
 
@@ -39,7 +39,7 @@ These handle all in-match/gameplay logic like damage, position updates, match ru
 
 **Ip**: Public or loopback IP
 
-**Port**: Gameplay traffic port (e.g., 13006)
+**Port**: Gameplay traffic port (e.g., default 13006)
 
 **IpcPort**: Used for inter-server communication
 
@@ -50,7 +50,7 @@ Connection settings for your MariaDB database.
 
 **Ip**: Ip where the database is accessed, for example 127.0.0.1
 
-**Port**: Port of the DB (commonly 3306, here it's 3305)
+**Port**: Port of the DB (commonly 3306, here it's 3305, and I will provide a `my.ini` file in the next chapter that uses `3305`)
 
 **DatabaseName**: Name of the database (e.g., microvolts-db)
 
