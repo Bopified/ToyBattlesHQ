@@ -1,4 +1,4 @@
-# 4.1 Config setup for localhost
+# 4.1 Config.ini setup for localhost
 
 Assume that:
 - My local IP is 123.456.78.9
@@ -45,3 +45,7 @@ Port = 8080
 [Client]
 ClientVersion = 1.1.1
 ```
+
+
+## Next
+[4.2 Config setup for VPS](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_vps.md)
