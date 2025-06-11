@@ -37,7 +37,7 @@ These handle all in-match/gameplay logic like damage, position updates, match ru
 
 **LocalIp**: Local IP address
 
-**Ip**: Public or loopback IP
+**Ip**: Public or localhost IP (127.0.0.1)
 
 **Port**: Gameplay traffic port (e.g., default 13006)
 
