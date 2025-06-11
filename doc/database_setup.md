@@ -50,9 +50,3 @@ On Windows:
   - Value: your_db_password_here
 Done!
 
-### Step 5: Start the Server
-Once the database is ready and setup.ini is configured:
-
-- You should have built your servers in the steps before. If you haven't, do it now: build Common, then the Auth/Main/Cast servers. 
-- If the database is not reachable or misconfigured, you’ll see an error in the console — check your settings!
-- If everything was done correctly, you should now be able to login through the game's client.
