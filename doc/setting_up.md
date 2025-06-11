@@ -56,7 +56,7 @@ Connection settings for your MariaDB database.
 
 **Username**: Database user (e.g., root)
 
-**PasswordEnvironmentName:** Name of the environment variable (not the actual password) that holds the DB password — this improves security
+**PasswordEnvironmentName:** Name of the environment variable (not the actual password) that holds the DB password
 
 ### [Website]
 Defines the API endpoint used for admin panel or external requests.
