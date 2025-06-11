@@ -5,6 +5,8 @@ At the moment, this emulator runs only on Windows, and it requires either the MS
 
 Support for Linux and GCC is definitely on my radar, but that’s something planned for a future release — so stay tuned.
 
+You will also need >= Python 3.10.
+
 ## Installation
 The installation process is pretty much the same as it was in version 1.0 when it comes to setting up the servers. Most of the dependencies are handled through vcpkg, and a vcpkg.json file is already provided to help with that.
 
