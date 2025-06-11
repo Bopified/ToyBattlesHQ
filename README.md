@@ -37,7 +37,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [5.1 Tour of database tables](https://example.com)
 
 ### 6. 🌐 Website API
-- [6.1 Website API overview and communication with MainServer](https://example.com)
+- [6.1 Website API overview and communication with MainServer](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/website_info.md)
 
 ### 7. 🚀 Updater & Client Tools
 - [7.1 The Updater: How the launcher retrieves updates](https://example.com)
