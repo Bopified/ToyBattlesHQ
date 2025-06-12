@@ -49,11 +49,16 @@ exe = bin/Microvolts.exe
 Your update server (or website, or whenever you put all your update packages) needs this exact structure:
 ```cpp
 microvolts/
-├── patch.ini (latest version)
-├── Patcher/ (launcher updates - not used)
-└── ENG_NEWVERSION/ (one folder per version)
-    ├── microvolts-OLDVERSION-NEWVERSION.cab
-    └── microvolts-OLDVERSION-NEWVERSION.xml
+│
+├── patch.ini                # Current version manifest
+│
+├── Patcher/                 # Launcher update files (unused in this system)
+│   └── patchLauncher.ini    # Launcher version info
+│
+└── ENG_[NEW_VERSION]/       # Version-specific update package
+    │
+    ├── microvolts-[OLD]-[NEW].cab    # Compressed update files
+    └── microvolts-[OLD]-[NEW].xml    # Update manifest
 ```
 
 You can take a look at my public example [here](https://github.com/SoWeBegin/MVPtchTest/tree/main)
@@ -137,12 +142,19 @@ update_output/
 3. Final server structure should look like:
 ```py
 microvolts/
-├── patch.ini (updated)
+│
+├── patch.ini                # Contains all versions up to ENG_7.0.0.2
+│
 ├── Patcher/
-├── ENG_7.0.0.1/
+│   └── patchLauncher.ini
+│
+├── ENG_7.0.0.1/             # Update from 7.0.0.0 → 7.0.0.1
+│   │
 │   ├── microvolts-ENG_7.0.0.0-ENG_7.0.0.1.cab
 │   └── microvolts-ENG_7.0.0.0-ENG_7.0.0.1.xml
-└── ENG_7.0.0.2/
+│
+└── ENG_7.0.0.2/             # Update from 7.0.0.1 → 7.0.0.2
+    │
     ├── microvolts-ENG_7.0.0.1-ENG_7.0.0.2.cab
     └── microvolts-ENG_7.0.0.1-ENG_7.0.0.2.xml
 ```
