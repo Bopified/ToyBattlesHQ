@@ -61,14 +61,14 @@ You can take a look at my public example [here](https://github.com/SoWeBegin/MVP
 ### Update Package Components
 Each version folder contains two critical files:
 1. **.cab** File:
-- Contains all updated files
-- Files must have .new extension (e.g., MicroVolts.exe.new)
-- These will replace existing files during update
+ - Contains all updated files
+ - Files must have .new extension (e.g., MicroVolts.exe.new)
+ - These will replace existing files during update
 
 2. **.xml** File:
-- Lists all updated files and their checksums
-- Uses ADLER32 checksum algorithm
-- Specifies file locations
+ - Lists all updated files and their checksums
+ - Uses ADLER32 checksum algorithm
+ - Specifies file locations
 
 Example:
 ```xml
