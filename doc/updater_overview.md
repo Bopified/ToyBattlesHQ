@@ -51,7 +51,7 @@ Your update server (or website, or whenever you put all your update packages) ne
 microvolts/
 ├── patch.ini (latest version)
 ├── Patcher/ (launcher updates - not used)
-└── ENG_VERSION_NUMBER/ (one folder per version)
+└── ENG_NEWVERSION/ (one folder per version)
     ├── microvolts-OLDVERSION-NEWVERSION.cab
     └── microvolts-OLDVERSION-NEWVERSION.xml
 ```
