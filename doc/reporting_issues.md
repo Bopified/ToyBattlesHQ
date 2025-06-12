@@ -56,3 +56,7 @@ Be sure your PR references the issue number (e.g. `Fixes #42`) so everything sta
 ---
 
 Thanks again for helping improve the project! 🚀
+
+
+## Next
+[9.1 Credits and community contributions](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/thanks.md)
