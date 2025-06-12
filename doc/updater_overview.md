@@ -57,8 +57,8 @@ microvolts/
 │
 └── ENG_[NEW_VERSION]/       # Version-specific update package
     │
-    ├── microvolts-[OLD]-[NEW].cab    # Compressed update files
-    └── microvolts-[OLD]-[NEW].xml    # Update manifest
+    ├── microvolts-[OLD_VERSION]-[NEW_VERSION].cab    # Compressed update files
+    └── microvolts-[OLD_VERSION]-[NEW_VERSION].xml    # Update manifest
 ```
 
 You can take a look at my public example [here](https://github.com/SoWeBegin/MVPtchTest/tree/main)
