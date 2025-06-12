@@ -29,11 +29,13 @@ Only the `[update]` section is relevant for our purposes.
 
 ### `patch.ini`
 Tracks all client versions (newest to oldest):
+```
 [patch]
 version = ENG_7.0.0.2
 version1 = ENG_7.0.0.1
 version2 = ENG_7.0.0.0
 exe = bin/Microvolts.exe
+```
 
 **Important Notes:**
 - Versions are listed newest to oldest
