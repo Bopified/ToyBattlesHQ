@@ -166,3 +166,10 @@ Before deploying:
 - Confirm .cab contains all changed files
 - Check XML checksums match the files
 - Ensure previous update packages remain available in the server
+
+
+
+
+
+## Next
+[7.2 Changing the client version (using the client version tool)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_version_tool.md)
