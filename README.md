@@ -48,7 +48,7 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [8.1 How to create bug reports via GitHub Issues](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/reporting_issues.md)
 
 ### 9. 🙌 Acknowledgements
-- [9.1 Credits and community contributions](https://example.com)
+- [9.1 Credits and community contributions](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/thanks.md)
 
 ### 10. 🔮 Future steps
 - [What's next?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/whats_next.md)
