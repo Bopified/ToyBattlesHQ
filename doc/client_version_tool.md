@@ -15,3 +15,6 @@ The tool can be found inside `Client/VersionPatcher.cpp`. All you need is to com
 
 Once you have the executable ready, start it and it will prompt you to enter the full path where your game client (`Microvolts.exe` or `ToyBattles.exe`) is, and the new version you want it to use.
 
+
+## Next
+[7.3 Changing the CGD password (using the password tool)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/password_updater.md)
