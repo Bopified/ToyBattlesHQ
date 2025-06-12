@@ -19,6 +19,9 @@ A big thanks goes to the whole ToyBattles team that made the whole project possi
 
 I'm sure that the community enjoyed what we made available to everyone, completely **for free**!
 
+Another honorable mention is one of my friends that helped me start this project. Without him, this project would likely never come to life. 
+He's helped me learn the essential skills & how reverse engineering in general worked.
+**A big thanks goes to them!**
 
 ### Contributors
 I did not forget about them!
