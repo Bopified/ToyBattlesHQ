@@ -13,7 +13,7 @@ Starting with version 2.0, the Microvolts updater tool is available for creating
 
 The system supports two approaches:
 - **Full updates** (complete file replacements) - *This is what our tool creates*
-- Partial updates (not supported by our tool)
+- **Partial updates** (not supported by our tool)
 
 ## Configuration Files 
 ### `updateinfo.ini`
