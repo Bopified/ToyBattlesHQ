@@ -1,4 +1,4 @@
-# 🛠️ How to Report Issues
+# 🛠️ 8.1 How to create bug reports via GitHub Issues
 
 If you’ve found something wrong with the server emulator — whether it’s a bug, an exploit, or anything else — thank you for taking the time to report it! This helps improve the project for everyone. Please read below to make sure your report is clear and useful.
 
