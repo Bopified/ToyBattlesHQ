@@ -62,3 +62,6 @@ Requires:
 - `Crypt.h` (can be found inside the `Client` folder)
 - The utility can be found inside `Client/CgdPasswordUpdater.cpp`
 
+
+## Next
+[8.1 How to create bug reports via GitHub Issues](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/reporting_issues.md)
