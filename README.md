@@ -51,4 +51,4 @@ The entire project has been thoroughly refactored to improve clarity, maintainab
 - [9.1 Credits and community contributions](https://example.com)
 
 ### 10. 🔮 Future steps
-- [What's next?](https://example.com)
+- [What's next?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/whats_next.md)
