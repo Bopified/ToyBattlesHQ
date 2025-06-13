@@ -75,6 +75,8 @@ You can configure up to 9 Main Servers and 9 Cast Servers.
 
 If anything is misconfigured (invalid IPs, missing ports, database issues, etc.), the server will print an error message on startup — so always check the console output when launching.
 
+**Make sure that the ports you use for the emulator aren't used by other services running in your OS.**
+
 I’ll also provide example setup.ini files for different setups in later chapters:
 
 - Single local server (for testing everything on one machine)
