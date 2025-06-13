@@ -37,6 +37,7 @@
 - multiple-kill hacks / "room rape" (need to define how)
 - resending the kill packet (hack where you kill a chosen target multiple times) (need to define how)
 -- may be "fixed" by not allowing identical packets in a window of ~5 minutes (unless header-only)
+- Maybe try to flag range hacks? (Could have false positives, TBA?)
 
 ## Possible general solutions
 - Packet rate limit (issue: player position has many natural packets)
