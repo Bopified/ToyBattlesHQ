@@ -25,7 +25,7 @@ He's helped me learn the essential skills & how reverse engineering in general w
 
 ### Contributors
 I did not forget about them!
-Special mentions are needed, shotout to:
+Special mentions are needed, shoutout to:
 - [@avlad](https://github.com/avlad171) - (Linux support, CMake => Temporarily removed) & Core stuff
 - [@TipicoDev](https://github.com/TipicoDev) - some Core stuff, CGD archive tools
 - [@sw1ndle777](https://github.com/sw1ndle777) - general help & exploit fixes
