@@ -118,6 +118,7 @@ namespace Main
 			}
 			else if (Main::Classes::Room* room = roomsManager.getRoomByNumber(session->getPlayer().getRoomNumber()))
 			{
+				if (!room->isHost(session->getAccountInfo().uniqueId)) return; // only the host should send this packet, prevent lvl up exploits
 				MC::ClientEndingMatchHeader endMatchHeader = Main::Details::parseData<MC::ClientEndingMatchHeader>(request);
 
 				if (room->getRoomNumber() >= Common::Constants::clanRoomNumberStart)
