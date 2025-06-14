@@ -166,7 +166,7 @@ Before deploying:
 - Confirm .cab contains all changed files
 - Check XML checksums match the files
 - Ensure previous update packages remain available in the server
-
+- Ensure that your cgd.dip's `patchversion.cdb` inside the `ENG` folder has the latest version, identically as the last one inside your `patch.ini` file. Otherwise your launcher will complain!
 
 
 
