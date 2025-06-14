@@ -31,11 +31,21 @@
   -- Possible fix: check that both targets aren't in the same team
 
 ### Probably? possible cheats to "detect" server side
-- blatant speed hacking
-- jump hacks? (may have false positives with normal jumps from high places)
-- fly hacks? (may have same false positives)
-- multiple-kill hacks / "room rape" (need to define how)
-- resending the kill packet (hack where you kill a chosen target multiple times) (need to define how)
+#### blatant speed hacking
+Parameters needed: SessionID, player position
+
+#### jump hacks? (may have false positives with normal jumps from high places)
+Parameters needed: SessionID, player position
+
+#### fly hacks? (may have same false positives)
+Parameters needed: SessionID, player position
+
+#### multiple-kill hacks / "room rape" (need to define how)
+Parameters needed: SessionID, player kill action => some how we need to check time passed since last kill action to check if there are multiple kill actions in a very short period
+
+#### resending the kill packet (hack where you kill a chosen target multiple times) (need to define how)
+Parameters needed: SessionID, not sure what else...
+
 -- may be "fixed" by not allowing identical packets in a window of ~5 minutes (unless header-only)
 - Maybe try to flag range hacks? (Could have false positives, TBA?)
 - Maybe try to track sniper & rifle accuracy if possible?
