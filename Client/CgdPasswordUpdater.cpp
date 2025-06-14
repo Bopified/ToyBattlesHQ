@@ -1,3 +1,5 @@
+
+
 #include <vector>
 #include <string>
 #include <iostream>
@@ -109,7 +111,7 @@ std::optional<std::streamoff> findDecryptedPasswordOffset(const std::string& exe
         snprintf(hex, sizeof(hex), "%02X", byte);
         encryptedHexStr += hex;
     }
-    return findEncryptedPasswordOffset(exePath, encryptedHexStr);  
+    return findEncryptedPasswordOffset(exePath, encryptedHexStr);
 }
 
 void patchStringInBinary(const std::string& exePath, const std::string& outputPath,
@@ -136,9 +138,9 @@ void patchStringInBinary(const std::string& exePath, const std::string& outputPa
 
     std::string password = newString;
 
-    std::string part1 = password.substr(0, 16);  
-    std::string part2 = password.substr(16, 10); 
-    part2.resize(16, '\0'); 
+    std::string part1 = password.substr(0, 16);
+    std::string part2 = password.substr(16, 10);
+    part2.resize(16, '\0');
 
     std::vector<unsigned char> encryptedPart1(part1.begin(), part1.end());
     std::vector<unsigned char> encryptedPart2(part2.begin(), part2.end());
@@ -163,6 +165,7 @@ void patchStringInBinary(const std::string& exePath, const std::string& outputPa
     std::cout << encryptedHexStr << '\n';
 
     std::memcpy(&binaryContent[offset], encryptedHexStr.c_str(), encryptedHexStr.size());
+    std::memcpy(&binaryContent[0xc6e658], encryptedHexStr.c_str(), encryptedHexStr.size()); // for shotgun.exe
 
     std::ofstream outputFile(outputPath, std::ios::binary);
     if (!outputFile) {
@@ -280,7 +283,7 @@ int main() {
             std::string offsetStr = command.substr(26, firstSpace - 26);
             std::streamoff offset = 0;
             try {
-                offset = std::stoll(offsetStr);  
+                offset = std::stoll(offsetStr);
             }
             catch (const std::invalid_argument& e) {
                 std::cerr << ORANGE << "Error: Invalid offset format. Could not convert to number." << RESET;
@@ -313,4 +316,6 @@ int main() {
         }
     }
 }
+
+
 
