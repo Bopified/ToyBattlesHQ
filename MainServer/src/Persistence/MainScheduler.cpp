@@ -43,6 +43,7 @@ namespace Main
 
         void  MainScheduler::persist()
         {
+            std::unique_lock<std::mutex> lock(m_callbacksMutex);
             for (const auto& [accountId, callbacks] : m_databaseCallbacksIncremental)
             {
                 for (const auto& [updateType, callback] : callbacks)
@@ -66,6 +67,7 @@ namespace Main
 
         void MainScheduler::persistFor(std::uint32_t accountId)
         {
+            std::unique_lock<std::mutex> lock(m_callbacksMutex);
             for (const auto& [updateType, callback] : m_databaseCallbacksIncremental[accountId])
             {
                 callback();
@@ -82,4 +84,3 @@ namespace Main
         }
     };
 }
-
