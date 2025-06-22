@@ -46,6 +46,7 @@ namespace Main
             std::unordered_map<std::uint32_t, std::map<std::size_t, std::function<void()>>> m_databaseCallbacks{};
             std::unordered_map<std::uint32_t, std::map<std::size_t, std::function<void()>>> m_databaseCallbacksIncremental{};
             std::size_t m_incrementalDifferentiationKey = 0;
+            std::mutex m_callbacksMutex;
 
 
         public:
@@ -56,12 +57,14 @@ namespace Main
             template<typename Function, typename... Args>
             void addCallback(const std::source_location& loc, std::uint32_t accountId, std::size_t differentiationKey, Function databaseMemberFunction, Args&&... args)
             {
+                std::unique_lock<std::mutex> lock(m_callbacksMutex);
                 m_databaseCallbacks[accountId][differentiationKey] = std::bind(databaseMemberFunction, &m_database, std::forward<Args>(args)...);
             }
 
             template <typename Function, typename... Args>
             void addRepetitiveCallback(const std::source_location& loc, std::uint32_t accountId, Function databaseMemberFunction, Args&&... args)
             {
+                std::unique_lock<std::mutex> lock(m_callbacksMutex);
                 m_databaseCallbacksIncremental[accountId][++m_incrementalDifferentiationKey] =
                     [this, databaseMemberFunction, &loc, ...args = std::forward<Args>(args)]() mutable {
                         std::invoke(databaseMemberFunction, m_database, std::forward<decltype(args)>(args)...);
