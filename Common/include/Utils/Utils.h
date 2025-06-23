@@ -93,6 +93,14 @@ namespace Common
 			if (entry.si_acce_C != -1) itemTypes.push_back(Common::Enums::ACC_WAIST); 
 			return itemTypes;
 		}
+
+		inline std::uint64_t getCurrentTimestampMs()
+		{
+			using namespace std::chrono;
+			return static_cast<std::uint64_t>(
+				duration_cast<milliseconds>(system_clock::now().time_since_epoch()).count()
+				);
+		}
 	}
 }
 

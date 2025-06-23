@@ -32,8 +32,8 @@ namespace Common
 				{
 					if (entries.contains(value.getId())) 
 					{
-						Utils::Logger::log("Duplicate key found in cached CDB entries: " + std::to_string(value.getId()) + ", T = " + typeid(T).name(), 
-							Utils::LogType::Warning);
+						::Utils::Logger::log("Duplicate key found in cached CDB entries: " + std::to_string(value.getId()) + ", T = " + typeid(T).name(), 
+							::Utils::LogType::Warning);
 					}
 					entries[value.getId()] = value;
 				}

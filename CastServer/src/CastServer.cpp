@@ -8,11 +8,13 @@
 namespace Cast
 {
 
-	CastServer::CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId)
+	CastServer::CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId,
+		  Ac::AntiCheatManager& antiCheat)
 		: m_io_context{ io_context }
 		, m_acceptor{ io_context, tcp::endpoint(asio::ip::address::from_string(serverIp), port) }
 		, m_serverId{ serverId }
 		, m_mainServerAcceptor{ io_context, tcp::endpoint(asio::ip::address::from_string(Common::Utils::SetupParser::getInstance().getSelfCastServerInfo().ip), mainPort)}
+		, m_acManager{ antiCheat }
 	{
 		namespace CN = Common::Network;
 		using namespace Cast::Network;
@@ -84,7 +86,8 @@ namespace Cast
 			});
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(281, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerPosition(request, session, m_roomsManager, m_serverId, m_sessionsManager); });
+			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerPosition(request, session, m_roomsManager, m_serverId, m_sessionsManager,
+				m_acManager); });
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(253, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handleCrash(request, session, m_roomsManager, m_serverId); });

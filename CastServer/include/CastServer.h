@@ -8,6 +8,8 @@
 #include "Classes/RoomsManager.h"
 #include "Network/SessionsManager.h"
 
+#include <AntiCheat/AntiCheat.h>
+
 namespace Cast
 {
 	using tcp = asio::ip::tcp;
@@ -26,8 +28,11 @@ namespace Cast
 		tcp::acceptor m_mainServerAcceptor;
 		std::optional<tcp::socket> m_mainSocket;
 
+		Ac::AntiCheatManager& m_acManager;
+
 	public:
-		CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId);
+		CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId,
+			Ac::AntiCheatManager& ac);
 		void asyncAccept();
 		void asyncAcceptMainServer();
 	};

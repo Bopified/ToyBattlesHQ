@@ -7,14 +7,18 @@
 #include "../Structures/SuicideStruct.h"
 
 #include "Utils/Logger.h"
+#include "AntiCheat/AntiCheat.h"
+#include "AntiCheat/Event.h"
+#include "../Utils/Utilities.h"
+#include <Utils/Utils.h>
 
 namespace Cast
 {
     namespace Handlers
     {
         inline void handlePlayerPosition(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session,
-            Cast::Classes::RoomsManager& roomsManager,
-            std::uint32_t serverId, Cast::Network::SessionsManager& sm)
+            Cast::Classes::RoomsManager& roomsManager, std::uint32_t serverId, Cast::Network::SessionsManager& sm,
+            Ac::AntiCheatManager& acManager)
         {
             using namespace Cast::Structures;
 
@@ -38,7 +42,17 @@ namespace Cast
                     room->m_redAssassinPos = playerPositionFromClient.position;;
                 }
             }
+            else
+            {
+                acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(session, 
+                    Common::Utils::getCurrentTimestampMs(), 14, 1000, "Speed hack (Cheat Engine)"));
+            }
 
+            /*
+            std::cout << "X: " << playerPositionFromClient.position.positionX << ", " 
+                << "Y: " << playerPositionFromClient.position.positionY << ", "
+                << "Z: " << playerPositionFromClient.position.positionZ << "\n";
+*/
             static Common::Network::UnecryptedPacket response{ 1440, 322, 1 };
             response.setCommand(322, 0, 0, 1);
             const auto fullSize = request.getFullSize();

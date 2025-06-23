@@ -7,6 +7,7 @@
 #include "../include/ConstantDatabase/CdbSingleton.h"
 #include "../include/ConstantDatabase/Structures/CdbMapInfo.h"
 #include <Utils/SetupParser.h>
+#include <AntiCheat/AntiCheat.h>
 
 
 void printInitialInformation()
@@ -35,7 +36,9 @@ int main()
 		parsedServerInfo.ipcPort, parsedServerInfo.serverNumber),
 		Utils::LogType::Normal);
 
-	Cast::CastServer srv(io_context, parsedServerInfo.ip, parsedServerInfo.port, parsedServerInfo.ipcPort, parsedServerInfo.serverNumber);
+	Ac::AntiCheatManager ac;
+	Cast::CastServer srv(io_context, parsedServerInfo.ip, parsedServerInfo.port, parsedServerInfo.ipcPort, parsedServerInfo.serverNumber,
+		ac);
 
 	srv.asyncAccept();
 	srv.asyncAcceptMainServer();
