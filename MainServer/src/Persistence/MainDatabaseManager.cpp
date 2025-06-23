@@ -3082,8 +3082,13 @@ namespace Main
                     mailbox.accountId = res->getInt("accountId");
                     mailbox.timestamp = res->getInt("timestamp");
                     mailbox.hasBeenRead = !res->getBoolean("isNew");
-                    std::memcpy(mailbox.nickname, res->getString("nickname").c_str(), Common::Constants::maxNicknameSize);
-                    std::memcpy(mailbox.message, res->getString("message").c_str(), Common::Constants::maxMailboxMessage);
+                    const std::string nicknameStr = res->getString("nickname").c_str();
+                    std::memset(mailbox.nickname, 0, sizeof(mailbox.nickname));
+                    std::memcpy(mailbox.nickname, nicknameStr.c_str(), std::min(nicknameStr.size(), sizeof(mailbox.nickname) - 1));
+
+                    const std::string messageStr = res->getString("message").c_str();
+                    std::memset(mailbox.message, 0, sizeof(mailbox.message));
+                    std::memcpy(mailbox.message, messageStr.c_str(), std::min(messageStr.size(), sizeof(mailbox.message) - 1));
 
                     if (res->getBoolean("sent"))
                         sentMailboxes.push_back(mailbox);
