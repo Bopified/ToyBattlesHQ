@@ -31,9 +31,15 @@
   -- Possible fix: check that both targets aren't in the same team
 
 ### Probably? possible cheats to "detect" server side
-#### blatant speed hacking
+#### blatant speed hacking (example: cheat engine builtin speed hack)
 Parameters needed: SessionID, player position
 
+#### general packet flooding
+Examples:
+- room rape
+- explosives flooding
+- tba
+  
 #### jump hacks? (may have false positives with normal jumps from high places)
 Parameters needed: SessionID, player position
 
