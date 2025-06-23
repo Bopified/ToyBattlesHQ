@@ -51,7 +51,8 @@ namespace Cast
 
 		// Room creation
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(277, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {	m_roomsManager.addRoom(std::make_shared<Cast::Classes::Room>(session->getId(), session), session->getId()); });
+			std::shared_ptr<Cast::Network::Session> session) {	m_roomsManager.addRoom(std::make_shared<Cast::Classes::Room>(session->getId(), session), 
+				session->getId()); });
 
 		// Leaving a room
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(279, [&](const Common::Network::UnecryptedPacket& request,
@@ -72,6 +73,12 @@ namespace Cast
 		// Explosives
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(272, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) {
+
+				// TODO: This packet is always from the host, need to take SEID from the data and find the actual target who shot the explosive
+				// in order for AC to work correctly here.
+				m_acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(session,
+				   Common::Utils::getCurrentTimestampMs(), 6, 1000, "Bazooka/Grenade flooding", 272));
+
 				m_roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 			});
 

@@ -18,7 +18,8 @@ namespace Ac
             PacketFloodingEvent event;
         };
 
-        std::unordered_map<uint32_t, std::deque<PacketRecord>> playerData;
+        // [SEID] [ [PacketId][PreviousPackets] ]
+        std::unordered_map<uint32_t, std::unordered_map<uint32_t, std::deque<PacketRecord>>> playerData;
 
         std::string floatToString(float value, int precision = 2)
         {
@@ -31,22 +32,26 @@ namespace Ac
         std::optional<ACFlag> processEvent(const PacketFloodingEvent& event) override
         {
             const std::uint64_t serverTime = Common::Utils::getCurrentTimestampMs();
-            auto& records = playerData[event.session->getId()];
-            records.push_back({ serverTime, event });
+            auto& packetRecords = playerData[event.session->getId()][event.packetId];
+            packetRecords.push_back({ serverTime, event });
 
-            while (!records.empty() && (serverTime - records.front().serverTime) > event.analysisWindowMs)
+            while (!packetRecords.empty() &&
+                (serverTime - packetRecords.front().serverTime) > event.analysisWindowMs)
             {
-                records.pop_front();
+                packetRecords.pop_front();
             }
 
-            if (records.size() > event.maxPacketsPerSecond)
+            if (packetRecords.size() > event.maxPacketsPerSecond)
             {
-                const ACFlag flag{ event.session->getId(), event.floodingType, "Packet flood: " + std::to_string(records.size()) +
-                    " packets in " + floatToString((records.back().serverTime - records.front().serverTime) / 1000.0f) +
-                    "s (max " + std::to_string(event.maxPacketsPerSecond) + ")" };
-                records.clear();
-
-                event.session->closeSocket();
+                const ACFlag flag{
+                    event.session->getId(),
+                    event.floodingType,
+                    "Packet flood (ID " + std::to_string(event.packetId) + "): " +
+                    std::to_string(packetRecords.size()) + " packets in " +
+                    floatToString((packetRecords.back().serverTime - packetRecords.front().serverTime) / 1000.0f) +
+                    "s (max " + std::to_string(event.maxPacketsPerSecond) + ")"
+                };
+                packetRecords.clear();
                 return flag;
             }
 

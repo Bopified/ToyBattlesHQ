@@ -37,11 +37,12 @@ namespace Ac
         std::size_t maxPacketsPerSecond;
         std::uint64_t analysisWindowMs;
         std::string floodingType;
+        std::uint32_t packetId;
 
         PacketFloodingEvent(std::shared_ptr<Common::Network::Session> session_, std::uint64_t timestamp_, std::size_t maxPacketsPerS_,
-            std::uint64_t analysisWindowMs_, const std::string& type_)
+            std::uint64_t analysisWindowMs_, const std::string& type_, std::uint32_t packetId_)
             : session(session_), timestamp(timestamp_), maxPacketsPerSecond(maxPacketsPerS_), analysisWindowMs(analysisWindowMs_),
-            floodingType(type_)
+            floodingType(type_), packetId(packetId_)
         {
             type = Type::PacketFlooding;
         }

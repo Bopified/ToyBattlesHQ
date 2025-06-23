@@ -44,15 +44,10 @@ namespace Cast
             }
             else
             {
-                acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(session, 
-                    Common::Utils::getCurrentTimestampMs(), 14, 1000, "Speed hack (Cheat Engine)"));
+               // acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(session, 
+                 //   Common::Utils::getCurrentTimestampMs(), 14, 1000, "Speed hack (Cheat Engine)", 281));
             }
 
-            /*
-            std::cout << "X: " << playerPositionFromClient.position.positionX << ", " 
-                << "Y: " << playerPositionFromClient.position.positionY << ", "
-                << "Z: " << playerPositionFromClient.position.positionZ << "\n";
-*/
             static Common::Network::UnecryptedPacket response{ 1440, 322, 1 };
             response.setCommand(322, 0, 0, 1);
             const auto fullSize = request.getFullSize();
