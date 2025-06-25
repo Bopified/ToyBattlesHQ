@@ -389,7 +389,7 @@ namespace Main
 				m_sessionsManager.setClansManager(&m_clansManager);
 
 				auto client = std::make_shared<Main::Network::Session>(m_scheduler, std::move(*MainServer::m_socket),
-					std::bind(&Main::Network::SessionsManager::removeSession, &m_sessionsManager, std::placeholders::_1));
+					std::bind(&Main::Network::SessionsManager::removeSession, &m_sessionsManager, std::placeholders::_1), m_acManager);
 
 				client->sendConnectionACK(Common::Enums::MAIN_SERVER);
 				asyncAccept();

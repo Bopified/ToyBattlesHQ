@@ -119,7 +119,7 @@ namespace Common
 						onPacket(data);
 						if (m_reader.empty()) break;
 
-						auto newSize = m_reader.size() - header.getSize();
+						const auto newSize = m_reader.size() - header.getSize();
 						std::memmove(m_reader.data(), m_reader.data() + header.getSize(), newSize);
 						m_reader.resize(newSize);
 					}

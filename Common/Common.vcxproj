@@ -22,6 +22,7 @@
     <ClInclude Include="include\AntiCheat\AcEventQueue.h" />
     <ClInclude Include="include\AntiCheat\AntiCheat.h" />
     <ClInclude Include="include\AntiCheat\Checks\PacketFloodingCheck.h" />
+    <ClInclude Include="include\AntiCheat\Checks\PacketReplicaCheck.h" />
     <ClInclude Include="include\AntiCheat\Event.h" />
     <ClInclude Include="include\AntiCheat\Interfaces.h" />
     <ClInclude Include="include\ConstantDatabase\Cdb.h" />

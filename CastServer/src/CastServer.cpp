@@ -8,13 +8,11 @@
 namespace Cast
 {
 
-	CastServer::CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId,
-		  Ac::AntiCheatManager& antiCheat)
+	CastServer::CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId)
 		: m_io_context{ io_context }
 		, m_acceptor{ io_context, tcp::endpoint(asio::ip::address::from_string(serverIp), port) }
 		, m_serverId{ serverId }
 		, m_mainServerAcceptor{ io_context, tcp::endpoint(asio::ip::address::from_string(Common::Utils::SetupParser::getInstance().getSelfCastServerInfo().ip), mainPort)}
-		, m_acManager{ antiCheat }
 	{
 		namespace CN = Common::Network;
 		using namespace Cast::Network;
@@ -76,8 +74,7 @@ namespace Cast
 				const auto targetUid = Cast::Details::parseDataFromEnd<Main::Structures::UniqueId>(request, 4);
 				if (auto targetSession = m_sessionsManager.getSession(targetUid.session))
 				{
-					m_acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(targetSession,
-						Common::Utils::getCurrentTimestampMs(), 5, 1000, "Bazooka/Grenade flooding", 272));
+					m_acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(targetSession, 5, 1000, "Bazooka/Grenade flooding", 272));
 				}
 				m_roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 			});

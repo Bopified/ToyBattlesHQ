@@ -36,9 +36,7 @@ int main()
 		parsedServerInfo.ipcPort, parsedServerInfo.serverNumber),
 		Utils::LogType::Normal);
 
-	Ac::AntiCheatManager ac;
-	Cast::CastServer srv(io_context, parsedServerInfo.ip, parsedServerInfo.port, parsedServerInfo.ipcPort, parsedServerInfo.serverNumber,
-		ac);
+	Cast::CastServer srv(io_context, parsedServerInfo.ip, parsedServerInfo.port, parsedServerInfo.ipcPort, parsedServerInfo.serverNumber);
 
 	srv.asyncAccept();
 	srv.asyncAcceptMainServer();

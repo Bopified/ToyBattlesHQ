@@ -15,6 +15,8 @@
 #include <boost/asio/io_context.hpp>
 #include <boost/asio.hpp>
 
+#include <AntiCheat/AntiCheat.h>
+
 namespace Main
 {
 	using tcp = asio::ip::tcp;
@@ -58,6 +60,9 @@ namespace Main
 		Main::Structures::EventMissionInfo m_tradeSystemEvent;
 		Main::Structures::CapsuleListDatabase m_capsuleListDb;
 		Main::Structures::ExpMpBonusInfo m_expMpEvent;
+
+		// Ac
+		Ac::AntiCheatManager m_acManager;
 
 	public:
 		MainServer(ioContext& io_context, boost::asio::io_context& boost_io_context, const Common::Utils::MainSetup& mainSetup, std::uint32_t websitePort);

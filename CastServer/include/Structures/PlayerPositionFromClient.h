@@ -66,11 +66,6 @@ namespace Cast
                 if (isNaNOrInfinity(halfToFloat(positionX)) || isNaNOrInfinity(halfToFloat(positionY)) || isNaNOrInfinity(halfToFloat(positionZ))) return true;
                 return isBadPosition(positionX) || isBadPosition(positionY) || isBadPosition(positionZ);
             }
-
-            Ac::Position toAcPosition() const noexcept
-            {
-                return Ac::Position{ positionX, positionY, positionZ };
-            }
         };
 #pragma pack(pop)
 

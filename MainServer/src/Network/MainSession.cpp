@@ -29,9 +29,11 @@ namespace Main
 {
 	namespace Network
 	{
-		Session::Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct)
+		Session::Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct,
+			Ac::AntiCheatManager& ac)
 			: Common::Network::Session{ std::move(socket), fnct }
 			, m_scheduler{ scheduler }
+			, m_acManager{ ac }
 		{
 			m_packet.setTcpHeader(m_id, Common::Enums::USER_ENCRYPTION);
 		}
@@ -56,6 +58,15 @@ namespace Main
 			
 			Common::Network::Session::callbacks<Common::Network::PacketType::ENCRYPTED, Main::Network::Session>[callbackNum](incomingPacket, 
 				std::static_pointer_cast<Main::Network::Session>(shared_from_this()));
+
+			Common::Protocol::TcpHeader header;
+			Common::Cryptography::Crypt cryptography;
+			cryptography.KeySetup(0);
+			cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, sizeof(Common::Protocol::TcpHeader));
+			if (header.getCrypt() && header.getSize() > 8)
+			{
+				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(shared_from_this(), callbackNum, data));
+			}
 		}
 
 		// For many packets, the clients assumes certain extras and logic:

@@ -119,8 +119,7 @@ namespace Cast
 						}
 						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
 						{
-							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession,
-								Common::Utils::getCurrentTimestampMs(), 4, 1000, "Room Rape (flooding)", 265));
+							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession, 4, 1000, "Room Rape (flooding)", 265));
 						}
 					}
 				}
@@ -170,8 +169,7 @@ namespace Cast
 						}
 						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
 						{
-							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession,
-								Common::Utils::getCurrentTimestampMs(), 4, 1000, "Room Rape (flooding)", 265));
+							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession, 4, 1000, "Room Rape (flooding)", 265));
 						}
 					}
 				}

@@ -14,34 +14,22 @@ namespace Ac
         { 
             PlayerPosition, 
             PlayerKill, 
-            PacketFlooding 
+            PacketFlooding,
+            PacketReplication
         } type;
-    };
-
-    struct Position
-    {
-        DirectX::PackedVector::HALF positionX{};
-        DirectX::PackedVector::HALF positionY{};
-        DirectX::PackedVector::HALF positionZ{};
-
-        Position(DirectX::PackedVector::HALF x, DirectX::PackedVector::HALF y, DirectX::PackedVector::HALF z)
-            : positionX{ x }, positionY{ y }, positionZ{ z }
-        {
-        }
     };
 
     struct PacketFloodingEvent : ACEvent
     {
         std::shared_ptr<Common::Network::Session> session;
-        std::uint64_t timestamp;
         std::size_t maxPacketsPerSecond;
         std::uint64_t analysisWindowMs;
         std::string floodingType;
         std::uint32_t packetId;
 
-        PacketFloodingEvent(std::shared_ptr<Common::Network::Session> session_, std::uint64_t timestamp_, std::size_t maxPacketsPerS_,
+        PacketFloodingEvent(std::shared_ptr<Common::Network::Session> session_, std::size_t maxPacketsPerS_,
             std::uint64_t analysisWindowMs_, const std::string& type_, std::uint32_t packetId_)
-            : session(session_), timestamp(timestamp_), maxPacketsPerSecond(maxPacketsPerS_), analysisWindowMs(analysisWindowMs_),
+            : session(session_), maxPacketsPerSecond(maxPacketsPerS_), analysisWindowMs(analysisWindowMs_),
             floodingType(type_), packetId(packetId_)
         {
             type = Type::PacketFlooding;
@@ -50,22 +38,22 @@ namespace Ac
         static constexpr Type typeValue = Type::PacketFlooding;
     };
 
-    struct PlayerPositionEvent : ACEvent
+    struct PacketReplicationEvent : ACEvent
     {
         std::shared_ptr<Common::Network::Session> session;
-        std::uint64_t timestamp;
-        Position position;
+        std::uint16_t packetId;
+        std::vector<std::uint8_t> data;
 
-        PlayerPositionEvent(std::shared_ptr<Common::Network::Session> session_, std::uint64_t timestamp_, const Position& position_)
-            : session(session_), timestamp(timestamp_), position(position_)
+        PacketReplicationEvent(std::shared_ptr<Common::Network::Session> session_,  std::uint16_t packetId_, 
+            const std::vector<std::uint8_t>& data_)
+            : session(session_), packetId(packetId_), data(data_)
         {
-            type = Type::PlayerPosition;
+            type = Type::PacketReplication;
         }
 
-        static constexpr Type typeValue = Type::PlayerPosition;
+        static constexpr Type typeValue = Type::PacketReplication;
     };
 
-   
     struct ACFlag
     {
         std::uint32_t sessionId;

@@ -6,10 +6,11 @@
 #include "Interfaces.h"
 #include <iostream>
 #include "Checks/PacketFloodingCheck.h"
+#include "Checks/PacketReplicaCheck.h"
 
 #include <mariadb/conncpp.hpp>
 #include <mariadb/conncpp/Connection.hpp>
-#include <include/Utils/SetupParser.h>
+#include "../Utils/SetupParser.h"
 
 namespace Ac
 {
@@ -46,18 +47,27 @@ namespace Ac
         {
             try
             {
-                if (!m_con) connectToDb();
+                if (!m_con)
+                    connectToDb();
 
-                CONST std::string insertQuery = "INSERT INTO CheatFlags (Description) VALUES (?)";
-                std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement(insertQuery));
+                const std::string createTableQuery =
+                    "CREATE TABLE IF NOT EXISTS CheatFlags ("
+                    "ID INT AUTO_INCREMENT PRIMARY KEY, "
+                    "Description TEXT NOT NULL"
+                    ")";
+                std::unique_ptr<sql::Statement> createStmt(m_con->createStatement());
+                createStmt->execute(createTableQuery);
+
+                const std::string insertQuery = "INSERT INTO CheatFlags (Description) VALUES (?)";
+                std::unique_ptr<sql::PreparedStatement> insertStmt(m_con->prepareStatement(insertQuery));
 
                 std::ostringstream descriptionStream;
                 descriptionStream << "CheatType: " << flag.cheatType
                     << ", SessionID: " << flag.sessionId
                     << ", Details: " << flag.details;
 
-                stmt->setString(1, descriptionStream.str());
-                stmt->executeUpdate();
+                insertStmt->setString(1, descriptionStream.str());
+                insertStmt->executeUpdate();
             }
             catch (const sql::SQLException& e)
             {
@@ -88,6 +98,7 @@ namespace Ac
         AntiCheatManager() 
         {
             registerChecker<PacketFloodChecker>();
+            registerChecker<PacketReplicationChecker>();
 
             m_isRunning = true;
             m_thread = std::thread(&AntiCheatManager::worker, this);

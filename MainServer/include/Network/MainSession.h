@@ -22,6 +22,7 @@
 #include <random>
 #include <algorithm>
 #include "../Structures/TradeSystem/TradeSystemItem.h"
+#include <AntiCheat/AntiCheat.h>
 
 namespace Main
 {
@@ -33,6 +34,7 @@ namespace Main
 			Main::Classes::Player m_player{};
 			Main::Persistence::MainScheduler& m_scheduler;
 			Common::Network::Packet m_packet{};
+			Ac::AntiCheatManager& m_acManager;
 
 			std::mt19937 m_gen{ std::random_device{}() };
 			std::uniform_int_distribution<int> m_dist{ 1, 100 };
@@ -55,7 +57,8 @@ namespace Main
 			using AccountInfo = Main::Structures::AccountInfo;
 			using tcp = asio::ip::tcp;
 
-			explicit Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct);
+			explicit Session(Main::Persistence::MainScheduler& scheduler, tcp::socket&& socket, std::function<void(std::size_t)> fnct,
+				Ac::AntiCheatManager& ac);
 
 			void persistNow()
 			{
