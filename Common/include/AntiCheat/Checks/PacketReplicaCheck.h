@@ -13,8 +13,8 @@ namespace Ac
     class PacketReplicationChecker : public IACChecker<PacketReplicationEvent>
     {
     private:
-        // [SEID] -> [PacketHash] -> [timestamp]
-        std::unordered_map<uint32_t, std::unordered_map<size_t, std::uint64_t>> playerData;
+        // [SEID] -> [PacketHash] -> [timestamps...]
+        std::unordered_map<uint32_t, std::unordered_map<size_t, std::vector<std::uint64_t>>> playerData;
         static inline std::uint64_t analysisWindowMs = 120000;
 
         std::string floatToString(float value, int precision = 2)
@@ -36,30 +36,35 @@ namespace Ac
             const size_t packetHash = calculatePacketHash(event.data);
             auto& playerPackets = playerData[event.session->getId()];
 
-            for (auto it = playerPackets.begin(); it != playerPackets.end(); ) 
+            for (auto& [hash, timestamps] : playerPackets)
             {
-                if ((serverTime - it->second) > analysisWindowMs) it = playerPackets.erase(it);
-                else ++it;
+                timestamps.erase(
+                    std::remove_if(timestamps.begin(), timestamps.end(), [&](std::uint64_t ts) {
+                        return (serverTime - ts) > analysisWindowMs;
+                        }),
+                    timestamps.end()
+                );
             }
 
-            if (playerPackets.find(packetHash) != playerPackets.end())
+            auto& timestamps = playerPackets[packetHash];
+            timestamps.push_back(serverTime);
+
+            if (timestamps.size() >= 4)
             {
                 const ACFlag flag{
                     event.session->getAccountId(),
                     "Possible Packet Replication (e.g. WPE)",
                     "Packet replication detected (ID " + std::to_string(event.packetId) + "): " +
-                    "Duplicate packet in " +
-                    floatToString((serverTime - playerPackets[packetHash]) / 1000.0f) +
-                    "s window"
+                    std::to_string(timestamps.size()) + " identical packets within " +
+                    floatToString(analysisWindowMs / 1000.0f) + "s window"
                 };
 
-                playerPackets.clear();
+                playerData[event.session->getId()].clear(); 
                 event.session->closeSocket();
 
                 return flag;
             }
 
-            playerPackets[packetHash] = serverTime;
             return std::nullopt;
         }
     };
