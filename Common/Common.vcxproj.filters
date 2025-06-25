@@ -114,6 +114,24 @@
     <ClInclude Include="include\ConstantDatabase\Structures\CdbRewardInfo.h">
       <Filter>File di intestazione</Filter>
     </ClInclude>
+    <ClInclude Include="include\AntiCheat\Event.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AntiCheat\Interfaces.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AntiCheat\AcEventQueue.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AntiCheat\AntiCheat.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AntiCheat\Checks\PacketFloodingCheck.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
+    <ClInclude Include="include\AntiCheat\Checks\PacketReplicaCheck.h">
+      <Filter>File di intestazione</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Cryptography\Crypt.cpp">

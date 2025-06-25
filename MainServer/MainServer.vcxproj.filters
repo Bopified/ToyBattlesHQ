@@ -146,6 +146,7 @@
     <ClInclude Include="include\ChatCommands\Commands\SetEventCommands.h" />
     <ClInclude Include="include\ChatCommands\Commands\Invisible.h" />
     <ClInclude Include="include\Structures\EndScoreboard.h" />
+    <ClInclude Include="include\ChatCommands\Commands\CsdMode.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
