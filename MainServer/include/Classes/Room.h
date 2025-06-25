@@ -231,6 +231,7 @@ namespace Main
 			void setTime(std::uint16_t time);
 			bool changePlayerTeam(const Main::Structures::UniqueId& uniqueId, std::uint32_t newTeam);
 			std::optional<std::uint32_t> getTeamForSession(std::uint32_t sessionId) const;
+			bool isEveryoneCsd() const;
 
 			void muteRoom();
 			void unmuteRoom();	

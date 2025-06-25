@@ -1116,28 +1116,42 @@ namespace Main
 			session->setPlayerState(state);
 		}
 
+		bool Room::isEveryoneCsd() const
+		{
+			auto& pair = m_players[0];
+			auto hostSession = pair.second.lock();
+			if (!hostSession) return false;
+			if (m_players.empty()) return false;
+			bool ret = true;
+			for (auto& [roomInfo, session] : m_players)
+			{
+				if (auto actSession = session.lock(); actSession && !actSession->hasCsdItems())
+				{
+					hostSession->sendMessage("(error) Player " + std::string{ actSession->getAccountInfo().nickname } + " is not CSD");
+					ret = false;
+				}
+			}
+			return ret;
+		}
+
 		// Refactored
 		void Room::startMatch()
 		{
+			auto& pair = m_players[0];
+			auto hostSession = pair.second.lock();
+			if (!hostSession) return;
+
 			// Reset votekick stuff
 			resetVotekick();
 			m_votekickStarters.clear();
 
 			if (m_players.empty()) return;
+			// Check that all players are CSD if the mode is enabled.
+
 			m_hasMatchStarted = true;
 			m_matchStartTime = Main::Details::getUtcTimeMs();
-
-			auto& pair = m_players[0];
-			auto hostSession = pair.second.lock();
-			if (hostSession)
-			{
-				setStateFor(pair, Common::Enums::PlayerState::STATE_NORMAL);
-			}
-			else
-			{
-				broadcastMessage("[Room::startMatch] Error: Host's weak_ptr is nullptr! Please report this issue.");
-			}
-
+			setStateFor(pair, Common::Enums::PlayerState::STATE_NORMAL);
+			
 			if (isAssassinMode() || (m_settings.map == Common::Enums::AcademyTrainingGround && m_settings.mode == Common::Enums::FreeForAll))
 			{
 				std::vector<Main::ClientData::PlayerTeamInfo> playerTeamBatch;
