@@ -429,7 +429,7 @@ namespace Main
 			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
 			{
 				const auto& item = m_equippedItemByCharacter[i];
-				if (item.id != 0) 
+				if (item.serialInfo.itemNumber != 0) 
 					equippedItems.push_back(item);
 			}
 

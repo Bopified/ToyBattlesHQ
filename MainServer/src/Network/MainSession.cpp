@@ -1992,16 +1992,21 @@ namespace Main
 				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::insertItemLog, m_player.getAccountID(), log);
 		}
 
-		bool Session::hasCsdItems() const
+		bool Session::hasCsdItems()
 		{
-			for (const auto& equippedItem : m_player.getEquippedItemsFor(m_player.getAccountInfo().latestSelectedCharacter))
+			const auto equippedItems = m_player.getEquippedItemsFor(m_player.getAccountInfo().latestSelectedCharacter);
+			for (auto& equippedItem : equippedItems)
 			{
 				const bool isEquippedItemCsd = Details::isCsdItem(
 					static_cast<Common::Enums::ItemType>(equippedItem.type),
 					equippedItem.id
 				);
 
-				if (!isEquippedItemCsd) return false;
+				if (!isEquippedItemCsd)
+				{
+					sendMessage("Item Type " + std::to_string(equippedItem.type) + " is not CSD");
+					return false;
+				}
 			}
 			return true;
 		}

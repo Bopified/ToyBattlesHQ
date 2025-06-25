@@ -1125,7 +1125,7 @@ namespace Main
 			bool ret = true;
 			for (auto& [roomInfo, session] : m_players)
 			{
-				if (auto actSession = session.lock(); actSession && !actSession->hasCsdItems())
+				if (auto actSession = session.lock(); actSession && roomInfo.state == Common::Enums::STATE_READY && !actSession->hasCsdItems())
 				{
 					hostSession->sendMessage("(error) Player " + std::string{ actSession->getAccountInfo().nickname } + " is not CSD");
 					ret = false;

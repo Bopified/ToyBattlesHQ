@@ -408,7 +408,7 @@ namespace Main
 
 			void spawnItem(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& itemSerialInfo, const std::string& action);
 
-			bool hasCsdItems() const;
+			bool hasCsdItems();
 		};
 	}
 }
