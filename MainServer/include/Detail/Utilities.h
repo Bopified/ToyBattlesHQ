@@ -174,31 +174,36 @@ namespace Main
 					|| (itemId >= 3010200 && itemId <= 3010279) // wrench
 					|| (itemId >= 3010300 && itemId <= 3010379) // chain saw
 					|| (itemId == 3010380 || itemId == 3010390 || itemId == 3010280 || itemId == 3010290
-						|| itemId == 3010080 || itemId == 3010090); // black / white versions
+						|| itemId == 3010080 || itemId == 3010090 // black / white versions
+						|| itemId == 3010100); // basic melee
 			}
 			else if (itemType == Common::Enums::RIFLE)
 			{
 				return (itemId >= 3020100 && itemId <= 3020179) || itemId == 3020180 || itemId == 3020190 // peppers
 					|| (itemId >= 3020200 && itemId <= 3020279) || itemId == 3020280 || itemId == 3020290 // hornets
-					|| (itemId >= 3020300 && itemId <= 3020379) || itemId == 3020380 || itemId == 3020390; // sherlock
+					|| (itemId >= 3020300 && itemId <= 3020379) || itemId == 3020380 || itemId == 3020390 // sherlock
+					|| itemId == 3020000; // basic rifle
 			}
 			else if (itemType == Common::Enums::SHOTGUN)
 			{
 				return itemId == 3030180 || itemId == 3030190 || (itemId >= 3030100 && itemId <= 3030179) // kw
 					|| itemId == 3030280 || itemId == 3030290 || (itemId >= 3030200 && itemId <= 3030279) // bombard
-					|| itemId == 3030380 || itemId == 3030390 || (itemId >= 3030300 && itemId <= 3030379); // driver
+					|| itemId == 3030380 || itemId == 3030390 || (itemId >= 3030300 && itemId <= 3030379) // driver
+					|| itemId == 3030000; // basic shotgun
 			}
 			else if (itemType == Common::Enums::SNIPER)
 			{
 				return itemId == 3040180 || itemId == 3040190 || (itemId >= 3040100 && itemId <= 3040179) // Sea eagle
 					|| itemId == 3040280 || itemId == 3040290 || (itemId >= 3040200 && itemId <= 3040279) // Venom
-					|| itemId == 3040301 || itemId == 3040302 || (itemId >= 3040300 && itemId <= 3040379); // Vast
+					|| itemId == 3040301 || itemId == 3040302 || (itemId >= 3040300 && itemId <= 3040379) // Vast
+					|| itemId == 3040000; // basic sniper
 			}
 			else if (itemType == Common::Enums::MG)
 			{
 				return itemId == 3050180 || itemId == 3050190 || (itemId >= 3050100 && itemId <= 3050179) // daredev
 					|| itemId == 3050280 || itemId == 3050290 || (itemId >= 3050200 && itemId <= 3050279) // Firefly
-					|| itemId == 3050301 || itemId == 3050302 || (itemId >= 3050300 && itemId <= 3050379); // Crank
+					|| itemId == 3050301 || itemId == 3050302 || (itemId >= 3050300 && itemId <= 3050379) // Crank
+					|| itemId == 3050000; // basic MG
 			}
 			else if (itemType == Common::Enums::BAZOOKA)
 			{
@@ -208,7 +213,8 @@ namespace Main
 			{
 				return itemId == 3070180 || itemId == 3070190 || (itemId >= 3070100 && itemId <= 3070179) // pulse
 					|| itemId == 3070280 || itemId == 3070290 || (itemId >= 3070200 && itemId <= 3070279) // exile
-					|| itemId == 3070301 || itemId == 3070302 || (itemId >= 3070300 && itemId <= 3070379); // Thunder
+					|| itemId == 3070301 || itemId == 3070302 || (itemId >= 3070300 && itemId <= 3070379) // Thunder
+					|| itemId == 3070000; // basic grenade
 			}
 			else if (itemType == Common::Enums::ACC_BACK || itemType == Common::Enums::ACC_WAIST) return false;
 			else if ((itemType >= 0 && itemType <= 6) || itemType == 17)
