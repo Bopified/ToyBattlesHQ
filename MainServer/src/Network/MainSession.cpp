@@ -63,9 +63,9 @@ namespace Main
 			Common::Cryptography::Crypt cryptography;
 			cryptography.KeySetup(0);
 			cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, sizeof(Common::Protocol::TcpHeader));
-			if (header.getCrypt() && header.getSize() > 8)
+			if ((header.getCrypt() == Common::Enums::USER_ENCRYPTION || header.getCrypt() == Common::Enums::USER_LARGE_ENCRYPTION) && header.getSize() > 8)
 			{
-				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(shared_from_this(), callbackNum, m_reader.data()));
+				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(shared_from_this(), callbackNum, m_reader));
 			}
 
 		}

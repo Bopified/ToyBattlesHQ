@@ -6,6 +6,7 @@
 #include <deque>
 #include <format>
 #include "../../Utils/Utils.h"
+#include <functional>
 
 namespace Ac
 {
@@ -23,14 +24,9 @@ namespace Ac
             return oss.str();
         }
 
-        size_t calculatePacketHash(const std::vector<std::uint8_t>& data)
+        std::size_t calculatePacketHash(const std::vector<std::uint8_t>& data)
         {
-            std::size_t hash = 0;
-            for (auto byte : data) 
-            {
-                hash ^= byte + 0x9e3779b9 + (hash << 6) + (hash >> 2);
-            }
-            return hash;
+            return std::hash<std::string_view>{}(std::string_view(reinterpret_cast<const char*>(data.data()), data.size()));
         }
 
     public:
