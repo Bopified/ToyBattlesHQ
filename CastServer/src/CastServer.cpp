@@ -73,12 +73,12 @@ namespace Cast
 		// Explosives
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(272, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) {
-
-				// TODO: This packet is always from the host, need to take SEID from the data and find the actual target who shot the explosive
-				// in order for AC to work correctly here.
-				m_acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(session,
-				   Common::Utils::getCurrentTimestampMs(), 6, 1000, "Bazooka/Grenade flooding", 272));
-
+				const auto targetUid = Cast::Details::parseDataFromEnd<Main::Structures::UniqueId>(request, 4);
+				if (auto targetSession = m_sessionsManager.getSession(targetUid.session))
+				{
+					m_acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(targetSession,
+						Common::Utils::getCurrentTimestampMs(), 5, 1000, "Bazooka/Grenade flooding", 272));
+				}
 				m_roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 			});
 
@@ -125,7 +125,8 @@ namespace Cast
 
 		// Player sync (needed because otherwise the player: 1. does not get the time left of the match, and 2. they don't respawn at all)
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(309, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(session->getId(), request.getSession(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(session->getId(), request.getSession(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// without this e.g. the bomb in "bomb battle" doesn't exist seemingly
 		/*
@@ -137,7 +138,8 @@ namespace Cast
 		// When Option==9 in packet order 257: the non host's client sends packet 79 to the server, which dispatches to the host
 		// This packet asks the host to provide the room sync to the non-host
 		Common::Network::Session::addCallback < CN::PacketType::UNECRYPTED, Session>(79, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {	m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) {	m_roomsManager.playerForwardToHost(request.getSession(), session->getId(),
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// In-room info request, apparenly contains "isDeath" data??
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(306, [&](const Common::Network::UnecryptedPacket& request,
@@ -152,11 +154,13 @@ namespace Cast
 
 		// Zombie team broadcast for players that join the match late
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(78, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// Next round handler, this is covered in main, not sure why client sends it in cast -- but in any case cast sv must do nothing with it
 		// otherwise if we resend this packet (host=>player or player=>host or broadcast) next round never starts
-		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(259, [&](const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session) {});
+		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(259, [&](const Common::Network::UnecryptedPacket& request, 
+			std::shared_ptr<Cast::Network::Session> session) {});
 
 		// CTB battery respawn for host, Other weapon reload
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(165, [&](const Common::Network::UnecryptedPacket& request,
@@ -164,11 +168,13 @@ namespace Cast
 
 		// Bomb Battle related -- NON host
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(155, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// Bomb battle drop bomb 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(156, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {  m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) {  m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// Bomb battle for host
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(271, [&](const Common::Network::UnecryptedPacket& request,
@@ -192,7 +198,8 @@ namespace Cast
 		// After the host client receives packet 78 from the non-host, it provides the non-host with the updated room tick
 		// Without this handler, the player never respawns (not even TAB shows anything) => The player keeps being in a waiting initial state
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(408, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(session->getId(), request.getSession(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(session->getId(), request.getSession(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// Items respawning
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(260, [&](const Common::Network::UnecryptedPacket& request,
@@ -228,18 +235,22 @@ namespace Cast
 
 		// Boss battle - npcs projectiles
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(326, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(),
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// Boss battle - npcs respawn
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(328, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) {m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(),
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		// Boss battle - npc boss attack -- this is already sent to all clients
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(331, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) {m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(304, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request)); });
+			std::shared_ptr<Cast::Network::Session> session) {m_roomsManager.hostForwardToPlayer(request.getSession(), session->getId(), 
+				const_cast<Common::Network::UnecryptedPacket&>(request)); });
 
 
 		// Shotgun / Mg damage
@@ -247,7 +258,7 @@ namespace Cast
 		{
 			Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(order, [&](const Common::Network::UnecryptedPacket& request,
 				std::shared_ptr<Cast::Network::Session> session) {
-					Cast::Handlers::handleSpecialWeaponDamage(request, session, m_roomsManager, m_sessionsManager);
+					Cast::Handlers::handleSpecialWeaponDamage(request, session, m_roomsManager, m_sessionsManager, m_acManager);
 				});
 		}
 
@@ -256,7 +267,7 @@ namespace Cast
 		{
 			Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(order, [&](const Common::Network::UnecryptedPacket& request,
 				std::shared_ptr<Cast::Network::Session> session) {
-					Cast::Handlers::handleNormalWeaponDamage(request, session, m_roomsManager, m_sessionsManager);
+					Cast::Handlers::handleNormalWeaponDamage(request, session, m_roomsManager, m_sessionsManager, m_acManager);
 				});
 		}
 		

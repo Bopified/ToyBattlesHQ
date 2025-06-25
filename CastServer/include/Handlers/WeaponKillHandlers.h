@@ -12,6 +12,8 @@
 #include "../Structures/PlayerPositionFromServer.h"
 #include "../Structures/SuicideStruct.h"
 #include "SimpleHandlers.h"
+#include <Utils/Utils.h>
+#include <AntiCheat/AntiCheat.h>
 
 namespace Cast
 {
@@ -21,10 +23,8 @@ namespace Cast
 			const Main::Structures::UniqueId& targetUid,
 			std::shared_ptr<Cast::Network::Session> session, std::shared_ptr<Cast::Network::Session> targetSession)
 		{
-			// Check if the target is assassin or not for their team.
 			if (room->m_assassinBlueUid == targetUid || room->m_assassinRedUid == targetUid)
 			{
-				// Kill whole assassin team here
 				room->killTeam(room->m_assassinBlueUid == targetUid ? Common::Enums::TEAM_BLUE : Common::Enums::TEAM_RED);
 				room->broadcastMessage("The assassin of team " + 
 					(room->m_assassinBlueUid == targetUid ? std::string("BLUE") : std::string("RED")) + " was killed by " + session->m_nickname + "!");
@@ -79,8 +79,7 @@ namespace Cast
 		}
 
 		inline void handleNormalWeaponDamage(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session, 
-			Cast::Classes::RoomsManager& roomsManager,
-			Cast::Network::SessionsManager& sessionsManager)
+			Cast::Classes::RoomsManager& roomsManager, Cast::Network::SessionsManager& sessionsManager, Ac::AntiCheatManager& acManager)
 		{
 			auto roomOpt = roomsManager.getRoom(session->getId());
 			if (!roomOpt) return;
@@ -90,9 +89,16 @@ namespace Cast
 			const auto targetUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 20);
 			const std::uint16_t targetHp = Cast::Details::parseData<std::uint16_t>(request, 24);
 
-			auto targetSession = sessionsManager.getSession(targetUid.session);
+			std::string hexData;
+			for (std::size_t i = 0; i < request.getDataSize(); ++i)
+			{
+				char buffer[4];
+				snprintf(buffer, sizeof(buffer), "%02X ", static_cast<std::uint8_t>(request.getData()[i]));
+				hexData += buffer;
+			}
+			std::cout << "DATA: " << hexData << '\n';
 
-			if (targetSession)
+			if (auto targetSession = sessionsManager.getSession(targetUid.session))
 			{
 				if (targetHp)
 				{
@@ -103,14 +109,8 @@ namespace Cast
 				{
 					if (room->m_isAssassinMode)
 					{
-						if (!handleAssassinMode(roomsManager, room, attackerUid, targetUid, session, targetSession))
-						{
-							return;
-						}
-						else
-						{
-							roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
-						}
+						if (!handleAssassinMode(roomsManager, room, attackerUid, targetUid, session, targetSession)) return;
+						else roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 					}
 					else
 					{
@@ -125,6 +125,11 @@ namespace Cast
 						if (Cast::Details::mustBroadcastDeath(roomsManager.getModeOf(session->getId())))
 						{
 							Cast::Handlers::sendPlayerStateUpdate(targetSession->getAccountId(), true);
+						}
+						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
+						{
+							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession,
+								Common::Utils::getCurrentTimestampMs(), 4, 1000, "Room Rape (flooding)", 265));
 						}
 					}
 				}
@@ -134,7 +139,8 @@ namespace Cast
 		// mg & shotgun
 		inline void handleSpecialWeaponDamage(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session, 
 			Cast::Classes::RoomsManager& roomsManager,
-			Cast::Network::SessionsManager& sessionsManager)
+			Cast::Network::SessionsManager& sessionsManager,
+			Ac::AntiCheatManager& acManager)
 		{
 			auto roomOpt = roomsManager.getRoom(session->getId());
 			if (!roomOpt) return;
@@ -143,9 +149,8 @@ namespace Cast
 			std::uint16_t targetHp = Cast::Details::parseDataFromEnd<std::uint16_t>(request, 6);
 			auto targetUid = Cast::Details::parseDataFromEnd<Main::Structures::UniqueId>(request, 8);
 			auto attackerUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 16);
-			auto targetSession = sessionsManager.getSession(targetUid.session);
 
-			if (targetSession)
+			if (auto targetSession = sessionsManager.getSession(targetUid.session))
 			{
 				if (targetHp)
 				{
@@ -156,14 +161,8 @@ namespace Cast
 				{
 					if (room->m_isAssassinMode)
 					{
-						if (!handleAssassinMode(roomsManager, room, attackerUid, targetUid, session, targetSession))
-						{
-							return;
-						}
-						else
-						{
-							roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
-						}
+						if (!handleAssassinMode(roomsManager, room, attackerUid, targetUid, session, targetSession)) return;
+						else roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 					}
 					else
 					{
@@ -177,6 +176,11 @@ namespace Cast
 						if (Cast::Details::mustBroadcastDeath(roomsManager.getModeOf(session->getId())))
 						{
 							Cast::Handlers::sendPlayerStateUpdate(targetSession->getAccountId(), true);
+						}
+						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
+						{
+							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession,
+								Common::Utils::getCurrentTimestampMs(), 4, 1000, "Room Rape (flooding)", 265));
 						}
 					}
 				}
@@ -200,8 +204,7 @@ namespace Cast
 			{
 				const auto targetUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 12 * (i + 1));
 				const auto targetNewHp = Cast::Details::parseData<std::uint16_t>(request, 12 * (i + 1) + sizeof(Main::Structures::UniqueId));
-				auto targetSession = sessionsManager.getSession(targetUid.session);
-				if (targetSession)
+				if (auto targetSession = sessionsManager.getSession(targetUid.session))
 				{
 					if (targetNewHp)
 					{
@@ -213,13 +216,8 @@ namespace Cast
 						if (room->m_isAssassinMode)
 						{
 							if (!handleAssassinMode(roomsManager, room, Main::Structures::UniqueId{ 0, 0, 1 } /*on purpose*/, targetUid, session, targetSession))
-							{
 								return;
-							}
-							else
-							{
-								roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
-							}
+							else roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 						}
 						else
 						{
