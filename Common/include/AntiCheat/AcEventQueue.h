@@ -12,7 +12,7 @@ namespace Ac
     class ACEventQueue
     {
     private:
-        std::queue<std::unique_ptr<ACEvent>> eventQueue;
+        std::queue<std::unique_ptr<ACEvent>> m_eventQueue;
         mutable std::mutex queueMutex;
         std::condition_variable queueCV;
         std::atomic<bool> shutdownFlag{ false };
@@ -21,7 +21,7 @@ namespace Ac
         void pushEvent(std::unique_ptr<ACEvent> event)
         {
             std::lock_guard<std::mutex> lock(queueMutex);
-            eventQueue.push(std::move(event));
+            m_eventQueue.push(std::move(event));
             queueCV.notify_one();
         }
 
@@ -30,16 +30,16 @@ namespace Ac
             std::unique_lock<std::mutex> lock(queueMutex);
             queueCV.wait(lock, [this]() 
                 {
-                return !eventQueue.empty() || shutdownFlag.load();
+                return !m_eventQueue.empty() || shutdownFlag.load();
                 });
 
-            if (shutdownFlag.load() && eventQueue.empty())
+            if (shutdownFlag.load() && m_eventQueue.empty())
             {
                 return nullptr;
             }
 
-            auto event = std::move(eventQueue.front());
-            eventQueue.pop();
+            auto event = std::move(m_eventQueue.front());
+            m_eventQueue.pop();
             return event;
         }
 
@@ -52,7 +52,7 @@ namespace Ac
         bool empty() const
         {
             std::lock_guard<std::mutex> lock(queueMutex);
-            return eventQueue.empty();
+            return m_eventQueue.empty();
         }
     };
 }

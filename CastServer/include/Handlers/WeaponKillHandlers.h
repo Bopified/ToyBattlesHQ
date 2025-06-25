@@ -89,15 +89,6 @@ namespace Cast
 			const auto targetUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 20);
 			const std::uint16_t targetHp = Cast::Details::parseData<std::uint16_t>(request, 24);
 
-			std::string hexData;
-			for (std::size_t i = 0; i < request.getDataSize(); ++i)
-			{
-				char buffer[4];
-				snprintf(buffer, sizeof(buffer), "%02X ", static_cast<std::uint8_t>(request.getData()[i]));
-				hexData += buffer;
-			}
-			std::cout << "DATA: " << hexData << '\n';
-
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
 			{
 				if (targetHp)

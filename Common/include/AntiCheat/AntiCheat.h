@@ -7,29 +7,34 @@
 #include <iostream>
 #include "Checks/PacketFloodingCheck.h"
 
+#include <mariadb/conncpp.hpp>
+#include <mariadb/conncpp/Connection.hpp>
+#include <include/Utils/SetupParser.h>
+
 namespace Ac
 {
-    class AntiCheatManager 
+    class AntiCheatManager
     {
     private:
-        ACEventQueue eventQueue;
-        std::vector<std::unique_ptr<IACCheckerBase>> checkers;
-        std::thread workerThread;
-        std::atomic<bool> running{ false };
+        sql::Connection* m_con;
+        ACEventQueue m_eventQueue;
+        std::vector<std::unique_ptr<IACCheckerBase>> m_checkers;
+        std::thread m_thread;
+        std::atomic<bool> m_isRunning{ false };
 
         AntiCheatManager(const AntiCheatManager&) = delete;
         AntiCheatManager& operator=(const AntiCheatManager&) = delete;
 
         void worker()
         {
-            while (running) 
+            while (m_isRunning)
             {
-                auto event = eventQueue.popEvent();
+                auto event = m_eventQueue.popEvent();
                 if (!event) continue;
 
-                for (auto& checker : checkers) 
+                for (auto& checker : m_checkers)
                 {
-                    if (auto flag = checker->processEventBase(*event)) 
+                    if (auto flag = checker->processEventBase(*event))
                     {
                         handleFlag(*flag);
                     }
@@ -37,40 +42,73 @@ namespace Ac
             }
         }
 
-        void handleFlag(const ACFlag& flag) 
+        void handleFlag(const ACFlag& flag)
         {
-            std::cout << "AC Flag: " << flag.cheatType
-                << " for player " << flag.sessionId
-                << " - " << flag.details << std::endl;
+            try
+            {
+                if (!m_con) connectToDb();
+
+                CONST std::string insertQuery = "INSERT INTO CheatFlags (Description) VALUES (?)";
+                std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement(insertQuery));
+
+                std::ostringstream descriptionStream;
+                descriptionStream << "CheatType: " << flag.cheatType
+                    << ", SessionID: " << flag.sessionId
+                    << ", Details: " << flag.details;
+
+                stmt->setString(1, descriptionStream.str());
+                stmt->executeUpdate();
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log(std::string("MariaDB exception while logging cheat flag: ") + e.what(),
+                    Utils::LogType::Error, "AntiCheat::handleFlag");
+            }
+        }
+
+        void connectToDb()
+        {
+            const auto& dbSetup = Common::Utils::SetupParser::getInstance().getDatabaseSetup();
+            try
+            {
+                m_con = sql::mariadb::get_driver_instance()->connect("tcp://" + dbSetup.ip + ":" + std::to_string(dbSetup.port),
+                    dbSetup.username, dbSetup.password);
+                m_con->setSchema(dbSetup.databaseName);
+                m_con->setAutoCommit(true);
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log("Error connecting to MariaDB: " + std::string(e.what()),
+                    Utils::LogType::Error, "AntiCheat::connectToDb");
+                throw;
+            }
         }
 
     public:
         AntiCheatManager() 
         {
             registerChecker<PacketFloodChecker>();
-            // registerChecker<AimBotChecker>();
-            // registerChecker<TeleportChecker>();
 
-            running = true;
-            workerThread = std::thread(&AntiCheatManager::worker, this);
+            m_isRunning = true;
+            m_thread = std::thread(&AntiCheatManager::worker, this);
         }
 
         ~AntiCheatManager()
         {
-            running = false;
-            eventQueue.shutdown();
-            if (workerThread.joinable()) workerThread.join();
+            m_isRunning = false;
+            m_eventQueue.shutdown();
+            if (m_thread.joinable()) m_thread.join();
         }
 
         template<typename CheckerT>
         void registerChecker() 
         {
-            checkers.push_back(std::make_unique<CheckerT>());
+            m_checkers.push_back(std::make_unique<CheckerT>());
         }
 
         void submitEvent(std::unique_ptr<ACEvent> event) 
         {
-            eventQueue.pushEvent(std::move(event));
+            m_eventQueue.pushEvent(std::move(event));
         }
     };
 }

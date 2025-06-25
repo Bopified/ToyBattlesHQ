@@ -52,6 +52,8 @@ namespace Ac
                     "s (max " + std::to_string(event.maxPacketsPerSecond) + ")"
                 };
                 packetRecords.clear();
+                event.session->closeSocket();
+
                 return flag;
             }
 
