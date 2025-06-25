@@ -62,7 +62,7 @@ namespace Main
 						session->sendMessage("error: The target user has equal or greater grade than you.");
 						return;
 					}
-					if (!targetSession->banAccount(0, "AUTOMATIC_CHEAT_BAN", true))
+					if (!targetSession->banAccount(9999, "AUTOMATIC_CHEAT_BAN", true))
 					{
 						session->sendMessage("error: unknown error");
 						return;

@@ -1584,7 +1584,7 @@ namespace Main
 
                 std::string updateQuery = "UPDATE Users SET SuspendedUntil = ?, SuspensionReason = ? WHERE Nickname = ?";
                 std::unique_ptr<sql::PreparedStatement> updateStmt(m_con->prepareStatement(updateQuery));
-                updateStmt->setString(1, reason == "AUTOMATIC_CHEAT_BAN" ? "" : until);
+                updateStmt->setString(1, until);
                 updateStmt->setString(2, reason);
                 updateStmt->setString(3, nickname);
 

@@ -34,10 +34,6 @@ namespace Main
 			Main::Network::SessionsManager& sessionsManager,
 			Main::Classes::RoomsManager& roomsManager, Main::Classes::ClansManager& clansManager,  const Main::Structures::UniqueId& uniqueId)
 		{
-			session->sendMessage("[DEBUG] You left the room. Extra: " + std::to_string((uint32_t)request.getExtra())
-			+ ", mission: "  + std::to_string((uint32_t)request.getMission()) + ", option: " + std::to_string((uint32_t)request.getOption()));
-
-
 			const auto& ainfo = session->getAccountInfo();
 			const std::uint16_t selfRoomNumber = session->getPlayer().getRoomNumber();
 
@@ -50,6 +46,7 @@ namespace Main
 						session->sendMessage("Error: Cannot kick an user with grade >= MOD", Main::Enums::HELP);
 						return;
 					}
+					if (room->hasMatchStarted()) return; // prevent host kicking while in match
 					room->addKickedPlayer(targetSession->getAccountInfo().accountID, targetSession->getAccountInfo().nickname);
 					targetSession->sendMessage("You have been kicked by the host");
 					room->removePlayer(targetSession, RoomLeaveExtra::LEAVE_KICKED_BY_HOST);

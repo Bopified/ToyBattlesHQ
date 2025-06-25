@@ -369,7 +369,7 @@ namespace Main
                     {
                         if (isCheatBan)
                         {
-                            targetSession->banAccount(0, "AUTOMATIC_CHEAT_BAN", true);
+                            targetSession->banAccount(9999, "AUTOMATIC_CHEAT_BAN", true);
                             targetSession->closeSocket();
                         }
                         else
