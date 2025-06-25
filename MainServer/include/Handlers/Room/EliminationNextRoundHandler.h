@@ -178,6 +178,7 @@ namespace Main
 					const auto& equippedItems = targetSession->getPlayer().getEquippedItemsFor(targetSession->getAccountInfo().latestSelectedCharacter);
 					for (const auto& currentItem : equippedItems)
 					{
+						if (currentItem.serialInfo.itemNumber == 0) continue;
 						const auto [expBonus, mpBonus] = Main::CdbUtils::getExpAndMpEnhancementFor(currentItem.id);
 						totalExpBonus += expBonus;
 						totalMpBonus += mpBonus;

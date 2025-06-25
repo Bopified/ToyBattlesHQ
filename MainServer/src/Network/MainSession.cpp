@@ -1997,6 +1997,7 @@ namespace Main
 			const auto equippedItems = m_player.getEquippedItemsFor(m_player.getAccountInfo().latestSelectedCharacter);
 			for (auto& equippedItem : equippedItems)
 			{
+				if (equippedItem.serialInfo.itemNumber == 0) continue;
 				const bool isEquippedItemCsd = Details::isCsdItem(
 					static_cast<Common::Enums::ItemType>(equippedItem.type),
 					equippedItem.id
