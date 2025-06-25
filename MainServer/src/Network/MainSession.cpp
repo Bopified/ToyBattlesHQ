@@ -65,8 +65,9 @@ namespace Main
 			cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, sizeof(Common::Protocol::TcpHeader));
 			if (header.getCrypt() && header.getSize() > 8)
 			{
-				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(shared_from_this(), callbackNum, data));
+				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(shared_from_this(), callbackNum, m_reader.data()));
 			}
+
 		}
 
 		// For many packets, the clients assumes certain extras and logic:
@@ -1989,6 +1990,20 @@ namespace Main
 			Main::Structures::ItemLogInfo log{ itemSerialInfo.itemNumber, itemId, 0, action };
 			m_scheduler.addRepetitiveCallback(std::source_location::current(),
 				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::insertItemLog, m_player.getAccountID(), log);
+		}
+
+		bool Session::hasCsdItems() const
+		{
+			for (const auto& equippedItem : m_player.getEquippedItemsFor(m_player.getAccountInfo().latestSelectedCharacter))
+			{
+				const bool isEquippedItemCsd = Details::isCsdItem(
+					static_cast<Common::Enums::ItemType>(equippedItem.type),
+					equippedItem.id
+				);
+
+				if (!isEquippedItemCsd) return false;
+			}
+			return true;
 		}
 	};
 }

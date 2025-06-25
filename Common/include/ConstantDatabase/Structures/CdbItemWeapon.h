@@ -28,6 +28,7 @@ namespace Common
 			int ii_tradeable{};
 			int ii_type_inven{};
 			std::array<char, 50> ii_name{};
+			std::array<char, 100> ii_option{};
 
 			constexpr CdbItemWeapon() = default;
 
@@ -38,6 +39,7 @@ namespace Common
 				, ii_name{cdbWeapon.ii_name}, ii_stocks{cdbWeapon.ii_stocks}, ii_effect_1{cdbWeapon.ef_effect_1}, ii_effect_2{cdbWeapon.ef_effect_2}
 				, ii_effect_3{cdbWeapon.ef_effect_3}, ii_tradeable{cdbWeapon.ii_is_trade}, ii_type_inven{cdbWeapon.ii_type_inven}
 			{
+				std::copy(cdbWeapon.ii_name_option.begin(),cdbWeapon.ii_name_option.end(), ii_option.begin());
 			}
 
 			constexpr CdbItemWeapon(const CdbItemInfo& cdbItem)
@@ -46,6 +48,7 @@ namespace Common
 				, ii_immediately_set{ cdbItem.ii_immediately_set }, ii_limited_time{ cdbItem.ii_limited_time }, ii_type{ cdbItem.ii_type }
 				, ii_name{ cdbItem.ii_name }, ii_stocks{cdbItem.ii_stocks}, ii_effect_1{ cdbItem.ef_effect_1 }, ii_effect_2{ cdbItem.ef_effect_2 }
 				, ii_effect_3{ cdbItem.ef_effect_3 }, ii_tradeable{cdbItem.ii_is_trade}, ii_type_inven{cdbItem.ii_type_inven}
+				, ii_option{cdbItem.ii_name_option}
 			{
 			}
 

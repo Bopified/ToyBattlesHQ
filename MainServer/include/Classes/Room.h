@@ -71,6 +71,7 @@ namespace Main
 
 			// Special modes
 			bool m_isAssassinMode{};
+			bool m_isCsdMode{};
 
 		private:
 			Main::Structures::RoomPlayerInfo createRoomPlayerInfo(std::shared_ptr<Main::Network::Session> session, std::uint32_t team) const;
@@ -346,6 +347,14 @@ namespace Main
 			{
 				return m_isAssassinMode && m_settings.mode == Common::Enums::Elimination;
 			}
+
+			bool setCsdMode()
+			{
+				m_isCsdMode = !m_isCsdMode;
+				return m_isCsdMode;
+			}
+
+			bool isCsdMode() const noexcept { return m_isCsdMode; }
 
 			bool assassinModeEnoughPlayers() const noexcept;
 

@@ -5,6 +5,7 @@
 #include "../include/ChatCommands/Commands/ChangeHost.h"
 #include "../include/ChatCommands/Commands/ChangeRoomTitle.h"
 #include "../include/ChatCommands/Commands/Close.h"
+#include "../include/ChatCommands/Commands/CsdMode.h"
 #include "../include/ChatCommands/Commands/DebugRoom.h"
 #include "../include/ChatCommands/Commands/Disconnect.h"
 #include "../include/ChatCommands/Commands/EnableRoomCreation.h"

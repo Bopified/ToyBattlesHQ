@@ -50,6 +50,7 @@ namespace Common
 			MG = 14,
 			BAZOOKA = 15,
 			GRENADE = 16,
+
 			SET = 17,
 			MAX_ITEMTYPE = 18
 		};

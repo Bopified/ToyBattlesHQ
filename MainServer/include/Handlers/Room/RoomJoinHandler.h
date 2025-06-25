@@ -273,7 +273,10 @@ namespace Main
 				{
 					session->sendMessage("Assassin mode is ENABLED", Main::Enums::TIP);
 				}
-				
+				else if (room->isCsdMode())
+				{
+					session->sendMessage("CSD mode is ENABLED", Main::Enums::TIP);
+				}
 			}
 			else
 			{

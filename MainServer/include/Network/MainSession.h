@@ -407,6 +407,8 @@ namespace Main
 			void resetTradeInfo();
 
 			void spawnItem(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& itemSerialInfo, const std::string& action);
+
+			bool hasCsdItems() const;
 		};
 	}
 }

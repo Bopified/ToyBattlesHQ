@@ -14,7 +14,7 @@ namespace Ac
     private:
         // [SEID] -> [PacketHash] -> [timestamp]
         std::unordered_map<uint32_t, std::unordered_map<size_t, std::uint64_t>> playerData;
-        static inline std::uint64_t analysisWindowMs = 300000;
+        static inline std::uint64_t analysisWindowMs = 120000;
 
         std::string floatToString(float value, int precision = 2)
         {
@@ -50,7 +50,7 @@ namespace Ac
             {
                 const ACFlag flag{
                     event.session->getAccountId(),
-                    "Packet Replication (e.g. WPE)",
+                    "Possible Packet Replication (e.g. WPE)",
                     "Packet replication detected (ID " + std::to_string(event.packetId) + "): " +
                     "Duplicate packet in " +
                     floatToString((serverTime - playerPackets[packetHash]) / 1000.0f) +

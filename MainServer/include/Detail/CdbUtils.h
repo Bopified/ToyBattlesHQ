@@ -95,6 +95,8 @@ namespace Main
 			return std::nullopt;
 		}
 
+		// ei_key == three ==> HP
+		// ei_key == thirteen ==> Speed.
 		inline std::pair<std::uint32_t, std::uint32_t> getExpAndMpEnhancementFor(std::uint32_t itemId)
 		{
 			std::pair<std::uint32_t, std::uint32_t> totalExpMpPercentageToAdd{};
@@ -122,6 +124,16 @@ namespace Main
 			}
 
 			return totalExpMpPercentageToAdd;
+		}
+
+		inline bool isNoOptionItem(std::uint32_t itemId)
+		{
+			if (const auto entry = cdbItemWeapons::getInstance().getEntry(itemId); entry)
+			{
+				std::string optionStr(entry->ii_option.data(), strnlen(entry->ii_option.data(), entry->ii_option.size()));
+				return optionStr.find("No option") != std::string::npos;
+			}
+			return false;
 		}
 
 		inline std::optional<std::uint16_t> getItemDurability(std::uint32_t itemId)

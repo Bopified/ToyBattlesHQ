@@ -203,6 +203,7 @@
     <ClInclude Include="include\ChatCommands\Commands\ChangeHost.h" />
     <ClInclude Include="include\ChatCommands\Commands\ChangeRoomTitle.h" />
     <ClInclude Include="include\ChatCommands\Commands\Close.h" />
+    <ClInclude Include="include\ChatCommands\Commands\CsdMode.h" />
     <ClInclude Include="include\ChatCommands\Commands\DebugRoom.h" />
     <ClInclude Include="include\ChatCommands\Commands\Disconnect.h" />
     <ClInclude Include="include\ChatCommands\Commands\EnableRoomCreation.h" />

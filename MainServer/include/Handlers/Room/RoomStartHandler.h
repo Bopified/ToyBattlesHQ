@@ -62,6 +62,11 @@ namespace Main
 
 				if (request.getExtra() == 38) 
 				{ // host or non-host clicks on "start" button 
+					if (room->isCsdMode() && !session->hasCsdItems())
+					{
+						session->sendMessage("Error: This room requires CSD equipment.");
+						return;
+					}
 					if (room->isHost(selfUniqueId))
 					{
 						room->generateMapIfRandom();
