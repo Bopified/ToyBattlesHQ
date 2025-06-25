@@ -255,6 +255,7 @@ namespace Main
 
 		void Session::setAccountInfo(const AccountInfo& accountInfo)
 		{
+			this->setAccountId(accountInfo.accountID);
 			m_player.setAccountInfo(accountInfo);
 
 			m_packet.setTcpHeader(m_id, Common::Enums::USER_LARGE_ENCRYPTION);

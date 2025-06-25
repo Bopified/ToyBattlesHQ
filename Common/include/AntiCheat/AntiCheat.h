@@ -63,7 +63,7 @@ namespace Ac
 
                 std::ostringstream descriptionStream;
                 descriptionStream << "CheatType: " << flag.cheatType
-                    << ", SessionID: " << flag.sessionId
+                    << ", AccountID: " << flag.sessionId
                     << ", Details: " << flag.details;
 
                 insertStmt->setString(1, descriptionStream.str());

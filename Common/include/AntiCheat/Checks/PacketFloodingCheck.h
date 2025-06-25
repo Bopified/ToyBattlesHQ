@@ -44,7 +44,7 @@ namespace Ac
             if (packetRecords.size() > event.maxPacketsPerSecond)
             {
                 const ACFlag flag{
-                    event.session->getId(),
+                    event.session->getAccountId(),
                     event.floodingType,
                     "Packet flood (ID " + std::to_string(event.packetId) + "): " +
                     std::to_string(packetRecords.size()) + " packets in " +

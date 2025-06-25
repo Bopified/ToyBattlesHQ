@@ -49,7 +49,7 @@ namespace Ac
             if (playerPackets.find(packetHash) != playerPackets.end())
             {
                 const ACFlag flag{
-                    event.session->getId(),
+                    event.session->getAccountId(),
                     "Packet Replication (e.g. WPE)",
                     "Packet replication detected (ID " + std::to_string(event.packetId) + "): " +
                     "Duplicate packet in " +
