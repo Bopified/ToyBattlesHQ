@@ -40,6 +40,7 @@ namespace Main
 			std::uniform_int_distribution<int> m_dist{ 1, 100 };
 
 			std::unordered_map<std::uint32_t, std::uint32_t> m_eventMissions;
+			std::unordered_set<int> m_packetReplicaWhitelist{ 71, 81, 86, 87, 101, 284 };
 
 		public:
 			std::uint64_t m_matchStartTime{};
@@ -49,7 +50,6 @@ namespace Main
 			std::string m_hwid{ "" };
 			std::uint32_t m_pingPacketCounter = 0;
 			
-		public:
 			using Item = Main::Structures::Item;
 			using EquippedItem = Main::Structures::EquippedItem;
 			using DetailedEquippedItem = Main::Structures::DetailedEquippedItem;

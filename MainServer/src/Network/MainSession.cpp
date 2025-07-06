@@ -63,11 +63,12 @@ namespace Main
 			Common::Cryptography::Crypt cryptography;
 			cryptography.KeySetup(0);
 			cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, sizeof(Common::Protocol::TcpHeader));
-			if (header.getCrypt() && header.getSize() >= 12 && callbackNum != 71)
-			{
-				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(shared_from_this(), callbackNum, m_reader));
-			}
 
+			if (header.getCrypt() && header.getSize() >= 12 && m_packetReplicaWhitelist.count(callbackNum) == 0)
+			{
+				m_acManager.submitEvent(std::make_unique<Ac::PacketReplicationEvent>(
+					shared_from_this(), callbackNum, m_reader));
+			}
 		}
 
 		// For many packets, the clients assumes certain extras and logic:

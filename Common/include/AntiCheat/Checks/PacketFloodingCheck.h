@@ -31,12 +31,11 @@ namespace Ac
     public:
         std::optional<ACFlag> processEvent(const PacketFloodingEvent& event) override
         {
-            const std::uint64_t serverTime = Common::Utils::getCurrentTimestampMs();
             auto& packetRecords = playerData[event.session->getId()][event.packetId];
-            packetRecords.push_back({ serverTime, event });
+            packetRecords.push_back({ event.eventTime, event });
 
             while (!packetRecords.empty() &&
-                (serverTime - packetRecords.front().serverTime) > event.analysisWindowMs)
+                (event.eventTime - packetRecords.front().serverTime) > event.analysisWindowMs)
             {
                 packetRecords.pop_front();
             }
@@ -59,6 +58,7 @@ namespace Ac
 
             return std::nullopt;
         }
+
     };
 }
 

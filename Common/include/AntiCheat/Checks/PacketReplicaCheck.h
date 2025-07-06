@@ -32,7 +32,6 @@ namespace Ac
     public:
         std::optional<ACFlag> processEvent(const PacketReplicationEvent& event) override
         {
-            const std::uint64_t serverTime = Common::Utils::getCurrentTimestampMs();
             const size_t packetHash = calculatePacketHash(event.data);
             auto& playerPackets = playerData[event.session->getId()];
 
@@ -40,14 +39,14 @@ namespace Ac
             {
                 timestamps.erase(
                     std::remove_if(timestamps.begin(), timestamps.end(), [&](std::uint64_t ts) {
-                        return (serverTime - ts) > analysisWindowMs;
+                        return (event.eventTime - ts) > analysisWindowMs;
                         }),
                     timestamps.end()
                 );
             }
 
             auto& timestamps = playerPackets[packetHash];
-            timestamps.push_back(serverTime);
+            timestamps.push_back(event.eventTime);
 
             if (timestamps.size() >= 4)
             {
@@ -59,7 +58,7 @@ namespace Ac
                     floatToString(analysisWindowMs / 1000.0f) + "s window"
                 };
 
-                playerData[event.session->getId()].clear(); 
+                playerData[event.session->getId()].clear();
                 event.session->closeSocket();
 
                 return flag;
