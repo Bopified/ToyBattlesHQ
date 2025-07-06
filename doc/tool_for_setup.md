@@ -21,7 +21,6 @@ A GUI tool that makes setting up your own local MicroVolts server quick and easy
 ### ✅ Prerequisites
 
 - ❗ **Do not install MariaDB manually** — the tool handles this for you.
-- ✅ Make sure you’ve cloned the emulator repository and built your servers as described earlier.
 
 ---
 
