@@ -3,7 +3,7 @@ Starting from version 2.0, setting up the emulator should be much easier than be
 
 A new `config.ini` file was now added inside the `Setup` folder (in the root directory). 
 
-Want an easy setup? You can now use a GUI tool created by Mikael. See - [🛠️ Setup Tool (GUI)]([https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/tool_for_setup.md))
+Want an easy setup? You can now use a GUI tool created by Mikael. See  [🛠️ Setup Tool (GUI)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/tool_for_setup.md)
 
 ## 🔧 config.ini Configuration Guide
 This file contains all the key configuration values used by the servers (Auth, Main, Cast) and supporting components (database, client, website). Here's how to fill it out correctly:
