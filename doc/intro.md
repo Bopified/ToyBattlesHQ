@@ -16,6 +16,8 @@ I really hope this encourages more devs to get involved with the game and keep i
 - Allow people to further enhance the game's possibilities.
 
 ## Demonstration
+![image](https://github.com/user-attachments/assets/02fcbfa0-530a-403b-8279-72ba8193d823)
+
 This is one of the first videos I ever nade around 2 years ago, at the first stages of this emulator:
 
 https://github.com/user-attachments/assets/24b7a12a-517d-42a9-9554-fe90d8a9f5a9
