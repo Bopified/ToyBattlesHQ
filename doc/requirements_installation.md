@@ -8,6 +8,8 @@ Support for Linux and GCC is definitely on my radar, but that’s something plan
 You will also need >= Python 3.10.
 
 ## Installation
+Want an easy setup? You can now use a GUI tool created by Mikael. See  [🛠️ Setup Tool (GUI)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/tool_for_setup.md)
+
 The installation process is pretty much the same as it was in version 1.0 when it comes to setting up the servers. Most of the dependencies are handled through vcpkg, and a vcpkg.json file is already provided to help with that.
 
 Here’s how to get everything set up:
