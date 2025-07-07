@@ -83,6 +83,23 @@ int main()
 	Utils::Logger::log(std::format("Website Information: IP: {},  Port: {}",
 		websiteInfo.ip, websiteInfo.port), Utils::LogType::Normal);
 
+	const std::string banner = R"(
+
+   _____   __          __  ____             _         ______                 _       _             
+  / ____|  \ \        / / |  _ \           (_)       |  ____|               | |     | |            
+ | (___   __\ \  /\  / /__| |_) | ___  __ _ _ _ __   | |__   _ __ ___  _   _| | __ _| |_ ___  _ __ 
+  \___ \ / _ \ \/  \/ / _ \  _ < / _ \/ _` | | '_ \  |  __| | '_ ` _ \| | | | |/ _` | __/ _ \| '__|
+  ____) | (_) \  /\  /  __/ |_) |  __/ (_| | | | | | | |____| | | | | | |_| | | (_| | || (_) | |   
+ |_____/ \___/ \/  \/ \___|____/ \___|\__, |_|_| |_| |______|_| |_| |_|\__,_|_|\__,_|\__\___/|_|   
+                                       __/ |                                                       
+                                      |___/                                                       
+
+    GitHub: https://github.com/SoWeBegin/MicrovoltsEmulator
+
+)";
+
+	Utils::Logger::log(banner, Utils::LogType::Info);
+
 	Main::MainServer srv(io_context, io_context_boost, parsedServerInfo, websiteInfo.port);
 
 	srv.asyncAccept();
