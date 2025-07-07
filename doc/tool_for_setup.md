@@ -31,7 +31,7 @@ You can watch a simple video tutorial [here](https://www.youtube.com/watch?v=nZY
 
 If you encounter problems:
 
-- Open an issue directly on the public repository for the tool [here](https://github.com/Mikael/MicroVolts-Server-Setup)) 
+- Open an issue directly on the public repository for the tool [here](https://github.com/Mikael/MicroVolts-Server-Setup)
 - Or open an issue in this repository — we’ll make sure it gets forwarded
 
 ---
