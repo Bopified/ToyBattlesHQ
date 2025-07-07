@@ -20,19 +20,22 @@ A GUI tool that makes setting up your own local MicroVolts server quick and easy
 
 ### ✅ Prerequisites
 
-- ❗ **Do not install MariaDB manually** — the tool handles this for you.
-
+- Git https://git-scm.com/downloads/win
+- Visual Studio https://visualstudio.microsoft.com/downloads/
+- Python https://www.python.org/downloads/
 ---
+
+You can watch a simple video tutorial [here](https://www.youtube.com/watch?v=nZYgwMuQXvo).
 
 ### 🧩 Having Issues?
 
 If you encounter problems:
 
-- Contact [@mikael](https://github.com/mikael) directly  
+- Open an issue directly on the public repository for the tool [here](https://github.com/Mikael/MicroVolts-Server-Setup)) 
 - Or open an issue in this repository — we’ll make sure it gets forwarded
 
 ---
 
 ### 📦 Download
 
-➡️ [**Download the Setup Tool (MVTool)**](https://github.com/SoWeBegin/MicrovoltsEmulator/releases/tag/MVtool)
+➡️ [**Download the Setup Tool (MVTool)**](https://github.com/Mikael/MicroVolts-Server-Setup)
