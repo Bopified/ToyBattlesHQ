@@ -16,19 +16,23 @@ namespace Main
 	{
 		inline Main::Enums::ChatGrade getChatGrade(Common::Enums::PlayerGrade playerGrade)
 		{
-			if (playerGrade == Main::Enums::PlayerGrade::GRADE_NORMAL)
-			{
-				return static_cast<Main::Enums::ChatGrade>(playerGrade - 1);
-			}
-			else if (playerGrade == Main::Enums::PlayerGrade::GRADE_MOD || playerGrade == Main::Enums::PlayerGrade::GRADE_ES)
-			{
-				return static_cast<Main::Enums::ChatGrade>(playerGrade - 2);
-			}
-			else if (playerGrade == Main::Enums::PlayerGrade::GRADE_TESTER)
-			{
-				return Main::Enums::ChatGrade::CHAT_TESTER;
-			}
-			return Main::Enums::ChatGrade::CHAT_GM;
+ 		   if (playerGrade == Main::Enums::PlayerGrade::GRADE_NORMAL)
+		    {
+		        return static_cast<Main::Enums::ChatGrade>(playerGrade - 1);
+		    }
+		    else if (playerGrade == Main::Enums::PlayerGrade::GRADE_MOD || playerGrade == Main::Enums::PlayerGrade::GRADE_ES)
+		    {
+		        return static_cast<Main::Enums::ChatGrade>(playerGrade - 2);
+		    }
+		    else if (playerGrade == Main::Enums::PlayerGrade::GRADE_TESTER)
+		    {
+		        return Main::Enums::ChatGrade::CHAT_TESTER;
+		    }
+		    else if (playerGrade == Main::Enums::PlayerGrade::GRADE_GM)
+ 		   {
+		        return Main::Enums::ChatGrade::CHAT_GM;
+		    }
+		    return Main::Enums::ChatGrade::CHAT_NORMAL;
 		}
 
 		inline void executeCommand(std::shared_ptr<Main::Network::Session> session, const Common::Network::Packet& request, Common::Network::Packet& response,
