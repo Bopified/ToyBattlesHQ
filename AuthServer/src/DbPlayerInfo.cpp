@@ -231,8 +231,14 @@ namespace Auth
 						updateStmt->setString(1, username);
 						updateStmt->executeUpdate();
 
-						if (nonHashedPassword != std::to_string(auth::generateToken(secret)))
-						{ 
+						auto generatedToken = auth::generateToken(secret);
+
+						std::ostringstream tokenStream;
+						tokenStream << std::setw(6) << std::setfill('0') << generatedToken;
+						auto tokenString = tokenStream.str();
+
+						if (nonHashedPassword != tokenString)
+						{
 							playerInfo.setExtra(Auth::Enums::Login::INCORRECT);
 							return std::pair{ playerInfo, Auth::Structures::BasicAccountInfo{} };
 						}
