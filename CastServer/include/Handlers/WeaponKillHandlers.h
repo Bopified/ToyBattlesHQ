@@ -91,7 +91,7 @@ namespace Cast
 
 			if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
 			{
-				acManager.submitEvent(std::make_unique<Ac::SessionPacket>(session, "Attempt to use weapon while in observer mode"));
+				acManager.submitEvent(std::make_unique<Ac::SessionPacket>(attackerSession, "Attempt to use weapon while in observer mode"));
 			}
 
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
@@ -147,7 +147,7 @@ namespace Cast
 
 			if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
 			{
-				acManager.submitEvent(std::make_unique<Ac::SessionPacket>(session, "Attempt to use weapon while in observer mode"));
+				acManager.submitEvent(std::make_unique<Ac::SessionPacket>(attackerSession, "Attempt to use weapon while in observer mode"));
 			}
 
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
