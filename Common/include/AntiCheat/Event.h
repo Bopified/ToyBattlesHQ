@@ -5,18 +5,21 @@
 #include <string>
 #include <memory>
 #include "../Utils/Utils.h"
+#include "../Network/Session.h"
 
 namespace Ac
 {
     struct ACEvent
     {
         virtual ~ACEvent() = default;
+
         enum class Type 
         { 
             PlayerPosition, 
             PlayerKill, 
             PacketFlooding,
-            PacketReplication
+            PacketReplication,
+            ObserverCheck,
         } type;
     };
 
@@ -39,6 +42,20 @@ namespace Ac
         }
 
         static constexpr Type typeValue = Type::PacketFlooding;
+    };
+
+    struct SessionPacket : ACEvent
+    {
+        std::shared_ptr<Common::Network::Session> session;
+        std::string message;
+        SessionPacket(std::shared_ptr<Common::Network::Session> session_, const std::string& mss)
+            : session(session_)
+            , message(mss)
+        {
+            type = Type::ObserverCheck;
+        }
+
+        static constexpr Type typeValue = Type::ObserverCheck;
     };
 
     struct PacketReplicationEvent : ACEvent

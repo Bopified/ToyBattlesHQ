@@ -12,6 +12,8 @@
 #include "../Network/SessionsManager.h"
 #include "../Structures/Rest.h"
 #include <asio/post.hpp>
+#include "AntiCheat/AntiCheat.h"
+#include "AntiCheat/Event.h"
 
 namespace Cast
 {
@@ -303,11 +305,14 @@ namespace Cast
 
         inline void handlePlayerRespawn(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session, 
             Cast::Classes::RoomsManager& roomsManager,
-            Cast::Network::SessionsManager& sessionsManager)
+            Cast::Network::SessionsManager& sessionsManager,
+            Ac::AntiCheatManager& acManager)
         {
             auto roomOpt = roomsManager.getRoom(session->getId());
             if (!roomOpt) return;
             auto& room = *roomOpt;
+
+            acManager.submitEvent(std::make_unique<Ac::SessionPacket>(session, "Attempt to respawn while in observer mode"));
 
             Common::Network::UnecryptedPacket response;
             response.setTcpHeader(session->getId());

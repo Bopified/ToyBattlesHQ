@@ -120,6 +120,7 @@ namespace Cast
 						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
 						{
 							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession, 4, 1000, "Room Rape (flooding)", 265));
+							acManager.submitEvent(std::make_unique<Ac::SessionPacket>(session, "Attempt to use weapon while in observer mode"));
 						}
 					}
 				}
@@ -170,6 +171,7 @@ namespace Cast
 						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
 						{
 							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession, 4, 1000, "Room Rape (flooding)", 265));
+							acManager.submitEvent(std::make_unique<Ac::SessionPacket>(session, "Attempt to use weapon while in observer mode"));
 						}
 					}
 				}
