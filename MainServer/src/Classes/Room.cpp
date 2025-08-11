@@ -1358,19 +1358,19 @@ namespace Main
 						{
 							session->sendEventMission(ClientData::EventMissionPoint{ 1 });
 						}
-						else if (m_settings.mode == Common::Enums::ZombieMode && stats.meleeKills >= 2) // >= 2 infections per match = 1 pt
+						if (m_settings.mode == Common::Enums::ZombieMode && stats.meleeKills >= 2) // >= 2 infections per match = 1 pt
 						{
 							session->sendEventMission(ClientData::EventMissionPoint{ 2 });
 						}
-						else if (stats.headshots >= 2) // >= 2 headshots per match = 1 pt
+						if (stats.headshots >= 2) // >= 2 headshots per match = 1 pt
 						{
 							session->sendEventMission(ClientData::EventMissionPoint{ 3 });
 						}
-						else if (stats.totalKills >= 15) // >= total kills >= 15 per match = 1 pt
+						if (stats.totalKills >= 15) // >= total kills >= 15 per match = 1 pt
 						{
 							session->sendEventMission(ClientData::EventMissionPoint{ 4 });
 						}
-						else if (stats.mgKills >= 5) // >= mgKills >= 5 per match = 1 pt
+						if (stats.mgKills >= 5) // >= mgKills >= 5 per match = 1 pt
 						{ 
 							session->sendEventMission(ClientData::EventMissionPoint{ 5 });
 						}
