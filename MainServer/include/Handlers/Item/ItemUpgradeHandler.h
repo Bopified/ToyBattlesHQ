@@ -56,18 +56,17 @@ namespace Main
                 }
 
                 const auto& firstItemSerialInfo = itemSerialInfos.front(); 
-                const auto firstItemIdOpt = session->getPlayer().findItemIdBySerialInfo(firstItemSerialInfo);
+                const auto firstItemIdOpt = session->getPlayer().findItemIdBySerialInfo(firstItemSerialInfo); // itemID of new weapon after upgrade
                 if (!firstItemIdOpt)
                 {
                     session->sendMessage("[handleItemUpgrade] error: itemIdOpt was nullopt for first item: " + std::to_string(firstItemSerialInfo.itemNumber));
                     return;
                 }
 
-                const auto mpNeeded = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbUpgradeInfo>::getInstance().getEntry(*firstItemIdOpt);
-                const auto hasParent = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbUpgradeInfo>::getInstance().getEntry(*firstItemIdOpt);
-                if (!mpNeeded || !hasParent)
+                const auto upgradeInfo = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbUpgradeInfo>::getInstance().getEntry(*firstItemIdOpt);
+                if (!upgradeInfo)
                 {
-                    session->sendMessage("[handleItemUpgrade] error: !mpNeeded or !hasParent for first item: " + std::to_string(firstItemSerialInfo.itemNumber));
+                    session->sendMessage("[handleItemUpgrade] error: upgradeInfo not found for itemID " + std::to_string(firstItemSerialInfo.itemNumber));
                     return;
                 }
 
@@ -88,12 +87,13 @@ namespace Main
                         useGlue = *itemIdOpt == SpecialItems::SUPER_GLUE;
                 }
 
-                session->upgradeWeapon(*firstItemIdOpt, firstItemSerialInfo, mpNeeded->ui_buy_point, hasParent->ui_parentid, request.getMission(), request.getOption(),
-                    useEnergyRefund, useGlue);
-
-                for (std::size_t i = 1; i < itemSerialInfos.size(); ++i)
+                if (session->upgradeWeapon(*firstItemIdOpt, firstItemSerialInfo, upgradeInfo->ui_parentid, request.getMission(), 
+                    request.getOption(), useEnergyRefund, useGlue))
                 {
-                    session->deleteItem(itemSerialInfos[i], "Item deleted after it was used while upgrading a weapon (Example: Super Glue item");
+                    for (std::size_t i = 1; i < itemSerialInfos.size(); ++i)
+                    {
+                        session->deleteItem(itemSerialInfos[i], "Item deleted after it was used while upgrading a weapon (Example: Super Glue item");
+                    }
                 }
             }
 			else if (receivedExtra == 53)

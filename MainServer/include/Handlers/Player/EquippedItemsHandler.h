@@ -17,13 +17,10 @@ namespace Main
 
 			if (request.getExtra() == 51) 
 			{
-				std::uint16_t character;
-				std::uint32_t itemNumber;
-
 				for (std::size_t idx = 0; idx < request.getOption(); ++idx)
 				{
-					std::memcpy(&character, request.getData() + idx * 12, sizeof(character));
-					std::memcpy(&itemNumber, request.getData() + idx * 12 + 4, sizeof(itemNumber));
+					const std::uint16_t character = Main::Details::parseData<std::uint16_t>(request, idx * 1);
+					const std::uint32_t itemNumber = Main::Details::parseData<std::uint32_t>(request, idx * 12 + 4);
 					session->switchItemEquip(character, itemNumber);
 				}
 			}
@@ -33,13 +30,11 @@ namespace Main
 			}
 			else if (request.getMission() == 0)
 			{
-				Main::Structures::ItemSerialInfo itemSerialInfo;
-				std::uint64_t val = 0;
-					
 				for (std::size_t idx = 0; idx < request.getOption(); ++idx)
 				{
-					std::memcpy(&itemSerialInfo, request.getData() + idx * 8, sizeof(itemSerialInfo));
-					std::memcpy(&val, request.getData() + idx * 8, sizeof(itemSerialInfo));
+					const Main::Structures::ItemSerialInfo itemSerialInfo = Main::Details::parseData<Main::Structures::ItemSerialInfo>(request, idx * 8);
+					const std::uint64_t val = Main::Details::parseData<std::uint64_t>(request, idx * 8);
+
 					if (val < static_cast<std::uint64_t>(Common::Constants::maxItemType))
 					{ // val == equippedItem.type
 						session->unequipItem(val); 

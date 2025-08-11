@@ -15,8 +15,8 @@ namespace Main
 			Main::Classes::RoomsManager& roomsManager)
 		{
 			const std::uint32_t selectedCharacter = static_cast<std::uint32_t>(request.getOption());
-			const bool isCharacterAvailable = selectedCharacter == Common::Enums::Naomi || selectedCharacter == Common::Enums::Pandora
-				|| selectedCharacter == Common::Enums::CHIP || selectedCharacter == Common::Enums::Knox || selectedCharacter == Common::Enums::Kai;
+			const bool isCharacterAvailable = true; //selectedCharacter == Common::Enums::Naomi || selectedCharacter == Common::Enums::Pandora
+				//|| selectedCharacter == Common::Enums::CHIP || selectedCharacter == Common::Enums::Knox || selectedCharacter == Common::Enums::Kai;
 
 			Common::Network::Packet response;
 			response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);

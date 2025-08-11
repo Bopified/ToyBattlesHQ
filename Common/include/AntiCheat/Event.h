@@ -44,19 +44,21 @@ namespace Ac
         static constexpr Type typeValue = Type::PacketFlooding;
     };
 
-    struct SessionPacket : ACEvent
+    template<typename SessionType>
+    struct OutsideMatchActionEvent : ACEvent 
     {
-        std::shared_ptr<Common::Network::Session> session;
+        std::shared_ptr<SessionType> session;
         std::string message;
-        SessionPacket(std::shared_ptr<Common::Network::Session> session_, const std::string& mss)
-            : session(session_)
-            , message(mss)
+
+        OutsideMatchActionEvent(std::shared_ptr<SessionType> session_, const std::string& mss)
+            : session(session_), message(mss)
         {
             type = Type::ObserverCheck;
         }
 
         static constexpr Type typeValue = Type::ObserverCheck;
     };
+
 
     struct PacketReplicationEvent : ACEvent
     {

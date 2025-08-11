@@ -25,6 +25,7 @@ namespace Cast
             std::uint32_t m_roomNumber{};
 
         public:
+            Common::Enums::Team m_team{};
             bool isDead{};
             bool m_isInMatch{ 0 };
             std::string m_nickname;

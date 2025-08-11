@@ -89,9 +89,11 @@ namespace Cast
 			const auto targetUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 20);
 			const std::uint16_t targetHp = Cast::Details::parseData<std::uint16_t>(request, 24);
 
-			if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
+			if (auto attackerSession = sessionsManager.getSession(attackerUid.session);
+				attackerSession &&
+				(attackerSession->m_team == Common::Enums::TEAM_OBSERVER || !attackerSession->m_isInMatch))
 			{
-				acManager.submitEvent(std::make_unique<Ac::SessionPacket>(attackerSession, "Attempt to use weapon while in observer mode"));
+				return;
 			}
 
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
@@ -145,9 +147,11 @@ namespace Cast
 			auto targetUid = Cast::Details::parseDataFromEnd<Main::Structures::UniqueId>(request, 8);
 			auto attackerUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 16);
 
-			if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
+			if (auto attackerSession = sessionsManager.getSession(attackerUid.session);
+				attackerSession &&
+				(attackerSession->m_team == Common::Enums::TEAM_OBSERVER || !attackerSession->m_isInMatch))
 			{
-				acManager.submitEvent(std::make_unique<Ac::SessionPacket>(attackerSession, "Attempt to use weapon while in observer mode"));
+				return;
 			}
 
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))

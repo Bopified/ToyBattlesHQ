@@ -24,12 +24,17 @@ namespace Main
 		inline void handleRoomCreation(const Common::Network::Packet& request, std::shared_ptr<Main::Network::Session> session, Main::Classes::RoomsManager& roomsManager,
 			bool isRoomCreationEnabled)
 		{
-			if (!isRoomCreationEnabled && session->getAccountInfo().playerGrade < Common::Enums::GRADE_ES)
+			if (session->getPlayer().getRoomNumber()) // cannot create a room while already in one
+			{
+				session->sendMessage("You are already in a room - If this is an error, report it");
+				return;
+			}
+			else if (!isRoomCreationEnabled && session->getAccountInfo().playerGrade < Common::Enums::GRADE_ES)
 			{
 				session->sendMessage("Public room creation is currently disabled by the team.");
 				return;
 			}
-			if (!session->getPlayer().isRoomCreationEnabled())
+			else if (!session->getPlayer().isRoomCreationEnabled())
 			{
 				session->sendMessage("You currently cannot create a new room.");
 				return;
@@ -49,8 +54,7 @@ namespace Main
 			roomCreator.ping = session->getPlayer().getPing();
 			roomCreator.team = Common::Enums::TEAM_ALL;
 
-			Main::Structures::CompleteRoomInfo roomInfo;
-			std::memcpy(&roomInfo, request.getData(), request.getDataSize());
+			const Main::Structures::CompleteRoomInfo roomInfo = Main::Details::parseData<Main::Structures::CompleteRoomInfo>(request);
 
 			// request.getOption() ==> server/channel ID
 			Main::Classes::Room room{ roomInfo.title, roomInfo.roomSettings, roomCreator, session };

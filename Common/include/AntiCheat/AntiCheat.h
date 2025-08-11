@@ -7,7 +7,6 @@
 #include <iostream>
 #include "Checks/PacketFloodingCheck.h"
 #include "Checks/PacketReplicaCheck.h"
-#include "Checks/ObserverModeCheck.h"
 
 #include <mariadb/conncpp.hpp>
 #include <mariadb/conncpp/Connection.hpp>
@@ -96,15 +95,15 @@ namespace Ac
         }
 
     public:
-        AntiCheatManager() 
+        AntiCheatManager()
         {
             registerChecker<PacketFloodChecker>();
             registerChecker<PacketReplicationChecker>();
-            registerChecker<ObserverModeActionChecker>();
 
             m_isRunning = true;
             m_thread = std::thread(&AntiCheatManager::worker, this);
         }
+
 
         ~AntiCheatManager()
         {

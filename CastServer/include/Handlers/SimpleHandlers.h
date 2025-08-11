@@ -312,8 +312,6 @@ namespace Cast
             if (!roomOpt) return;
             auto& room = *roomOpt;
 
-            acManager.submitEvent(std::make_unique<Ac::SessionPacket>(session, "Attempt to respawn while in observer mode"));
-
             Common::Network::UnecryptedPacket response;
             response.setTcpHeader(session->getId());
             response.setCommand(request.getOrder(), 0, 0, 0);
@@ -360,6 +358,8 @@ namespace Cast
             
             if (auto targetSession = sessionsManager.getSession(playerRespawnPosition.targetUniqueId.session); targetSession)
             {                
+                if (targetSession->m_team == Common::Enums::TEAM_OBSERVER) return;
+
                 targetSession->isDead = (room->isArenaMode() && room->m_hasMatchStarted) ? true : false;
                 targetSession->m_isInMatch = true;
                 session->m_isInMatch = true;
@@ -435,6 +435,8 @@ namespace Cast
         inline void handleItemPickup(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session, 
             Cast::Classes::RoomsManager& roomsManager)
         {
+            if (session->m_team == Common::Enums::TEAM_OBSERVER || !session->m_isInMatch) return;
+
             if constexpr (PlayerType == Common::Enums::HOST)
             {
                 roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
@@ -451,6 +453,8 @@ namespace Cast
         inline void handleZombieAbility(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session,
             Cast::Classes::RoomsManager& roomsManager)
         {
+            if (session->m_team == Common::Enums::TEAM_OBSERVER || !session->m_isInMatch) return;
+
             if constexpr (PlayerType == Common::Enums::HOST)
             {
                 roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));

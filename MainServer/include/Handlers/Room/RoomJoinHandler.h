@@ -42,6 +42,13 @@ namespace Main
 		{
 			START_BENCHMARK
 
+			if (session->getPlayer().getRoomNumber())
+			{
+				session->sendMessage("Error: you are already inside a room (room number: " + std::to_string(session->getPlayer().getRoomNumber()) + 
+					", cannot join another room!");
+				return;
+			}
+
 			Main::ClientData::RoomInfo requestStructure = followUserRoomInfo.value_or(Main::Details::parseData<Main::ClientData::RoomInfo>(request));
 			const bool hasInputtedPassword = request.getDataSize() == 20;
 			

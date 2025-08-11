@@ -39,10 +39,8 @@ namespace Main
 					} votekickResponse;
 
 					// targetUniqueId and kickReason is provided by the client
-					std::memcpy(&votekickResponse.targetUniqueId, reinterpret_cast<std::uint8_t*>(const_cast<std::uint8_t*>(request.getData())),
-						sizeof(Main::Structures::UniqueId));
-					std::memcpy(&votekickResponse.kickReasonId, reinterpret_cast<std::uint8_t*>(const_cast<std::uint8_t*>(request.getData() + 4)),
-						sizeof(std::uint32_t));
+					votekickResponse.targetUniqueId = Main::Details::parseData<Main::Structures::UniqueId>(request);
+					votekickResponse.kickReasonId = Main::Details::parseData<std::uint32_t>(request, sizeof(Main::Structures::UniqueId));
 
 					if (auto targetSession = room->getPlayer(votekickResponse.targetUniqueId))
 					{
@@ -142,9 +140,7 @@ namespace Main
 					if (request.getDataSize() == sizeof(Main::Structures::RoomSettingsUpdateBase))
 					{ // Both title & password changed
 						if (!room->isHost(session->getAccountInfo().uniqueId)) return;
-						Main::Structures::RoomSettingsUpdateBase updatedRoomSettings;
-						std::memcpy(&updatedRoomSettings, request.getData(), request.getDataSize());
-
+						auto updatedRoomSettings = Main::Details::parseData<Main::Structures::RoomSettingsUpdateBase>(request);
 						room->updateRoomSettings(updatedRoomSettings, request.getOption());
 
 						// Disable team balance
@@ -155,8 +151,7 @@ namespace Main
 					else if (request.getDataSize() == sizeof(Main::Structures::RoomSettingsUpdateTitle))
 					{
 						if (!room->isHost(session->getAccountInfo().uniqueId)) return;
-						Main::Structures::RoomSettingsUpdateTitle updatedRoomSettings;
-						std::memcpy(&updatedRoomSettings, request.getData(), request.getDataSize());
+						Main::Structures::RoomSettingsUpdateTitle updatedRoomSettings = Main::Details::parseData<Main::Structures::RoomSettingsUpdateTitle>(request);
 
 						room->updateRoomSettings(updatedRoomSettings.roomSettingsUpdateBase, request.getOption());
 						room->updateTitle(updatedRoomSettings.title);
@@ -169,8 +164,7 @@ namespace Main
 					else if (request.getDataSize() == sizeof(Main::Structures::RoomSettingsUpdatePassword))
 					{
 						if (!room->isHost(session->getAccountInfo().uniqueId)) return;
-						Main::Structures::RoomSettingsUpdatePassword updatedRoomSettings;
-						std::memcpy(&updatedRoomSettings, request.getData(), request.getDataSize());
+						Main::Structures::RoomSettingsUpdatePassword updatedRoomSettings = Main::Details::parseData<Main::Structures::RoomSettingsUpdatePassword>(request);
 
 						room->updateRoomSettings(updatedRoomSettings.roomSettingsUpdateBase, request.getOption());
 						room->updatePassword(updatedRoomSettings.password);
@@ -183,8 +177,8 @@ namespace Main
 					else if (request.getDataSize() == sizeof(Main::Structures::RoomSettingsUpdateTitlePassword))
 					{
 						if (!room->isHost(session->getAccountInfo().uniqueId)) return;
-						Main::Structures::RoomSettingsUpdateTitlePassword updatedRoomSettings;
-						std::memcpy(&updatedRoomSettings, request.getData(), request.getDataSize());
+						Main::Structures::RoomSettingsUpdateTitlePassword updatedRoomSettings =
+							Main::Details::parseData<Main::Structures::RoomSettingsUpdateTitlePassword>(request);
 
 						room->updateRoomSettings(updatedRoomSettings.roomSettingsUpdateBase, request.getOption());
 						room->updatePassword(updatedRoomSettings.password);

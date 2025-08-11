@@ -54,8 +54,7 @@ namespace Main
 			response.setOrder(request.getOrder());
 			response.setExtra(request.getExtra());
 			
-			std::uint32_t targetAccountId;
-			std::memcpy(&targetAccountId, request.getData() + sizeof(std::uint32_t), sizeof(std::uint32_t));
+			const std::uint32_t targetAccountId = Main::Details::parseData<std::uint32_t>(request, sizeof(std::uint32_t));
 
 			if (auto targetSession = sessionsManager.getSessionByAccountId(targetAccountId))
 			{

@@ -234,8 +234,8 @@ namespace Main
 
 			bool prolongItems(const std::vector<Main::Structures::BoughtItemToProlong>& toProlongItems, const std::vector<std::uint64_t>& newExpirations);
 
-			void upgradeWeapon(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& serialInfo, std::uint32_t mpNeeded, bool hasParent, 
-				std::uint8_t mission, std::uint8_t option, bool, bool);
+			bool upgradeWeapon(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& serialInfo, bool hasParent,
+				std::uint8_t mission, std::uint8_t option, bool useEnergyRefund, bool useGlue);
 
 			void resetUpgrade(const Main::ClientData::UpgradeReset& upgradeReset);
 

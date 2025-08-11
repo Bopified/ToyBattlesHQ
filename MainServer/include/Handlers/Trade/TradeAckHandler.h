@@ -27,8 +27,7 @@ namespace Main
 			const std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 			if (now >= tradeInfo.startDate && now <= tradeInfo.endDate)
 			{
-				std::uint32_t targetAccountId;
-				std::memcpy(&targetAccountId, request.getData() + sizeof(std::uint32_t), sizeof(std::uint32_t));
+				const std::uint32_t targetAccountId = Main::Details::parseData<std::uint32_t>(request, sizeof(std::uint32_t));
 				const auto& selfAccountInfo = session->getAccountInfo();
 				if (targetAccountId == selfAccountInfo.accountID)
 				{ // prevent trading with self

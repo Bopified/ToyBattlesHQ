@@ -53,7 +53,6 @@ namespace Common
 			std::string m_ip;
 
 		public:
-			Enums::Team m_team{};
 			bool m_checkValidSession{true};
 			bool m_isValidSession{};
 			bool m_isFirstRead{ true };
