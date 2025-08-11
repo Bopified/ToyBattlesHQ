@@ -16,6 +16,7 @@
 #include "Packet.h"
 #include "SessionIdManager.h"
 #include <queue>
+#include "../Enums/GameEnums.h"
 
 #ifdef ENABLE_BENCHMARKING
 #include <chrono>

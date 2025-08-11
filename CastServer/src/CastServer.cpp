@@ -189,7 +189,8 @@ namespace Cast
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handleMatchInitialLoading(request, session, m_roomsManager, m_serverId); });
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(276, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerRespawn(request, session, m_roomsManager, m_sessionsManager); });
+			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerRespawn(request, session, m_roomsManager, m_sessionsManager,
+				m_acManager); });
 
 		// Room tick providing:
 		// After the host client receives packet 78 from the non-host, it provides the non-host with the updated room tick

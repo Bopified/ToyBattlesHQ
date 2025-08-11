@@ -18,8 +18,7 @@ namespace Main
 		inline void handleAddTradeItem(const Common::Network::Packet& request, std::shared_ptr<Main::Network::Session> session, 
 			Main::Network::SessionsManager& sessionsManager)
 		{
-			Main::Structures::ItemSerialInfo itemSerialInfo;
-			std::memcpy(&itemSerialInfo, request.getData() + 8, sizeof(itemSerialInfo));
+			const Main::Structures::ItemSerialInfo itemSerialInfo = Main::Details::parseData<Main::Structures::ItemSerialInfo>(request, 8);
 
 			Common::Network::Packet response;
 			response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);
@@ -56,6 +55,11 @@ namespace Main
 					response.setOption(0);
 					response.setData(error.data(), error.size());
 					session->asyncWrite(response);
+					return;
+				}
+				else if (!session->getPlayer().isItemTradeable(itemSerialInfo))
+				{ // exploit attempt
+					session->closeSocket();
 					return;
 				}
 				else if (session->addTradedItem(itemID, itemSerialInfo))

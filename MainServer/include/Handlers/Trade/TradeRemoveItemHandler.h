@@ -20,8 +20,7 @@ namespace Main
 		{
 			if (session->hasBeenMatchBanned()) return;
 
-			Main::Structures::ItemSerialInfo itemSerialInfo;
-			std::memcpy(&itemSerialInfo, request.getData() + 8, sizeof(itemSerialInfo));
+			const Main::Structures::ItemSerialInfo itemSerialInfo = Main::Details::parseData<Main::Structures::ItemSerialInfo>(request, 8);
 
 			Common::Network::Packet response;
 			response.setTcpHeader(request.getSession(), Common::Enums::USER_LARGE_ENCRYPTION);

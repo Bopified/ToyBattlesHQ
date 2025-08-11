@@ -547,39 +547,64 @@ namespace Main
 		}
 
 		// Assumptions: serialInfo is correct
-		void Session::upgradeWeapon(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& serialInfo, std::uint32_t mpNeeded,
-			bool hasParent, std::uint8_t mission, std::uint8_t option, bool useEnergyRefund, bool useGlue)
+		bool Session::upgradeWeapon(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& serialInfo, bool hasParent,
+			std::uint8_t mission, std::uint8_t option, bool useEnergyRefund, bool useGlue)
 		{
+			const std::uint32_t toAdd = hasParent ? 1 : (mission * 10 + 1);
+			const std::uint32_t newItemId = itemId + toAdd;
+			const auto newItemUpgradeInfo = Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbUpgradeInfo>::getInstance().getEntry(newItemId);
+			if (!newItemUpgradeInfo)
+			{
+				sendMessage("[Session::upgradeWeapon] newItemUpgradeInfo is std::nullopt - report this issue if it's an error");
+				return false;
+			}
+
 			static constexpr std::array<std::uint8_t, 72> unused{};
 			const Main::Structures::AccountInfo& accountInfo = m_player.getAccountInfo();
 			m_packet.setTcpHeader(m_id, Common::Enums::NO_ENCRYPTION);
 			m_packet.setCommand(101, mission, Enums::UPGRADE_SUCCESS, option);
 			m_packet.setData(unused.data(), unused.size());
 
-			if (accountInfo.microPoints < mpNeeded)
+			if (accountInfo.microPoints < newItemUpgradeInfo->ui_buy_point)
 			{
 				m_packet.setExtra(Enums::NOT_ENOUGH_MP_FOR_UPGRADE);
 				asyncWrite(m_packet);
-				return;
+				return false;
 			}
-			setAccountMicroPoints(accountInfo.microPoints - mpNeeded);
+			auto itemEnergy = m_player.getItemEnergy(serialInfo);
+			if (!itemEnergy)
+			{
+				m_packet.setExtra(Enums::UPGRADE_FAIL);
+				asyncWrite(m_packet);
+				sendMessage("[Session::upgradeWeapon] could not retrieve the energy for this item, please report this issue");
+				return false;
+			}
+			// check that itemEnergy >= totalRequiredEnergy (from weapon CgdUtils)
+			if (itemEnergy.value() < newItemUpgradeInfo->ui_use_exp)
+			{
+				m_packet.setExtra(Enums::UPGRADE_FAIL);
+				asyncWrite(m_packet);
+				sendMessage("[Session::upgradeWeapon] error: selected item does not have enough energy for an upgrade!");
+				return false;
+			}
+			setAccountMicroPoints(accountInfo.microPoints - newItemUpgradeInfo->ui_buy_point);
 
 			if (!useGlue && m_dist(m_gen) <= Common::Constants::upgradeFailRate)
 			{
 				m_packet.setExtra(Enums::UPGRADE_FAIL);
 				asyncWrite(m_packet);
 				if (!useEnergyRefund)
-				{ // respawn a new item with 0 energy
+				{ // respawn a new identical item with 0 energy
 					replaceItem(serialInfo, itemId, "Item upgrade attempt failed for itemID: " + std::to_string(itemId));
 				} // if energy refund used, the item remains identical
 			}
 			else
 			{
 				asyncWrite(m_packet);
-				const std::uint32_t toAdd = hasParent ? 1 : (mission * 10 + 1);
-				replaceItem(serialInfo, itemId + toAdd, "Item upgraded successfully from ItemID: " + std::to_string(itemId) + " to ItemID: " + std::to_string(itemId + toAdd));
+				replaceItem(serialInfo, newItemId, "Item upgraded successfully from ItemID: " + std::to_string(itemId) + " to ItemID: " + std::to_string(itemId + toAdd));
 			}
 			sendCurrency();
+			return true;
 		}
 
 		void Session::resetUpgrade(const Main::ClientData::UpgradeReset& upgradeReset)

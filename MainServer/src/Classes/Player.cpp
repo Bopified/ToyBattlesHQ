@@ -366,6 +366,33 @@ namespace Main
 			return it != m_equippedItemByCharacter.end() ? std::make_optional(it->id) : std::nullopt;
 		}
 
+		bool Player::isItemTradeable(const Main::Structures::ItemSerialInfo& itemSerialInfo) const
+		{
+			if (auto it = m_itemsByItemNumber.find(itemSerialInfo.itemNumber);
+				it != m_itemsByItemNumber.end())
+			{
+				const auto& item = it->second;
+				return Main::CdbUtils::isTradeable(item.itemId.itemId).value_or(false)
+					&& item.itemId.itemId != 1000000
+					&& item.expirationDate == 0;
+			}
+
+			auto it = std::find_if(m_equippedItemByCharacter.begin(), m_equippedItemByCharacter.end(),
+				[&itemSerialInfo](const auto& equippedItem)
+				{
+					return equippedItem.serialInfo.itemNumber == itemSerialInfo.itemNumber;
+				});
+
+			if (it != m_equippedItemByCharacter.end())
+			{
+				return Main::CdbUtils::isTradeable(it->id).value_or(false)
+					&& it->id != 1000000
+					&& it->expirationDate == 0;
+			}
+
+			return false;
+		}
+
 		std::optional<std::uint64_t> Player::findMaxItemNumber() const
 		{
 			std::optional<std::uint64_t> maxItemNumber = std::nullopt;
@@ -556,6 +583,26 @@ namespace Main
 					return updateEnergyAndBattery(equippedItem);
 				}
 			}
+			return std::nullopt;
+		}
+
+		std::optional<std::uint16_t> Player::getItemEnergy(const Main::Structures::ItemSerialInfo& itemSerialInfo) const
+		{
+			if (auto it = m_itemsByItemNumber.find(itemSerialInfo.itemNumber); it != m_itemsByItemNumber.end())
+			{
+				return it->second.energy;
+			}
+
+			const std::size_t offset = m_accountInfo.latestSelectedCharacter * Common::Enums::MAX_ITEMTYPE;
+			for (std::size_t i = 0; i < Common::Enums::MAX_ITEMTYPE; ++i)
+			{
+				const auto& equippedItem = m_equippedItemByCharacter[offset + i];
+				if (equippedItem.serialInfo.itemNumber == itemSerialInfo.itemNumber)
+				{
+					return equippedItem.energy;
+				}
+			}
+
 			return std::nullopt;
 		}
 

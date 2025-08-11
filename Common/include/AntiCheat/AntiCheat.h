@@ -95,7 +95,7 @@ namespace Ac
         }
 
     public:
-        AntiCheatManager() 
+        AntiCheatManager()
         {
             registerChecker<PacketFloodChecker>();
             registerChecker<PacketReplicationChecker>();
@@ -103,6 +103,7 @@ namespace Ac
             m_isRunning = true;
             m_thread = std::thread(&AntiCheatManager::worker, this);
         }
+
 
         ~AntiCheatManager()
         {

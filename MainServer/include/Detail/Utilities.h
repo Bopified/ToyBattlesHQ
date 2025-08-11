@@ -26,9 +26,9 @@ namespace Main
 
 
 		template<typename T, typename PacketType, bool Warn = false>
-			requires (std::is_same_v<PacketType, Common::Network::Packet> ||
+		requires (std::is_same_v<PacketType, Common::Network::Packet> ||
 		std::is_same_v<PacketType, Common::Network::UnecryptedPacket>)
-			T parseDataImpl(const PacketType& request, std::uint32_t offset = 0, std::source_location location = std::source_location::current())
+		T parseDataImpl(const PacketType& request, std::uint32_t offset = 0, std::source_location location = std::source_location::current())
 		{
 			static_assert(std::is_trivially_copyable_v<T>, "Details::parseData requires T to be trivially copyable");
 

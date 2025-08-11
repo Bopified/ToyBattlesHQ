@@ -27,8 +27,7 @@ namespace Main
 			roomCreator.ping = session->getPlayer().getPing();
 			roomCreator.team = Common::Enums::TEAM_BLUE;
 
-			Main::Structures::CompleteRoomInfo roomInfo;
-			std::memcpy(&roomInfo, request.getData(), request.getDataSize());
+			const Main::Structures::CompleteRoomInfo roomInfo = Main::Details::parseData<Main::Structures::CompleteRoomInfo>(request);
 
 			// request.getOption() ==> server/channel ID
 			Main::Classes::Room room{ roomInfo.title, roomInfo.roomSettings, roomCreator, session, true };

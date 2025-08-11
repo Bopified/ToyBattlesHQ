@@ -125,25 +125,21 @@ namespace Main
 					{
 						room->setStateFor(selfUniqueId, Common::Enums::PlayerState::STATE_NORMAL);
 
-						if (room->isAssassinMode() || (room->getRoomSettings().map == Common::Enums::AcademyTrainingGround
-							&& room->getRoomSettings().mode == Common::Enums::FreeForAll))
+						Main::ClientData::PlayerTeamInfo info;
+						info.uid = selfUniqueId;
+						std::memcpy(info.nickname, session->getAccountInfo().nickname, 16);
+						if (auto foundTeam = room->getTeamForSession(selfUniqueId.session))
 						{
-							Main::ClientData::PlayerTeamInfo info;
-							info.uid = selfUniqueId;
-							std::memcpy(info.nickname, session->getAccountInfo().nickname, 16);
-							if (auto foundTeam = room->getTeamForSession(selfUniqueId.session))
-							{
-								info.team = *foundTeam;
-							}
-							else
-							{
-								Utils::Logger::log("[Handlers::StartMatch] Failed to retrieve player team for IPC", Utils::LogType::Error);
-								return;
-							}
-							if (!Main::Ipc::M2C_sendPlayerTeamInfoBatch(session->getId(), { info }))
-							{
-								Utils::Logger::log("[Handlers::StartMatch] Failed to send single player team info to Cast Server", Utils::LogType::Error);
-							}
+							info.team = *foundTeam;
+						}
+						else
+						{
+							Utils::Logger::log("[Handlers::StartMatch] Failed to retrieve player team for IPC", Utils::LogType::Error);
+							return;
+						}
+						if (!Main::Ipc::M2C_sendPlayerTeamInfoBatch(session->getId(), { info }))
+						{
+							Utils::Logger::log("[Handlers::StartMatch] Failed to send single player team info to Cast Server", Utils::LogType::Error);
 						}
 					}
 

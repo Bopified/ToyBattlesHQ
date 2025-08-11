@@ -1151,33 +1151,30 @@ namespace Main
 			m_hasMatchStarted = true;
 			m_matchStartTime = Main::Details::getUtcTimeMs();
 			setStateFor(pair, Common::Enums::PlayerState::STATE_NORMAL);
-			
-			if (isAssassinMode() || (m_settings.map == Common::Enums::AcademyTrainingGround && m_settings.mode == Common::Enums::FreeForAll))
-			{
-				std::vector<Main::ClientData::PlayerTeamInfo> playerTeamBatch;
-				for (auto& pair : ranges::views::concat(m_players, m_observerPlayers))
-				{
-					if (pair.first.state == Common::Enums::STATE_READY || hostSession->getId() == pair.first.uniqueId.session)
-					{
-						if (auto session = pair.second.lock())
-						{
-							setStateFor(pair, Common::Enums::PlayerState::STATE_NORMAL);
 
-							Main::ClientData::PlayerTeamInfo info;
-							info.uid = pair.first.uniqueId;
-							info.team = pair.first.team;
-							std::memcpy(info.nickname, session->getAccountInfo().nickname, 16);
-							playerTeamBatch.push_back(info);
-						}
+			std::vector<Main::ClientData::PlayerTeamInfo> playerTeamBatch;
+			for (auto& pair : ranges::views::concat(m_players, m_observerPlayers))
+			{
+				if (pair.first.state == Common::Enums::STATE_READY || hostSession->getId() == pair.first.uniqueId.session)
+				{
+					if (auto session = pair.second.lock())
+					{
+						setStateFor(pair, Common::Enums::PlayerState::STATE_NORMAL);
+
+						Main::ClientData::PlayerTeamInfo info;
+						info.uid = pair.first.uniqueId;
+						info.team = pair.first.team;
+						std::memcpy(info.nickname, session->getAccountInfo().nickname, 16);
+						playerTeamBatch.push_back(info);
 					}
 				}
+			}
 
-				if (!playerTeamBatch.empty())
+			if (!playerTeamBatch.empty())
+			{
+				if (!Main::Ipc::M2C_sendPlayerTeamInfoBatch(hostSession->getId(), playerTeamBatch))
 				{
-					if (!Main::Ipc::M2C_sendPlayerTeamInfoBatch(hostSession->getId(), playerTeamBatch))
-					{
-						Utils::Logger::log("Failed to send player team batch to Cast Server", Utils::LogType::Error);
-					}
+					Utils::Logger::log("Failed to send player team batch to Cast Server", Utils::LogType::Error);
 				}
 			}
 		}

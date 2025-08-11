@@ -49,6 +49,16 @@ namespace Main
 
 			if (Main::Classes::Room* room = roomsManager.getRoomByNumber(session->getPlayer().getRoomNumber()))
 			{
+				std::uint32_t playerState = request.getOption();
+				if (session->getPlayer().isInMatch() && 
+					(playerState == Common::Enums::PlayerState::STATE_CAPSULE ||
+						playerState == Common::Enums::PlayerState::STATE_INVENTORY ||
+						playerState == Common::Enums::PlayerState::STATE_READY ||
+						playerState == Common::Enums::PlayerState::STATE_SHOP))
+				{
+					session->sendMessage("[handlerPlayerState] Attempted to switch to new state: [" + std::to_string(playerState) + "] while inside a match!");
+					return;
+				}
 				const auto uniqueId = session->getAccountInfo().uniqueId;
 				response.setCommand(Details::Orders::PLAYER_STATE_NOTIFICATION, 0, 0, static_cast<Common::Enums::PlayerState>(request.getOption()));
 				response.setData(reinterpret_cast<const std::uint8_t*>(&uniqueId), sizeof(uniqueId));

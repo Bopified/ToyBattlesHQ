@@ -13,21 +13,21 @@
 #include "../../../MainServer/include/Structures/AccountInfo/MainAccountInfo.h"
 #include "Network/Session.h"
 #include "../Structures/PlayerPositionFromClient.h"
+#include "../include/Enums/PlayerEnums.h"
 
 namespace Cast
 {
     namespace Network
     {
-
         class Session final : public Common::Network::Session
         {
         protected:
             std::uint32_t m_roomNumber{};
 
         public:
+            Common::Enums::Team m_team{};
             bool isDead{};
             bool m_isInMatch{ 0 };
-            Common::Enums::Team m_team{};
             std::string m_nickname;
             bool m_isInvisible{};
 
