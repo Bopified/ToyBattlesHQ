@@ -242,10 +242,10 @@ namespace Main
 								eventMissionInfo);
 						}
 					}
-
 					response.setCommand(request.getOrder(), 3, isFarm ? 6 : 1, 0);
 					response.setData(reinterpret_cast<std::uint8_t*>(&scoreboardResponse), sizeof(scoreboardResponse));
 					targetSession->asyncWrite(response);
+					if (!isFarm) targetSession->sendRt(clampedMp);
 				}
 			}
 		}
