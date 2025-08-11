@@ -19,7 +19,7 @@ namespace Main
 			{
 				for (std::size_t idx = 0; idx < request.getOption(); ++idx)
 				{
-					const std::uint16_t character = Main::Details::parseData<std::uint16_t>(request, idx * 1);
+					const std::uint16_t character = Main::Details::parseData<std::uint16_t>(request, idx * 12);
 					const std::uint32_t itemNumber = Main::Details::parseData<std::uint32_t>(request, idx * 12 + 4);
 					session->switchItemEquip(character, itemNumber);
 				}
