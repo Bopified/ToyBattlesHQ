@@ -26,7 +26,7 @@ namespace Main
 			}
 		};
 
-		REGISTER_CMD(SetCurrency, Common::Enums::PlayerGrade::GRADE_NORMAL)
+		REGISTER_CMD(SetCurrency, Common::Enums::PlayerGrade::GRADE_TESTER)
 	}
 }
 
