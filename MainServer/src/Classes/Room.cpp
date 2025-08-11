@@ -1291,7 +1291,7 @@ namespace Main
 		{
 			if (team == Common::Enums::TEAM_RED) ++m_redPoints;
 			else ++m_bluePoints;
-		}	
+		}
 
 		// Refactored
 		void Room::sendTo(const Main::Structures::UniqueId& uniqueId, const Common::Network::Packet& packet)
@@ -1326,7 +1326,7 @@ namespace Main
 
 
 		// Refactored
-		void Room::storeEndMatchStatsFor(const Main::Structures::UniqueId& uniqueId, const Main::Structures::ScoreboardResponse& stats, 
+		void Room::storeEndMatchStatsFor(const Main::Structures::UniqueId& uniqueId, const Main::Structures::ScoreboardResponse& stats,
 			std::uint32_t blueScore, std::uint32_t redScore, bool hasLeveledUp, const Main::Structures::EventMissionInfo& eventMissionInfo)
 		{
 			for (auto& [roomInfo, weakSession] : m_players)
@@ -1336,36 +1336,43 @@ namespace Main
 				if (roomInfo.uniqueId == uniqueId)
 				{
 					Main::Enums::MatchEnd matchEnd = (redScore == blueScore) ? Main::Enums::MATCH_DRAW
-						: ((blueScore > redScore && roomInfo.team == Common::Enums::TEAM_BLUE) || 
+						: ((blueScore > redScore && roomInfo.team == Common::Enums::TEAM_BLUE) ||
 							(redScore > blueScore && roomInfo.team == Common::Enums::TEAM_RED))
 						? Main::Enums::MATCH_WON
 						: Main::Enums::MATCH_LOST;
 
 					if (m_settings.mode == Common::Enums::ZombieMode || m_settings.mode == Common::Enums::FreeForAll
-						|| m_settings.mode == Common::Enums::BossBattle || m_settings.mode == Common::Enums::ArmsRace 
+						|| m_settings.mode == Common::Enums::BossBattle || m_settings.mode == Common::Enums::ArmsRace
 						|| m_settings.mode == Common::Enums::SquareMode)
 					{
 						matchEnd = Main::Enums::MATCH_DO_NOTHING;
 					}
-					session->storeEndMatchStats((Main::Details::getUtcTimeMs() - session->getMatchStartTime()) / 1000, 
+					session->storeEndMatchStats((Main::Details::getUtcTimeMs() - session->getMatchStartTime()) / 1000,
 						stats, matchEnd, hasLeveledUp, m_settings.mode == Common::Enums::ZombieMode,
 						session->getPlayer().getRoomNumber() >= Common::Constants::clanRoomNumberStart);
 
 					const std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 					if (now >= eventMissionInfo.startDate && now <= eventMissionInfo.endDate)
 					{
-						for (std::uint32_t weaponIndex = 0; const auto & kills : stats.weaponKills())
+						if (m_settings.mode == Common::Enums::ZombieMode && (stats.totalKills / 3) >= 1) // >= 1 zombie kills per match = 1 pt
 						{
-							if (kills >= 10)
-							{
-								auto it = weaponToMissionIndex.find(weaponIndex);
-								if (it != weaponToMissionIndex.end())
-								{
-									ClientData::EventMissionPoint eventMission{ it->second };
-									session->sendEventMission(eventMission);
-								}
-							}
-							++weaponIndex;
+							session->sendEventMission(ClientData::EventMissionPoint{ 1 });
+						}
+						else if (m_settings.mode == Common::Enums::ZombieMode && stats.meleeKills >= 2) // >= 2 infections per match = 1 pt
+						{
+							session->sendEventMission(ClientData::EventMissionPoint{ 2 });
+						}
+						else if (stats.headshots >= 2) // >= 2 headshots per match = 1 pt
+						{
+							session->sendEventMission(ClientData::EventMissionPoint{ 3 });
+						}
+						else if (stats.totalKills >= 15) // >= total kills >= 15 per match = 1 pt
+						{
+							session->sendEventMission(ClientData::EventMissionPoint{ 4 });
+						}
+						else if (stats.mgKills >= 5) // >= mgKills >= 5 per match = 1 pt
+						{ 
+							session->sendEventMission(ClientData::EventMissionPoint{ 5 });
 						}
 					}
 					return;

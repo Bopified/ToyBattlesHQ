@@ -228,10 +228,11 @@ namespace Main
 							eventMissionInfo);
 
 						if (actualPlayerLevel >= 5 && actualPlayerLevel % 5 == 0)
-						{ // RT reward
+						{ // RT & coupon reward
 							const std::uint32_t rtToAdd = 2000 * (actualPlayerLevel / 5);
 							targetSession->sendRt(rtToAdd);
-							targetSession->sendMessage("You obtained " + std::to_string(rtToAdd) + " RockTotens!");
+							targetSession->spawnCoupon(5);
+							targetSession->sendMessage("You obtained " + std::to_string(rtToAdd) + " RockTokens and 5 coupons!");
 						}
 					}
 					else
@@ -245,7 +246,10 @@ namespace Main
 					response.setCommand(request.getOrder(), 3, isFarm ? 6 : 1, 0);
 					response.setData(reinterpret_cast<std::uint8_t*>(&scoreboardResponse), sizeof(scoreboardResponse));
 					targetSession->asyncWrite(response);
-					if (!isFarm) targetSession->sendRt(clampedMp);
+					if (!isFarm)
+					{
+						targetSession->sendRt(static_cast<std::uint32_t>(static_cast<double>(clampedMp)/3));
+					}
 				}
 			}
 		}

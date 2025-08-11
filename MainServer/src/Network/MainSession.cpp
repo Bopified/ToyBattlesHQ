@@ -1802,8 +1802,9 @@ namespace Main
 						m_player.getAccountID(), &Main::Persistence::PersistentDatabase::updatePlayerMissionProgress, m_player.getAccountID(),
 						eventIndex, Common::Constants::eventMissionTotal);
 
-					// Also send 10,000 RT for each event mission.
+					// Also send 10,000 RT for each event mission + 10 coupons
 					sendRt(10'000);
+					spawnCoupon(10);
 				}
 				else
 				{
