@@ -49,6 +49,8 @@
 #include "../include/Handlers/Trade/TradeLockHandler.h"
 #include "../include/Handlers/Trade/TradeFinalizeHandler.h"
 #include "../include/Handlers/Trade/TradeCancelHandler.h"
+#include "../include/Handlers/Item/GambleItemHandler.h"
+
 
 // IPC Auth<=>Main
 #include "../include/Handlers/IPC/AuthMainCallbacks.h"
@@ -269,6 +271,7 @@ namespace Main
 			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleLobbyChatMessage(request, session, m_sessionsManager, m_chatCommands, m_roomsManager, m_scheduler, *this); });
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(161, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleRoomChatMessage(request, session, m_sessionsManager, m_chatCommands, m_roomsManager, m_scheduler, *this); });
+		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(200, Main::Handlers::handleGambleItem);
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(256, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleMatchLeave(request, session, m_sessionsManager, m_roomsManager, m_clansManager); });
 		

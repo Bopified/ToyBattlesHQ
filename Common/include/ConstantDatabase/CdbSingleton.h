@@ -152,6 +152,21 @@ namespace Common
                 }
             }
 
+            static void filterGambleItemsByRareCapsules(const std::vector<Common::ConstantDatabase::CdbCapsulePackageInfo>& rareCapsuleItems)
+            {
+                std::unordered_set<std::uint32_t> rareIds;
+                rareIds.reserve(rareCapsuleItems.size());
+                for (const auto& capsule : rareCapsuleItems)
+                    rareIds.insert(capsule.gi_itemid);
+
+                for (auto& [type, itemList] : m_gambleItems)
+                {
+                    itemList.erase(std::remove_if(itemList.begin(), itemList.end(),
+                        [&](std::uint32_t id) { return !rareIds.contains(id); }),
+                        itemList.end());
+                }
+            }
+
             CdbSingleton(CdbSingleton const&) = delete;
             void operator=(CdbSingleton const&) = delete;
 

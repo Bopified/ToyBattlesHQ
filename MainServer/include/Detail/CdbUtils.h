@@ -305,6 +305,25 @@ namespace Main
 			}
 			return std::nullopt;
 		}
+
+		inline std::vector<Common::ConstantDatabase::CdbCapsulePackageInfo> getAllRareCapsuleItems()
+		{
+			std::vector<Common::ConstantDatabase::CdbCapsulePackageInfo> rareItems;
+			const auto& capsuleInfos = cdbCapsuleInfos::getInstance().getEntries();
+
+			for (const auto& [unused, capsuleInfo] : capsuleInfos)
+			{
+				if (auto relatedPackages = cdbCapsulePackageInfos::getInstance().getEntriesFor(capsuleInfo.gi_infoid))
+				{
+					for (const auto& packageInfo : relatedPackages.value())
+					{
+						if (packageInfo.gi_type == 1)
+							rareItems.push_back(packageInfo);
+					}
+				}
+			}
+			return rareItems;
+		}
 	}
 }
 

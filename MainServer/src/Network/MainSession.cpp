@@ -1228,7 +1228,7 @@ namespace Main
 			auto weaponDurabilityDamages = m_player.reduceEquippedItemsDurabilities(characterID);
 
 			m_scheduler.addRepetitiveCallback(std::source_location::current(), m_player.getAccountID(), &Main::Persistence::PersistentDatabase::reduceDurability,
-				m_player.getAccountID(), m_player.getUnlimitedEquippedItemsFor(characterID));
+				m_player.getAccountID(), m_player.getUnlimitedEquippedWeaponsFor(characterID));
 
 			m_packet.setOrder(93);
 			m_packet.setOption(weaponDurabilityDamages.size());

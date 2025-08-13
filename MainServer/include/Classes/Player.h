@@ -133,7 +133,7 @@ namespace Main
 			bool prolongItem(const Main::Structures::ItemSerialInfo& newItemSerialInfo);
 			const std::array<EquippedItem, Common::Enums::MAX_CHARACTERS* Common::Enums::MAX_ITEMTYPE>& getEquippedItems() const;
 			std::vector<EquippedItem> getEquippedItemsFor(std::uint16_t characterID) const;
-			std::vector<EquippedItem> getUnlimitedEquippedItemsFor(std::uint16_t characterID) const;
+			std::vector<EquippedItem> getUnlimitedEquippedWeaponsFor(std::uint16_t characterID) const;
 			const std::unordered_map<std::uint64_t, Item>& getItems() const;
 			const std::vector<Item> getItemsAsVec() const;
 			bool deleteItemBasic(const Main::Structures::ItemSerialInfo& itemSerialInfo);

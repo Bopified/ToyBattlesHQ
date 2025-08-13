@@ -50,10 +50,14 @@ namespace Common
 			MG = 14,
 			BAZOOKA = 15,
 			GRENADE = 16,
-
 			SET = 17,
 			MAX_ITEMTYPE = 18
 		};
+
+		inline bool isWeapon(ItemType itemType)
+		{
+			return itemType >= ItemType::MELEE && itemType <= ItemType::GRENADE;
+		}
 
 		enum PlayerState : std::uint32_t
 		{

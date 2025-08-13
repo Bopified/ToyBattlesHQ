@@ -489,7 +489,7 @@ namespace Main
 			return equippedItems;
 		}
 
-		std::vector<EquippedItem> Player::getUnlimitedEquippedItemsFor(std::uint16_t characterID) const
+		std::vector<EquippedItem> Player::getUnlimitedEquippedWeaponsFor(std::uint16_t characterID) const
 		{
 			std::vector<EquippedItem> unlimitedItems;
 
@@ -502,7 +502,7 @@ namespace Main
 			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
 			{
 				const auto& item = m_equippedItemByCharacter[i];
-				if (item.id != 0 && item.expirationDate == 0)
+				if (item.id != 0 && item.expirationDate == 0 && Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type)))
 					unlimitedItems.push_back(item);
 			}
 
@@ -621,7 +621,8 @@ namespace Main
 			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
 			{
 				auto& item = m_equippedItemByCharacter[i];
-				if (item.id == 0 || item.expirationDate != 0) continue;
+				if (item.id == 0 || item.expirationDate != 0 
+					|| !Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type))) continue;
 
 				const auto baseDurability = Main::CdbUtils::getItemDurability(item.id);
 				if (!baseDurability || *baseDurability == 0) continue;
