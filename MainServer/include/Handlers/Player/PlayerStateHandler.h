@@ -29,17 +29,17 @@ namespace Main
 
 			if (static_cast<Common::Enums::PlayerState>(request.getOption()) == Common::Enums::PlayerState::STATE_CAPSULE)
 			{ // capsule resends currency + eventual sales
+				session->sendCurrency();
+
 				constexpr std::size_t chunkSize = 50;
 				auto capsuleItems = CdbUtils::getCapsuleEvents(capsuleListDb.saleEventStartDate, capsuleListDb.saleEventEndDate, capsuleListDb.newMpPrice, 
 					capsuleListDb.newRtPrice);
-				std::size_t totalItems = capsuleItems.size();
+				const std::size_t totalItems = capsuleItems.size();
 				response.setOrder(83);
 
 				for (std::size_t i = 0; i < totalItems; i += chunkSize)
 				{
-					session->sendCurrency();
-
-					std::size_t currentChunkSize = std::min(chunkSize, totalItems - i);
+					const std::size_t currentChunkSize = std::min(chunkSize, totalItems - i);
 					auto* chunkData = reinterpret_cast<std::uint8_t*>(&capsuleItems[i]);
 					response.setData(chunkData, currentChunkSize * sizeof(Main::Structures::CapsuleList));
 					response.setOption(currentChunkSize);

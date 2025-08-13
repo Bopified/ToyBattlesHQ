@@ -58,7 +58,7 @@ namespace Main
 		// Events
 		Main::Structures::EventMissionInfo m_eventMissionInfo;
 		Main::Structures::EventMissionInfo m_tradeSystemEvent;
-		Main::Structures::CapsuleListDatabase m_capsuleListDb;
+		Main::Structures::CapsuleListDatabase m_capsuleSaleEvent;
 		Main::Structures::ExpMpBonusInfo m_expMpEvent;
 
 		// Ac

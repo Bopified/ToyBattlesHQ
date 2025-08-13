@@ -12,11 +12,20 @@ namespace Main
 {
 	namespace Handlers
 	{
-		inline std::optional<std::pair<std::uint32_t, std::uint32_t>> itemSelectionAlgorithm(std::uint32_t gi_infoid, std::uint32_t gi_price, std::uint32_t gi_type)
+		inline std::optional<std::pair<std::uint32_t, std::uint32_t>> itemSelectionAlgorithm(std::uint32_t gi_infoid, std::uint32_t gi_price, std::uint32_t gi_type,
+			bool isLuckySpin)
 		{
 			static const std::array<double, 3> averageSpinCostByCurrency = Main::CdbUtils::getAverageSpinCostByCurrency();
-			double averageSpinCost = 0.0;
 
+			if (isLuckySpin)
+			{
+				static std::mt19937 rng(std::random_device{}()); 
+				std::uniform_int_distribution<int> dist(0, 1);
+				const std::uint32_t selected = (dist(rng) == 0) ? 5336503 : 5336504; // silver / gold lucky box
+				return std::pair{ selected, 0 };
+			}
+
+			double averageSpinCost = 0.0;
 			if (gi_type < averageSpinCostByCurrency.size())
 			{
 				averageSpinCost = averageSpinCostByCurrency[gi_type];
@@ -62,26 +71,49 @@ namespace Main
 		}
 
 
-		inline void removeCurrencyByCapsuleType(std::shared_ptr<Main::Network::Session> session, const Main::Structures::AccountInfo& accountInfo,
-			Main::Enums::CapsuleCurrencyType capsuleCurrencyType, std::uint32_t toRemove)
+		inline void removeCurrencyByCapsuleType(
+			const std::shared_ptr<Main::Network::Session>& session,
+			const Main::Structures::AccountInfo& accountInfo,
+			Main::Enums::CapsuleCurrencyType capsuleCurrencyType,
+			std::uint32_t toRemove,
+			const Main::Structures::CapsuleListDatabase& capsuleSaleEvent)
 		{
-			if (capsuleCurrencyType == Main::Enums::CapsuleCurrencyType::CAPSULE_COINS)
+			auto safeSubtract = [](std::uint32_t balance, std::uint32_t remove) {
+				return (remove >= balance) ? 0u : balance - remove;
+				};
+
+			const std::uint32_t now = static_cast<std::uint32_t>(
+				std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())
+				);
+			const bool inSalePeriod = (now >= capsuleSaleEvent.saleEventStartDate &&
+				now <= capsuleSaleEvent.saleEventEndDate);
+
+			switch (capsuleCurrencyType)
 			{
-				session->setAccountCoins(accountInfo.coins - toRemove);
-			}
-			else if (capsuleCurrencyType == Main::Enums::CapsuleCurrencyType::CAPSULE_ROCKTOTENS)
-			{
-				session->setAccountRockTotens(accountInfo.rockTotens - toRemove);
-			}
-			else
-			{
-				session->setAccountMicroPoints(accountInfo.microPoints - toRemove);
+			case Main::Enums::CapsuleCurrencyType::CAPSULE_COINS:
+				session->setAccountCoins(safeSubtract(accountInfo.coins, toRemove));
+				break;
+
+			case Main::Enums::CapsuleCurrencyType::CAPSULE_ROCKTOTENS:
+				if (inSalePeriod)
+					toRemove = capsuleSaleEvent.newRtPrice;
+				session->setAccountRockTotens(safeSubtract(accountInfo.rockTotens, toRemove));
+				break;
+
+			case Main::Enums::CapsuleCurrencyType::CAPSULE_MICROPOINTS:
+			default:
+				if (inSalePeriod)
+					toRemove = capsuleSaleEvent.newMpPrice;
+				session->setAccountMicroPoints(safeSubtract(accountInfo.microPoints, toRemove));
+				break;
 			}
 		}
 
+
 		inline void handleCapsuleSpin(const Common::Network::Packet& request, std::shared_ptr<Main::Network::Session> session,
 			Main::Network::SessionsManager& sessionsManager,
-			const Main::ClientData::CapsuleSpin& capsuleSpinData)
+			const Main::ClientData::CapsuleSpin& capsuleSpinData,
+			const Main::Structures::CapsuleListDatabase& capsuleSaleEvent)
 		{
 			START_BENCHMARK
 
@@ -94,9 +126,45 @@ namespace Main
 				const auto& accountInfo = session->getAccountInfo();
 				const auto totalSpins = request.getOption();
 
-				if (capsuleInfo->gi_type == Main::Enums::CapsuleCurrencyType::CAPSULE_COINS && accountInfo.coins < capsuleInfo->gi_price * totalSpins
-					|| capsuleInfo->gi_type == Main::Enums::CapsuleCurrencyType::CAPSULE_ROCKTOTENS && accountInfo.rockTotens < capsuleInfo->gi_price * totalSpins
-					|| capsuleInfo->gi_type == Main::Enums::CapsuleCurrencyType::CAPSULE_MICROPOINTS && accountInfo.microPoints < capsuleInfo->gi_price * totalSpins)
+				// check if enough currency + sales
+				const std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
+				const bool inSalePeriod = (now >= capsuleSaleEvent.saleEventStartDate && now <= capsuleSaleEvent.saleEventEndDate);
+				std::uint32_t pricePerSpin = capsuleInfo->gi_price;
+
+				if (inSalePeriod)
+				{
+					switch (capsuleInfo->gi_type)
+					{
+					case Main::Enums::CapsuleCurrencyType::CAPSULE_ROCKTOTENS:
+						pricePerSpin = capsuleSaleEvent.newRtPrice;
+						break;
+					case Main::Enums::CapsuleCurrencyType::CAPSULE_MICROPOINTS:
+						pricePerSpin = capsuleSaleEvent.newMpPrice;
+						break;
+					default:
+						break;
+					}
+				}
+
+				const std::uint32_t totalPrice = pricePerSpin * totalSpins;
+				bool notEnoughCurrency = false;
+
+				switch (capsuleInfo->gi_type)
+				{
+				case Main::Enums::CapsuleCurrencyType::CAPSULE_COINS:
+					notEnoughCurrency = accountInfo.coins < totalPrice;
+					break;
+				case Main::Enums::CapsuleCurrencyType::CAPSULE_ROCKTOTENS:
+					notEnoughCurrency = accountInfo.rockTotens < totalPrice;
+					break;
+				case Main::Enums::CapsuleCurrencyType::CAPSULE_MICROPOINTS:
+					notEnoughCurrency = accountInfo.microPoints < totalPrice;
+					break;
+				default:
+					break;
+				}
+
+				if (notEnoughCurrency)
 				{
 					response.setExtra(Main::Enums::CapsuleSpinExtra::CAPSULE_SPIN_NOT_ENOUGH_CURRENCY);
 					response.setOption(capsuleInfo->gi_type);
@@ -136,8 +204,8 @@ namespace Main
 					}
 					lastMission = static_cast<Main::Enums::CapsuleSpinMission>(response.getMission());
 
-					const auto wonItemIdAndType = itemSelectionAlgorithm(capsuleInfo->gi_infoid, capsuleInfo->gi_price, 
-						capsuleInfo->gi_type >= 3 ? 1 : capsuleInfo->gi_type);
+					const auto wonItemIdAndType = itemSelectionAlgorithm(capsuleInfo->gi_infoid, capsuleInfo->gi_price,
+						capsuleInfo->gi_type >= 3 ? 1 : capsuleInfo->gi_type, response.getMission() == Main::Enums::CapsuleSpinMission::CAPSULE_LUCKY_SPIN);
 					if (!wonItemIdAndType || !Main::CdbUtils::itemExists(wonItemIdAndType->first))
 					{
 						response.setExtra(Main::Enums::CapsuleSpinExtra::CAPSULE_SPIN_FAIL);
@@ -151,7 +219,7 @@ namespace Main
 						{
 							std::string_view itemNameView{ *optName };
 							itemNameView = itemNameView.substr(0, itemNameView.find('\0'));
-							sessionsManager.broadcastMessageToLobby("[" + std::string{session->getAccountInfo().nickname} + "] won a [" + std::string{itemNameView}
+							sessionsManager.broadcastMessageToLobby("[" + std::string{ session->getAccountInfo().nickname } + "] won a [" + std::string{ itemNameView }
 								+ "] item from the capsule machine."
 							);
 						}
@@ -162,28 +230,29 @@ namespace Main
 					Main::Structures::CapsuleSpin capsuleSpin{ wonItemIdAndType->first, serialInfo };
 					session->setLatestItemNumber(capsuleSpin.itemSerialInfo.itemNumber);
 					Main::Structures::Item capsuleItem{ capsuleSpin };
-					if (!(request.getOption() == 1 && response.getMission() == Main::Enums::CapsuleSpinMission::CAPSULE_LUCKY_SPIN)) // single lucky spin uses another handler apparently 
+					if (session->addItem(capsuleItem))
 					{
-						if (session->addItem(capsuleItem))
-						{
-							session->logItemInfo(capsuleItem.serialInfo.itemNumber, capsuleItem.itemId.itemId, capsuleItem.expirationDate,
-								"Item won through the capsule machine");
-						}
-						else
-						{
-							session->sendMessage("Error while getting the item from the capsule machine - please report this issue!");
-							++retryCount;
-							continue;
-						}
+						session->logItemInfo(capsuleItem.serialInfo.itemNumber, capsuleItem.itemId.itemId, capsuleItem.expirationDate,
+							"Item won through the capsule machine");
 					}
-
+					else
+					{
+						session->sendMessage("Error while getting the item from the capsule machine - please report this issue!");
+						++retryCount;
+						continue;
+					}
+				
 					response.setData(reinterpret_cast<std::uint8_t*>(&capsuleSpin), sizeof(Main::Structures::CapsuleSpin));
 					session->asyncWrite(response);
 					if (response.getMission() != Main::Enums::CapsuleSpinMission::CAPSULE_LUCKY_SPIN)
 					{ // lucky spin is free 
-						removeCurrencyByCapsuleType(session, accountInfo, static_cast<Main::Enums::CapsuleCurrencyType>(capsuleInfo->gi_type), capsuleInfo->gi_price);
+						removeCurrencyByCapsuleType(session, accountInfo, static_cast<Main::Enums::CapsuleCurrencyType>(capsuleInfo->gi_type), capsuleInfo->gi_price, capsuleSaleEvent);
 						session->addLuckyPoints(capsuleInfo->gi_luckypoint);
 						++i;
+					}
+					if (request.getOption() == 1 && response.getMission() == Main::Enums::CAPSULE_LUCKY_SPIN)
+					{ // single lucky spin
+						break;
 					}
 				}
 			}

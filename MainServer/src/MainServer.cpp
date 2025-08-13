@@ -74,7 +74,7 @@ namespace Main
 		m_chatCommands.m_scheduler = &m_scheduler;
 
 		// Events
-		m_capsuleListDb = m_scheduler.immediatePersist(std::source_location::current(),
+		m_capsuleSaleEvent = m_scheduler.immediatePersist(std::source_location::current(),
 			&Main::Persistence::PersistentDatabase::getCapsuleEvent).value_or(Main::Structures::CapsuleListDatabase{});
 		m_eventMissionInfo = m_scheduler.immediatePersist(std::source_location::current(),
 			&Main::Persistence::PersistentDatabase::getEventMissionsInfo).value_or(Main::Structures::EventMissionInfo{});
@@ -193,7 +193,7 @@ namespace Main
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(92, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session> session)
 			{
-				Main::Handlers::handleCapsuleSpin(request, session, m_sessionsManager, Details::parseData<Main::ClientData::CapsuleSpin>(request)); 
+				Main::Handlers::handleCapsuleSpin(request, session, m_sessionsManager, Details::parseData<Main::ClientData::CapsuleSpin>(request), m_capsuleSaleEvent); 
 			});
 
 
@@ -260,7 +260,7 @@ namespace Main
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(142, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleRoomsList(request, session, m_roomsManager); });
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(158, [&](const Common::Network::Packet& request,
-			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handlePlayerState(request, session, m_roomsManager, m_capsuleListDb); });
+			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handlePlayerState(request, session, m_roomsManager, m_capsuleSaleEvent); });
 					CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(159, [&](const Common::Network::Packet& request,
 						std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleRoomMiscellaneous(request, session, m_roomsManager, m_timeSinceLastRestart); }); // Team switch
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(162, [&](const Common::Network::Packet& request,

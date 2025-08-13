@@ -304,6 +304,7 @@ namespace Main
 			bool sendDeletePacket(const Main::Structures::ItemSerialInfo& itemSerialInfoToDelete);
 
 			void sendCurrency();
+			void sendCurrency(std::uint32_t newMP, std::uint32_t newRT);
 
 			void sendMp(std::uint32_t mptoAdd);
 
