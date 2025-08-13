@@ -10,9 +10,9 @@ namespace Main
 #pragma pack(push, 1)
 		struct CapsuleList
 		{
-			std::uint32_t capsuleInfoId : 6 = 0;
-			std::uint32_t newPrice : 15 = 0;
-			std::uint32_t rest : 11 = 0b11111111111;
+			std::uint32_t capsuleInfoId = 0;
+			std::uint32_t newPrice : 21 = 0;
+			std::uint32_t unknown2 : 11 = 0;
 			std::uint32_t saleEventStartDate{};
 			std::uint32_t saleEventEndDate{};
 		};

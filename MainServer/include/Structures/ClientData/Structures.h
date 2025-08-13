@@ -174,6 +174,14 @@ namespace Main
 		};
 #pragma pack(pop)
 
+#pragma pack(push, 1)
+		struct ItemRepair
+		{
+			std::uint32_t newTotalRT{};
+			std::uint32_t newTotalMP{};
+			Main::Structures::ItemSerialInfo serialInfo;
+		};
+#pragma pack(pop)
 	}
 }
 #endif

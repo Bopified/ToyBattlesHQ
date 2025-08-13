@@ -310,6 +310,10 @@ namespace Main
 
 			void sendRt(std::uint32_t rtToAdd);
 
+			void reduceEquippedItemsDurability();
+
+			void updateItemDurability(std::uint32_t itemNumber, std::uint32_t newDurability);
+
 			void switchItemEquip(std::uint32_t characterId, std::uint64_t itemNumber);
 
 			void unequipItem(std::uint64_t itemType);

@@ -249,6 +249,7 @@ namespace Main
 					if (!isFarm)
 					{
 						targetSession->sendRt(static_cast<std::uint32_t>(static_cast<double>(clampedMp)/3));
+						targetSession->reduceEquippedItemsDurability();
 					}
 				}
 			}

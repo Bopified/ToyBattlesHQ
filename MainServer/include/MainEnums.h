@@ -302,10 +302,10 @@ namespace Main
 
 		enum ItemExpirationType
 		{
-			// // 0=nothing happens, 1=becomes unused(1 day); 2=bomb?!;  3<=expired
 			UNLIMITED = 0,
 			UNUSED,
-			BOMB
+			BOMB,
+			EXPIRED // >= 3
 		};
 
 		enum ItemFrom

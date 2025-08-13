@@ -1931,6 +1931,57 @@ namespace Main
             }
         }
 
+        void PersistentDatabase::reduceDurability(std::uint32_t accountId, const std::vector<Main::Structures::EquippedItem>& equippedItems)
+        {
+            try
+            {
+                std::string updateQueryStr = "UPDATE UserItems SET Durability = ? WHERE AccountID = ? AND ItemNumber = ? AND ItemDuration = 0";
+                std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement(updateQueryStr));
+
+                for (const auto& currentEquippedItem : equippedItems)
+                {
+                    const auto currentItemBaseDurability = Main::CdbUtils::getItemDurability(currentEquippedItem.id);
+
+                    if (!currentItemBaseDurability || *currentItemBaseDurability == 0)
+                        continue;
+
+                    const std::uint32_t reduction = (*currentItemBaseDurability / 100) * 1;
+
+                    const std::uint32_t newDurability = (*currentItemBaseDurability > reduction)
+                        ? (*currentItemBaseDurability - reduction)
+                        : 0;
+
+                    stmt->setUInt(1, newDurability);
+                    stmt->setUInt(2, accountId);
+                    stmt->setUInt(3, currentEquippedItem.serialInfo.itemNumber);
+                    stmt->executeUpdate();
+                }
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log(std::string("SQL Error: ") + e.what(), Utils::LogType::Error,"PersistentDatabase::reduceDurability");
+            }
+        }
+
+        void PersistentDatabase::updateItemDurability(std::uint32_t accountId, std::uint32_t itemNumber, std::uint32_t newDurability)
+        {
+            try
+            {
+                const std::string updateQueryStr =
+                    "UPDATE UserItems SET Durability = ? WHERE AccountID = ? AND ItemNumber = ?";
+
+                std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement(updateQueryStr));
+
+                stmt->setUInt(1, newDurability);
+                stmt->setUInt(2, accountId);
+                stmt->setUInt(3, itemNumber);
+                stmt->executeUpdate();
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log(std::string("SQL Error: ") + e.what(), Utils::LogType::Error, "PersistentDatabase::updateItemDurability");
+            }
+        }
 
         void PersistentDatabase::updatePlayerStats(std::uint32_t accountId, const Main::Structures::AccountInfo& updatedAccountInfo)
         {

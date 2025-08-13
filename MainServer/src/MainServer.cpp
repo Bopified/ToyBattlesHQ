@@ -18,6 +18,7 @@
 #include "../include/Handlers/Player/Mailbox/MailboxHandlers.h"
 #include "../include/Handlers/Player/Mailbox/Gifthandlers.h"
 #include "../include/Handlers/Item/ItemUpgradeHandler.h"
+#include "../include/Handlers/Item/ItemRepairHandler.h"
 #include "../include/Handlers/CapsuleSpinHandler.h"
 #include "../include/Handlers/Room/RoomCreationHandler.h"
 #include "../include/Handlers/Room/RoomsListHandler.h"
@@ -196,6 +197,7 @@ namespace Main
 				Main::Handlers::handleCapsuleSpin(request, session, m_sessionsManager, Details::parseData<Main::ClientData::CapsuleSpin>(request), m_capsuleSaleEvent); 
 			});
 
+		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(97, Main::Handlers::handleItemRepair);
 
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(100, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session> session) { session->refundItem(Details::parseData<Main::ClientData::ItemRefund>(request)); });

@@ -127,6 +127,8 @@ namespace Main
 			void setUnequippedItems(const std::vector<Item>& items);
 			bool isItemTradeable(const Main::Structures::ItemSerialInfo& itemSerialInfo) const;
 			std::optional<std::uint32_t> findItemIdBySerialInfo(const Main::Structures::ItemSerialInfo& itemSerialInfo) const;
+			std::optional<std::pair<std::uint32_t, std::uint32_t>>
+				findItemIdAndDurabilityBySerialInfo(const Main::Structures::ItemSerialInfo& itemSerialInfo) const;
 			std::optional<std::uint64_t> findMaxItemNumber() const;
 			bool prolongItem(const Main::Structures::ItemSerialInfo& newItemSerialInfo);
 			const std::array<EquippedItem, Common::Enums::MAX_CHARACTERS* Common::Enums::MAX_ITEMTYPE>& getEquippedItems() const;
@@ -141,6 +143,7 @@ namespace Main
 			void setEquippedItems(const std::unordered_map<std::uint16_t, std::vector<EquippedItem>>& equippedItems);
 			std::optional<std::pair<std::uint16_t, std::uint64_t>>
 				addEnergyToItem(const Main::Structures::ItemSerialInfo& itemSerialInfo, std::uint32_t energyAdded);
+			bool updateItemDurabilityByNumber(std::uint32_t itemNumber, std::uint32_t newDurability);
 			std::optional<std::uint16_t> getItemEnergy(const Main::Structures::ItemSerialInfo& itemSerialInfo) const;
 
 			// ugly design but easier to write, ideally we shouldn't pass the scheduler to this function...

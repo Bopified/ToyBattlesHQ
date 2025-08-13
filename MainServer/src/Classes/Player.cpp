@@ -366,6 +366,32 @@ namespace Main
 			return it != m_equippedItemByCharacter.end() ? std::make_optional(it->id) : std::nullopt;
 		}
 
+		std::optional<std::pair<std::uint32_t, std::uint32_t>>
+			Player::findItemIdAndDurabilityBySerialInfo(const Main::Structures::ItemSerialInfo& itemSerialInfo) const
+		{
+			if (auto it = m_itemsByItemNumber.find(itemSerialInfo.itemNumber);
+				it != m_itemsByItemNumber.end())
+			{
+				return std::make_pair(it->second.itemId.itemId, it->second.durability);
+			}
+
+			auto it = std::find_if(
+				m_equippedItemByCharacter.begin(),
+				m_equippedItemByCharacter.end(),
+				[&itemSerialInfo](const auto& equippedItem)
+				{
+					return equippedItem.serialInfo.itemNumber == itemSerialInfo.itemNumber;
+				}
+			);
+
+			if (it != m_equippedItemByCharacter.end())
+			{
+				return std::make_pair(it->id, it->durability);
+			}
+
+			return std::nullopt;
+		}
+
 		bool Player::isItemTradeable(const Main::Structures::ItemSerialInfo& itemSerialInfo) const
 		{
 			if (auto it = m_itemsByItemNumber.find(itemSerialInfo.itemNumber);
@@ -560,6 +586,29 @@ namespace Main
 					++m_totalEquippedItems;
 				}
 			}
+		}
+
+		bool Player::updateItemDurabilityByNumber(std::uint32_t itemNumber, std::uint32_t newDurability)
+		{
+			auto updateDurability = [&](auto& item) {
+				item.durability = newDurability;
+				return true;
+				};
+			if (auto it = m_itemsByItemNumber.find(itemNumber); it != m_itemsByItemNumber.end())
+			{
+				return updateDurability(it->second);
+			}
+
+			const std::size_t offset = m_accountInfo.latestSelectedCharacter * Common::Enums::MAX_ITEMTYPE;
+			for (std::size_t i = 0; i < Common::Enums::MAX_ITEMTYPE; ++i)
+			{
+				auto& equippedItem = m_equippedItemByCharacter[offset + i];
+				if (equippedItem.serialInfo.itemNumber == itemNumber)
+				{
+					return updateDurability(equippedItem);
+				}
+			}
+			return false;
 		}
 
 		std::optional<std::pair<std::uint16_t, std::uint64_t>> Player::addEnergyToItem(const Main::Structures::ItemSerialInfo& itemSerialInfo, std::uint32_t energyAdded)

@@ -1222,6 +1222,20 @@ namespace Main
 			setAccountRockTotens(accountInfo.rockTotens + rtToAdd);
 		}
 
+		void Session::reduceEquippedItemsDurability()
+		{
+			const auto equippedItems = m_player.getEquippedItemsFor(m_player.getAccountInfo().latestSelectedCharacter);
+			m_scheduler.addRepetitiveCallback(std::source_location::current(),
+				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::reduceDurability, m_player.getAccountID(), equippedItems);
+		}
+
+		void Session::updateItemDurability(std::uint32_t itemNumber, std::uint32_t newDurability)
+		{
+			m_scheduler.addRepetitiveCallback(std::source_location::current(),
+				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::updateItemDurability, m_player.getAccountID(), itemNumber, newDurability);
+			m_player.updateItemDurabilityByNumber(itemNumber, newDurability);
+		}
+
 		void Session::sendCurrency()
 		{ // NB: Set the currency before using this function
 
