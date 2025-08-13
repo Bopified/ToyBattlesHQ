@@ -249,7 +249,10 @@ namespace Main
 					if (!isFarm)
 					{
 						targetSession->sendRt(static_cast<std::uint32_t>(static_cast<double>(clampedMp)/3));
-						targetSession->reduceEquippedItemsDurability();
+						if (room->getRoomSettings().mode != Common::Enums::SquareMode)
+						{
+							targetSession->reduceEquippedItemsDurability();
+						}
 					}
 				}
 			}

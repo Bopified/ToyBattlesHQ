@@ -179,7 +179,15 @@ namespace Main
 		{
 			std::uint32_t newTotalRT{};
 			std::uint32_t newTotalMP{};
-			Main::Structures::ItemSerialInfo serialInfo;
+			std::vector<Main::Structures::ItemSerialInfo> serialInfo;
+		};
+#pragma pack(pop)
+
+#pragma pack(push, 1)
+		struct SingleWeaponDurabilityDamage
+		{
+			Main::Structures::ItemSerialInfo serialInfo{};
+			std::uint32_t durabilityToRemove;
 		};
 #pragma pack(pop)
 	}

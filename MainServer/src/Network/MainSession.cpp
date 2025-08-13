@@ -1224,9 +1224,17 @@ namespace Main
 
 		void Session::reduceEquippedItemsDurability()
 		{
-			const auto equippedItems = m_player.getEquippedItemsFor(m_player.getAccountInfo().latestSelectedCharacter);
-			m_scheduler.addRepetitiveCallback(std::source_location::current(),
-				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::reduceDurability, m_player.getAccountID(), equippedItems);
+			const auto characterID = m_player.getAccountInfo().latestSelectedCharacter;
+			auto weaponDurabilityDamages = m_player.reduceEquippedItemsDurabilities(characterID);
+
+			m_scheduler.addRepetitiveCallback(std::source_location::current(), m_player.getAccountID(), &Main::Persistence::PersistentDatabase::reduceDurability,
+				m_player.getAccountID(), m_player.getUnlimitedEquippedItemsFor(characterID));
+
+			m_packet.setOrder(93);
+			m_packet.setOption(weaponDurabilityDamages.size());
+			m_packet.setData(reinterpret_cast<const std::uint8_t*>(weaponDurabilityDamages.data()),
+				weaponDurabilityDamages.size() * sizeof(Main::ClientData::SingleWeaponDurabilityDamage));
+			asyncWrite(m_packet);
 		}
 
 		void Session::updateItemDurability(std::uint32_t itemNumber, std::uint32_t newDurability)

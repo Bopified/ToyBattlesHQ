@@ -489,6 +489,25 @@ namespace Main
 			return equippedItems;
 		}
 
+		std::vector<EquippedItem> Player::getUnlimitedEquippedItemsFor(std::uint16_t characterID) const
+		{
+			std::vector<EquippedItem> unlimitedItems;
+
+			if (characterID >= Common::Enums::MAX_CHARACTERS)
+				return unlimitedItems;
+
+			const std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
+			const std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
+
+			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
+			{
+				const auto& item = m_equippedItemByCharacter[i];
+				if (item.id != 0 && item.expirationDate == 0)
+					unlimitedItems.push_back(item);
+			}
+
+			return unlimitedItems;
+		}
 
 		const std::array<EquippedItem, Common::Enums::MAX_CHARACTERS * Common::Enums::MAX_ITEMTYPE>& Player::getEquippedItems() const
 		{
@@ -586,6 +605,35 @@ namespace Main
 					++m_totalEquippedItems;
 				}
 			}
+		}
+
+		std::vector<Main::ClientData::SingleWeaponDurabilityDamage> Player::reduceEquippedItemsDurabilities(std::size_t characterID)
+		{
+			std::vector<Main::ClientData::SingleWeaponDurabilityDamage> damages;
+
+			if (characterID >= Common::Enums::MAX_CHARACTERS)
+				return damages;
+
+			std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
+			std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
+			damages.reserve(endIndex - startIndex);
+
+			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
+			{
+				auto& item = m_equippedItemByCharacter[i];
+				if (item.id == 0 || item.expirationDate != 0) continue;
+
+				const auto baseDurability = Main::CdbUtils::getItemDurability(item.id);
+				if (!baseDurability || *baseDurability == 0) continue;
+
+				const std::uint32_t reduction = (*baseDurability / 100) * 1;
+				const std::uint32_t newDurability = (*baseDurability > reduction) ? (*baseDurability - reduction) : 0;
+
+				item.durability = newDurability;
+				damages.push_back(Main::ClientData::SingleWeaponDurabilityDamage{ item.serialInfo, reduction });
+			}
+
+			return damages;
 		}
 
 		bool Player::updateItemDurabilityByNumber(std::uint32_t itemNumber, std::uint32_t newDurability)

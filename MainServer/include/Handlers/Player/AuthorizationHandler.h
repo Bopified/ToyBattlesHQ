@@ -32,7 +32,7 @@ namespace Main
 		{
 			START_BENCHMARK
 
-			Common::Network::Packet response;
+				Common::Network::Packet response;
 			response.setTcpHeader(request.getSession(), Common::Enums::NO_ENCRYPTION);
 			response.setOrder(request.getOrder());
 			response.setExtra(static_cast<std::uint8_t>(Main::Enums::AuthorizationExtra::SUCCESS));
@@ -46,11 +46,11 @@ namespace Main
 
 			const auto clientInfo = Main::Details::parseData<Main::ClientData::ClientAuthorization>(request);
 			const auto& clientVersionRequired = Common::Utils::SetupParser::getInstance().getClientSetup();
-			
-			if (auto accountInfoOpt = 
+
+			if (auto accountInfoOpt =
 				scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getPlayerInfo, clientInfo.accountID); accountInfoOpt)
 			{
-				const bool clientVersionMatches = clientInfo.clientVersion.matches(clientVersionRequired.version1, 
+				const bool clientVersionMatches = clientInfo.clientVersion.matches(clientVersionRequired.version1,
 					clientVersionRequired.version2, clientVersionRequired.version3);
 				const bool serverUnavailable = totalOnlinePlayers >= Common::Constants::maxServerCapacity || isServerOffline;
 
@@ -60,9 +60,9 @@ namespace Main
 					session->asyncWrite(response);
 
 					END_BENCHMARK(handleAuthorization, session)
-					return std::nullopt;
+						return std::nullopt;
 				}
-				
+
 				else if (accountInfoOpt->accountID != clientInfo.accountID || clientInfo.accountHash != accountInfoOpt->accountKey)
 				{
 					response.setExtra(static_cast<std::uint8_t>(Main::Enums::AuthorizationExtra::AUTHORIZATION_FAILED));
@@ -70,7 +70,7 @@ namespace Main
 					return std::nullopt;
 				}
 
-				auto hasBeenMatchBannedOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::hasBeenMatchBanned, 
+				auto hasBeenMatchBannedOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::hasBeenMatchBanned,
 					accountInfoOpt->accountID);
 				if (hasBeenMatchBannedOpt == std::nullopt)
 				{
@@ -80,11 +80,11 @@ namespace Main
 				session->setHasBeenMatchBanned(*hasBeenMatchBannedOpt);
 				session->asyncWrite(response);
 				session->sendMessage("Welcome! To see all commands, type /?", Main::Enums::ChatExtra::INFO);
-				session->sendMessage("Client Version: " + std::to_string(clientInfo.clientVersion.ver2) + "." 
+				session->sendMessage("Client Version: " + std::to_string(clientInfo.clientVersion.ver2) + "."
 					+ std::to_string(clientInfo.clientVersion.ver3) + "." + std::to_string(clientInfo.clientVersion.ver4));
 
 				END_BENCHMARK(handleAuthorization, session)
-				return *accountInfoOpt;
+					return *accountInfoOpt;
 			}
 
 			END_BENCHMARK(handleAuthorization, session)

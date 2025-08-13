@@ -133,6 +133,7 @@ namespace Main
 			bool prolongItem(const Main::Structures::ItemSerialInfo& newItemSerialInfo);
 			const std::array<EquippedItem, Common::Enums::MAX_CHARACTERS* Common::Enums::MAX_ITEMTYPE>& getEquippedItems() const;
 			std::vector<EquippedItem> getEquippedItemsFor(std::uint16_t characterID) const;
+			std::vector<EquippedItem> getUnlimitedEquippedItemsFor(std::uint16_t characterID) const;
 			const std::unordered_map<std::uint64_t, Item>& getItems() const;
 			const std::vector<Item> getItemsAsVec() const;
 			bool deleteItemBasic(const Main::Structures::ItemSerialInfo& itemSerialInfo);
@@ -143,6 +144,7 @@ namespace Main
 			void setEquippedItems(const std::unordered_map<std::uint16_t, std::vector<EquippedItem>>& equippedItems);
 			std::optional<std::pair<std::uint16_t, std::uint64_t>>
 				addEnergyToItem(const Main::Structures::ItemSerialInfo& itemSerialInfo, std::uint32_t energyAdded);
+			std::vector<Main::ClientData::SingleWeaponDurabilityDamage> reduceEquippedItemsDurabilities(std::size_t characterID);
 			bool updateItemDurabilityByNumber(std::uint32_t itemNumber, std::uint32_t newDurability);
 			std::optional<std::uint16_t> getItemEnergy(const Main::Structures::ItemSerialInfo& itemSerialInfo) const;
 
