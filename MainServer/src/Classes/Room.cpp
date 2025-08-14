@@ -1343,7 +1343,7 @@ namespace Main
 
 					if (m_settings.mode == Common::Enums::ZombieMode || m_settings.mode == Common::Enums::FreeForAll
 						|| m_settings.mode == Common::Enums::BossBattle || m_settings.mode == Common::Enums::ArmsRace
-						|| m_settings.mode == Common::Enums::SquareMode)
+						|| m_settings.mode == Common::Enums::SquareMode || m_settings.mode == Common::Enums::AiBattle)
 					{
 						matchEnd = Main::Enums::MATCH_DO_NOTHING;
 					}

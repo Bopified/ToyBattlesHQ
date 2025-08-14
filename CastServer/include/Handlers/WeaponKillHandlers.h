@@ -96,6 +96,11 @@ namespace Cast
 				return;
 			}
 
+			if (room->getMode() == Common::Enums::AiBattle)
+			{
+				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+				return;
+			}
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
 			{
 				if (targetHp)
@@ -154,6 +159,12 @@ namespace Cast
 				return;
 			}
 
+			if (room->getMode() == Common::Enums::AiBattle)
+			{
+				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+				return;
+			}
+
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
 			{
 				if (targetHp)
@@ -201,6 +212,12 @@ namespace Cast
 			if (request.getOption() == 0)
 			{
 				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+			}
+
+			if (room->getMode() == Common::Enums::AiBattle)
+			{
+				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+				return;
 			}
 
 			for (std::uint32_t i = 0; i < request.getOption(); ++i)

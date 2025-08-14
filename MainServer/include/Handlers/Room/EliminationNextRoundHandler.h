@@ -204,8 +204,24 @@ namespace Main
 						: Common::Constants::maxExpAndMpPerMatch;
 					const auto clampedMp = (finalGainedMpWithEvent <= Common::Constants::maxExpAndMpPerMatch) ? finalGainedMpWithEvent 
 						: Common::Constants::maxExpAndMpPerMatch;
-					scoreboardResponse.newTotalEXP = ainfo.experience + clampedExp;
-					scoreboardResponse.newTotalMP = ainfo.microPoints + clampedMp;
+					if (!isFarm && (clampedExp + ainfo.experience) < ainfo.experience)
+					{
+						targetSession->sendMessage("[Handlers::handleEliminationNextRound] error: negative experience detected");
+						scoreboardResponse.newTotalEXP = ainfo.experience + 200;
+					}
+					else
+					{
+						scoreboardResponse.newTotalEXP = ainfo.experience + clampedExp;
+					}
+					if (!isFarm && (clampedMp + ainfo.microPoints) < ainfo.microPoints)
+					{
+						targetSession->sendMessage("[Handlers::handleEliminationNextRound] error: negative MP detected");
+						scoreboardResponse.newTotalMP = ainfo.microPoints + 200;
+					}
+					else
+					{
+						scoreboardResponse.newTotalMP = ainfo.microPoints + clampedMp;
+					}
 
 					if (auto* gradeInfo = CD::CdbSingleton<CD::CdbGradeInfo>::getInstance().getEntry(ainfo.playerLevel + 1);
 						!isFarm && gradeInfo && scoreboardResponse.newTotalEXP >= gradeInfo->gi_exp)
@@ -249,7 +265,7 @@ namespace Main
 					if (!isFarm)
 					{
 						targetSession->sendRt(static_cast<std::uint32_t>(static_cast<double>(clampedMp)/3));
-						if (room->getRoomSettings().mode != Common::Enums::SquareMode)
+						if (room->getRoomSettings().mode != Common::Enums::SquareMode && room->getRoomSettings().mode != Common::Enums::AiBattle)
 						{
 							targetSession->reduceEquippedItemsDurability();
 						}

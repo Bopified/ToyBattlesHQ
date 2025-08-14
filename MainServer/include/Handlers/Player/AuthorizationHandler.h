@@ -79,7 +79,7 @@ namespace Main
 				}
 				session->setHasBeenMatchBanned(*hasBeenMatchBannedOpt);
 				session->asyncWrite(response);
-				session->sendMessage("Welcome! To see all commands, type /?", Main::Enums::ChatExtra::INFO);
+				session->sendMessage("Welcome! To see all commands, type /commands", Main::Enums::ChatExtra::INFO);
 				session->sendMessage("Client Version: " + std::to_string(clientInfo.clientVersion.ver2) + "."
 					+ std::to_string(clientInfo.clientVersion.ver3) + "." + std::to_string(clientInfo.clientVersion.ver4));
 

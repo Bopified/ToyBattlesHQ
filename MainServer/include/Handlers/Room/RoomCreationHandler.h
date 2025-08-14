@@ -82,13 +82,13 @@ namespace Main
 			{
 				room.setStateFor(session->getAccountInfo().uniqueId, Common::Enums::STATE_WAITING);
 				session->setRoomNumber(room.getRoomNumber());
-				const std::pair<std::uint16_t, std::uint16_t> roomInfo{ room.getRoomNumber() - 1, 1 }; // {roomNum, unk}
+				const std::pair<std::uint16_t, std::uint16_t> roomInfo{ room.getRoomNumber() - 1, 2 }; // {roomNum, unk}
 				response.setExtra(RoomCreationExtra::CREATION_SUCCESS);
 				response.setData(reinterpret_cast<const std::uint8_t*>(&roomInfo), sizeof(roomInfo));
 				session->asyncWrite(response);
 
 				// Disable team balance for now, since it causes issues such as team bugs
-				if (room.isModeTeamBased())
+				if (room.isModeTeamBased() && room.getRoomSettings().mode != Common::Enums::AiBattle)
 				{
 					response.setCommand(125, 0, 0, room.getRoomSettings().mode);
 					auto settings = room.getRoomSettingsUpdate();

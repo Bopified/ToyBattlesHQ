@@ -58,6 +58,11 @@ namespace Main
 
 			if (Main::Classes::Room* room = roomsManager.getRoomByNumber(requestStructure.roomNumber + 1))
 			{
+				if (room->getRoomSettings().mode == Common::Enums::AiBattle && !joinInvisible)
+				{
+					session->sendMessage("Error: cannot join AI battle mode room");
+					return;
+				}
 				if (room->playerExists(session->getId()))
 				{
 					::Utils::Logger::log("[handleRoomJoin] Duplicate player detected - disconnected target session", ::Utils::LogType::Warning);

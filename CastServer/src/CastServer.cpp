@@ -89,6 +89,16 @@ namespace Cast
 				m_roomsManager.playerForwardToHost(session->getId(), request.getSession(), const_cast<Common::Network::UnecryptedPacket&>(request));
 			});
 
+		// AI Battle
+		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(286, [&](const Common::Network::UnecryptedPacket& request,
+			std::shared_ptr<Cast::Network::Session> session) {
+				m_roomsManager.playerForwardToHost(session->getId(), request.getSession(), const_cast<Common::Network::UnecryptedPacket&>(request));
+			});
+		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(285, [&](const Common::Network::UnecryptedPacket& request,
+			std::shared_ptr<Cast::Network::Session> session) {
+				m_roomsManager.playerForwardToHost(session->getId(), request.getSession(), const_cast<Common::Network::UnecryptedPacket&>(request));
+			});
+
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(281, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerPosition(request, session, m_roomsManager, m_serverId, m_sessionsManager,
 				m_acManager); });
