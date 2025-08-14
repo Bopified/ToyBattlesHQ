@@ -17,6 +17,12 @@ namespace Main
 		{
 			if (Main::Classes::Room* room = roomsManager.getRoomByNumber(session->getPlayer().getRoomNumber()))
 			{
+				if (room->getRoomSettings().mode == Common::Enums::AiBattle)
+				{
+					session->sendMessage("Cannot change settings in AI battle, please create a new room");
+					return;
+				}
+
 				if (!room->isHost(session->getAccountInfo().uniqueId))
 				{
 					return;
