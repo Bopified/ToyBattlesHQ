@@ -49,6 +49,7 @@ namespace Main
 			std::uint16_t m_ping{};
 			bool m_isMuted{ false };
 			bool m_isRoomCreationEnabled{ true };
+			bool m_isVotekickEnabled{true};
 			std::string m_mutedBy{};
 			std::string m_muteReason{};
 			std::string m_mutedUntil{};
@@ -105,6 +106,9 @@ namespace Main
 			void disableRoomCreation();
 			void enableRoomCreation();
 			bool isRoomCreationEnabled() const noexcept;
+			void disableVotekick();
+			void enableVotekick();
+			bool isVotekickEnabled() const noexcept;
 			Main::Structures::MuteInfo getMuteInfo() const;
 			bool isMuted() const;
 			void resetKillDeath();

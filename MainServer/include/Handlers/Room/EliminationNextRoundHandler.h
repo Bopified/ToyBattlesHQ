@@ -231,7 +231,7 @@ namespace Main
 						{ // RT & coupon reward
 							const std::uint32_t rtToAdd = 2000 * (actualPlayerLevel / 5);
 							targetSession->sendRt(rtToAdd);
-							targetSession->spawnCoupon(5);
+							targetSession->spawnCouponImmediate(5);
 							targetSession->sendMessage("You obtained " + std::to_string(rtToAdd) + " RockTokens and 5 coupons!");
 						}
 					}

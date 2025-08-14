@@ -241,6 +241,22 @@ namespace Main
 			return m_isRoomCreationEnabled;
 		}
 
+		void Player::disableVotekick()
+		{
+			m_isVotekickEnabled = false;
+		}
+
+		void Player::enableVotekick()
+		{
+			m_isVotekickEnabled = true;
+		}
+
+		bool Player::isVotekickEnabled() const noexcept
+		{
+			return m_isVotekickEnabled;
+		}
+
+
 		void Player::unmute()
 		{
 			m_isMuted = false;

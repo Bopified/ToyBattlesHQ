@@ -32,6 +32,15 @@ namespace Main
 				expirationDate = duration <= 3 ? duration : serialInfo.itemCreationDate + duration;
 				serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
 			}
+
+			explicit SpawnedItem(std::uint32_t id, std::uint32_t stock)
+				: itemId{ id }
+			{
+				itemId.stock = stock;
+				const std::uint32_t duration = Main::CdbUtils::getItemDuration(id);
+				expirationDate = duration <= 3 ? duration : serialInfo.itemCreationDate + duration;
+				serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
+			}
 		};
 #pragma pack(pop)
 

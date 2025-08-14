@@ -56,6 +56,10 @@ namespace Main
 			std::optional<Main::Structures::BanInfo> getBanInfoByNickname(const std::string& nickname);
 			std::optional<Main::Structures::MuteInfo> getMuteInfoByNickname(const std::string& nickname);
 			bool isRoomCreationDisabled(std::uint32_t playerID);
+			bool isVotekickDisabled(std::uint32_t playerID);
+			std::optional<std::string> getVotekickDisabledUntil(const std::string& nickname);
+			bool updateVotekickDisabledUntil(const std::string& nickname, const std::string& until);
+			bool resetVotekickDisabledUntil(const std::string& nickname);
 			bool unbanPlayer(const std::string& nickname);
 			bool addPlayer(const std::string& username, const std::string& password, const std::string& nickname);
 			auto getPlayerItems(std::uint32_t playerID) -> std::pair<std::vector<Item>, std::unordered_map<std::uint16_t, std::vector<EquippedItem>>>;

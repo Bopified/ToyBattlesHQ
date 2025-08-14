@@ -1095,7 +1095,6 @@ namespace Main
             }
         }
 
-
         bool PersistentDatabase::isRoomCreationDisabled(std::uint32_t playerID)
         {
             try
@@ -1117,6 +1116,64 @@ namespace Main
             catch (const sql::SQLException& e)
             {
                 ::Utils::Logger::log("MariaDB exception: " + std::string(e.what()), Utils::LogType::Error, "PersistentDatabase::isRoomCreationDisabled");
+                return false;
+            }
+        }
+
+        std::optional<std::string> PersistentDatabase::getVotekickDisabledUntil(const std::string& nickname)
+        {
+            try
+            {
+                {
+                    std::string alterQuery = "ALTER TABLE Users ADD COLUMN IF NOT EXISTS VotekickDisabledUntil DATETIME NULL DEFAULT NULL";
+                    std::unique_ptr<sql::Statement> alterStmt(m_con->createStatement());
+                    alterStmt->execute(alterQuery);
+                }
+
+                std::string selectQueryStr = "SELECT VotekickDisabledUntil FROM Users WHERE Nickname = ?";
+                std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement(selectQueryStr));
+                stmt->setString(1, nickname);
+
+                std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
+                if (res->next())
+                {
+                    const std::string disabledUntil = res->getString("VotekickDisabledUntil").c_str();
+                    return disabledUntil;
+                }
+                return std::nullopt;
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log("MariaDB exception: " + std::string(e.what()), Utils::LogType::Error, "PersistentDatabase::getVotekickDisabledUntil");
+                return std::nullopt;
+            }
+        }
+
+        bool PersistentDatabase::isVotekickDisabled(std::uint32_t playerID)
+        {
+            try
+            {
+                {
+                    std::string alterQuery = "ALTER TABLE Users ADD COLUMN IF NOT EXISTS VotekickDisabledUntil DATETIME NULL DEFAULT NULL";
+                    std::unique_ptr<sql::Statement> alterStmt(m_con->createStatement());
+                    alterStmt->execute(alterQuery);
+                }
+
+                std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement("SELECT VotekickDisabledUntil FROM Users WHERE AccountID = ?"));
+                stmt->setUInt(1, playerID);
+
+                std::unique_ptr<sql::ResultSet> res(stmt->executeQuery());
+                if (res->next())
+                {
+                    const std::string disabledUntil = res->getString("VotekickDisabledUntil").c_str();
+                    auto const time = std::chrono::utc_clock::now();
+                    return disabledUntil > std::format("{:%Y-%m-%d %X}", time);
+                }
+                return false;
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log("MariaDB exception: " + std::string(e.what()), Utils::LogType::Error, "PersistentDatabase::isVotekickDisabled");
                 return false;
             }
         }
@@ -1414,11 +1471,7 @@ namespace Main
         {
             try
             {
-                const std::string queryStr =
-                    "UPDATE UserItems "
-                    "SET Stocks = ? "
-                    "WHERE AccountID = ? AND ItemNumber = ?";
-
+                const std::string queryStr = "UPDATE UserItems SET Stocks = ? WHERE AccountID = ? AND ItemNumber = ?";
                 std::unique_ptr<sql::PreparedStatement> stmt(m_con->prepareStatement(queryStr));
                 stmt->setUInt(1, newStock);     
                 stmt->setUInt(2, accountID);      
@@ -1428,7 +1481,6 @@ namespace Main
             }
             catch (const sql::SQLException& e)
             {
-                // Log any errors that occur
                 ::Utils::Logger::log("MariaDB exception: " + std::string(e.what()), Utils::LogType::Error, "PersistentDatabase::updateItemStock");
                 return false;
             }
@@ -2086,6 +2138,75 @@ namespace Main
             }
         }
 
+        bool PersistentDatabase::updateVotekickDisabledUntil(const std::string& nickname, const std::string& until)
+        {
+            try
+            {
+                {
+                    std::string alterQuery = "ALTER TABLE Users ADD COLUMN IF NOT EXISTS VotekickDisabledUntil DATETIME NULL DEFAULT NULL";
+                    std::unique_ptr<sql::Statement> alterStmt(m_con->createStatement());
+                    alterStmt->execute(alterQuery);
+                }
+
+                std::string updateQuery = "UPDATE Users SET VotekickDisabledUntil = ? WHERE Nickname = ?";
+                std::unique_ptr<sql::PreparedStatement> updateStmt(m_con->prepareStatement(updateQuery));
+                updateStmt->setString(1, until);
+                updateStmt->setString(2, nickname);
+
+                if (updateStmt->executeUpdate() == 0)
+                {
+                    ::Utils::Logger::log("Update failed: No rows affected.", Utils::LogType::Warning, "PersistentDatabase::updateVotekickDisabledUntil");
+                    return false;
+                }
+
+                return true;
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log("MariaDB exception: " + std::string(e.what()), Utils::LogType::Error, "PersistentDatabase::updateVotekickDisabledUntil");
+                return false;
+            }
+        }
+
+        bool PersistentDatabase::resetVotekickDisabledUntil(const std::string& nickname)
+        {
+            try
+            {
+                {
+                    std::string alterQuery = "ALTER TABLE Users ADD COLUMN IF NOT EXISTS VotekickDisabledUntil DATETIME NULL DEFAULT NULL";
+                    std::unique_ptr<sql::Statement> alterStmt(m_con->createStatement());
+                    alterStmt->execute(alterQuery);
+                }
+
+                std::string selectQueryStr = "SELECT AccountID FROM Users WHERE Nickname = ?";
+                std::unique_ptr<sql::PreparedStatement> selectStmt(m_con->prepareStatement(selectQueryStr));
+                selectStmt->setString(1, nickname);
+
+                std::unique_ptr<sql::ResultSet> resultSet(selectStmt->executeQuery());
+                if (!resultSet->next())
+                {
+                    return false;
+                }
+
+                const std::uint32_t accountID = resultSet->getUInt("AccountID");
+                std::string updateQueryStr = "UPDATE Users SET VotekickDisabledUntil = 0 WHERE AccountID = ?";
+                std::unique_ptr<sql::PreparedStatement> updateStmt(m_con->prepareStatement(updateQueryStr));
+                updateStmt->setUInt(1, accountID);
+
+                if (updateStmt->executeUpdate() == 0)
+                {
+                    return false;
+                }
+                return true;
+            }
+            catch (const sql::SQLException& e)
+            {
+                ::Utils::Logger::log("MariaDB exception: " + std::string(e.what()), Utils::LogType::Error, "PersistentDatabase::resetVotekickDisabledUntil");
+                return false;
+            }
+        }
+
+
         bool PersistentDatabase::updateRoomCreationDisabledUntil(const std::string& nickname, const std::string& until)
         {
             try
@@ -2483,7 +2604,6 @@ namespace Main
 
                 uint32_t currentMaxInventory = resGetMaxInventory->getUInt("MaxInventory");
 
-                // Reject if adding spaceToAdd would go over 1000
                 if (currentMaxInventory + spaceToAdd > 1000)
                 {
                     return false;

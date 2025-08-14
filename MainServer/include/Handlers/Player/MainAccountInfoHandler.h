@@ -59,6 +59,10 @@ namespace Main
 			{
 				session->setRoomCreationDisabled();
 			}
+			if (scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::isVotekickDisabled, accountInfo.accountID))
+			{
+				session->setVotekickDisabled();
+			}
 			auto [sentMailboxes, receivedMailboxes] = scheduler.immediatePersist(std::source_location::current(), 
 				&Main::Persistence::PersistentDatabase::loadMailboxes, accountInfo.accountID);
 			session->setMailbox(sentMailboxes, true);

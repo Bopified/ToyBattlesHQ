@@ -969,7 +969,7 @@ namespace Main
 			m_player.equipItem(itemNumber, m_scheduler);
 		}
 
-		void Session::replaceItem(const Main::Structures::ItemSerialInfo& serialInfo, std::uint32_t newItemId, const std::string& action)
+		bool Session::replaceItem(const Main::Structures::ItemSerialInfo& serialInfo, std::uint32_t newItemId, const std::string& action)
 		{
 			// Logs
 			auto itemIdOpt = m_player.findItemIdBySerialInfo(serialInfo);
@@ -977,17 +977,17 @@ namespace Main
 			if (!CdbUtils::itemExists(newItemId))
 			{
 				sendMessage("[Session::replaceItem] error: itemID not found");
-				return;
+				return false;
 			}
 			if (!m_player.hasEnoughInventorySpace(1))
 			{
 				sendMessage("[Session::replaceItem] not enough inventory space!");
-				return;
+				return false;
 			}
 			if (!sendDeletePacket(serialInfo))
 			{
 				sendMessage("[Session::replaceItem] error: failed to delete original item");
-				return;
+				return false;
 			}
 			Main::Structures::SpawnedItem spawnedItem{ newItemId };
 			spawnedItem.serialInfo = serialInfo;
@@ -1005,6 +1005,8 @@ namespace Main
 			Main::Structures::ItemLogInfo log{ serialInfo.itemNumber, *itemIdOpt, 0, action};
 			m_scheduler.addRepetitiveCallback(std::source_location::current(),
 				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::insertItemLog, m_player.getAccountID(), log);
+
+			return true;
 		}
 
 		void  Session::logItemInfo(std::uint64_t itemNumber, std::uint32_t itemId, std::uint32_t expiration, const std::string& action)
@@ -1040,32 +1042,73 @@ namespace Main
 			return false;
 		}
 
+		// use this for coupon items
 		bool Session::spawnCoupon(const std::uint32_t total)
+		{
+			return spawnCouponCommon(total, false);
+		}
+
+		// use this to spawn coupons directly to account currency
+		bool Session::spawnCouponImmediate(const std::uint32_t total)
+		{
+			return spawnCouponCommon(total, true);
+		}
+
+		bool Session::spawnCouponCommon(const std::uint32_t total, bool immediateToAccount)
 		{
 			const auto res = m_player.addCoupon(total);
 
+			Main::Structures::SpawnedItem spawnedItem{ 1000000 };
+			spawnedItem.itemId.stock = total;
+			spawnedItem.serialInfo.itemNumber = m_player.getLatestItemNumber() + 1;
+			spawnedItem.expirationDate = 0;
+
 			if (res.action == Common::Enums::AddCouponAction::MUST_CREATE_NEW_COUPON)
 			{
-				Main::Structures::SpawnedItem spawnedItem{ 1000000 };
-				spawnedItem.itemId.stock = total;
-				spawnedItem.serialInfo.itemNumber = m_player.getLatestItemNumber() + 1;
-				spawnedItem.expirationDate = 0;
 				Item convertedItem{ spawnedItem };
 				convertedItem.unknown = true;
-				if (addItem(convertedItem, true))
+
+				if (!addItem(convertedItem, true))
+					return false;
+
+				if (immediateToAccount)
+				{
+					m_packet.setCommand(66, 0, 51, 2);
+					m_packet.setData(reinterpret_cast<const std::uint8_t*>(&spawnedItem), sizeof(spawnedItem));
+					setLatestItemNumber(spawnedItem.serialInfo.itemNumber);
+					asyncWrite(m_packet);
+
+					logItemInfo(spawnedItem.serialInfo.itemNumber, spawnedItem.itemId.itemId, spawnedItem.expirationDate,
+						"Coupon item spawned automatically in Session::spawnCouponCommon");
+				}
+				else
 				{
 					m_player.addTotalCouponItems(convertedItem);
-					return true;
 				}
-				return false;
+
+				return true;
 			}
 			else if (res.action == Common::Enums::EXISTING_COUPON_STOCK_UPDATED)
 			{
-				m_scheduler.addRepetitiveCallback(std::source_location::current(), m_player.getAccountID(),
-					&Main::Persistence::PersistentDatabase::updateItemStock, m_player.getAccountID(),
-					res.serialInfo.itemNumber, res.newStock);
+				if (immediateToAccount)
+				{
+					// trick the client in thinking it has more coupon items, since deleting coupon items doesn't work unless we use the coupon shop packets
+					// this way, the client will keep the updated coupon total, consistent without relogging
+					spawnedItem.serialInfo.itemNumber = 0; // on purpose, this is just for the client anyway
+					m_packet.setCommand(66, 0, 51, 2);
+					m_packet.setData(reinterpret_cast<const std::uint8_t*>(&spawnedItem), sizeof(spawnedItem));
+					setLatestItemNumber(spawnedItem.serialInfo.itemNumber);
+					asyncWrite(m_packet);
+
+					logItemInfo(spawnedItem.serialInfo.itemNumber, spawnedItem.itemId.itemId, spawnedItem.expirationDate,
+						"Coupon item spawned automatically in Session::spawnCouponCommon");
+				}
+
+				m_scheduler.addRepetitiveCallback(std::source_location::current(), m_player.getAccountID(), &Main::Persistence::PersistentDatabase::updateItemStock,
+					m_player.getAccountID(), res.serialInfo.itemNumber, res.newStock);
 				return true;
 			}
+
 			return false;
 		}
 
@@ -1331,7 +1374,7 @@ namespace Main
 
 			using namespace std::chrono;
 			using namespace std::literals;
-			zoned_time zt{ current_zone(), local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)} };
+			zoned_time zt{ "UTC", local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)}};
 			const std::string bannedUntil = std::format("{:%Y-%m-%d %H:%M:%S}", zt.get_sys_time());
 
 			if (m_scheduler.immediatePersist(std::source_location::current(), 
@@ -1353,7 +1396,7 @@ namespace Main
 		{
 			using namespace std::chrono;
 			using namespace std::literals;
-			zoned_time zt{ current_zone(), local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)} };
+			zoned_time zt{ "UTC", local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)}};
 			const std::string mutedUntil = std::format("{:%Y-%m-%d %H:%M:%S}", zt.get_sys_time());
 			if (m_scheduler.immediatePersist(std::source_location::current(), 
 				&Main::Persistence::PersistentDatabase::updateMute, m_player.getAccountInfo().nickname,
@@ -1370,11 +1413,16 @@ namespace Main
 			m_player.disableRoomCreation();
 		}
 
+		void Session::setVotekickDisabled()
+		{
+			m_player.disableVotekick();
+		}
+
 		bool Session::disableRoomCreation(std::uint64_t daysDuration)
 		{
 			using namespace std::chrono;
 			using namespace std::literals;
-			zoned_time zt{ current_zone(), local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)} };
+			zoned_time zt{ "UTC", local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)}};
 			const std::string disabledUntil = std::format("{:%Y-%m-%d %H:%M:%S}", zt.get_sys_time());
 			if (m_scheduler.immediatePersist(std::source_location::current(),
 				&Main::Persistence::PersistentDatabase::updateRoomCreationDisabledUntil, m_player.getAccountInfo().nickname,
@@ -1385,6 +1433,27 @@ namespace Main
 			}
 			return false;
 		}
+
+		bool Session::disableVotekick(std::uint64_t daysDuration)
+		{
+			using namespace std::chrono;
+			using namespace std::literals;
+			zoned_time zt{ "UTC",
+				local_seconds{duration_cast<seconds>(system_clock::now().time_since_epoch()) + seconds(daysDuration * 24 * 60 * 60)}
+			};
+			const std::string disabledUntil = std::format("{:%Y-%m-%d %H:%M:%S}", zt.get_sys_time());
+
+			if (m_scheduler.immediatePersist(std::source_location::current(),
+				&Main::Persistence::PersistentDatabase::updateVotekickDisabledUntil,
+				m_player.getAccountInfo().nickname,
+				disabledUntil))
+			{
+				m_player.disableVotekick();
+				return true;
+			}
+			return false;
+		}
+
 
 		void Session::sendLobbyList(const std::vector<std::shared_ptr<Session>>& allSessions)
 		{
@@ -1469,6 +1538,13 @@ namespace Main
 			m_player.enableRoomCreation();
 			return m_scheduler.immediatePersist(std::source_location::current(),
 				&Main::Persistence::PersistentDatabase::resetRoomCreationDisabledUntil, m_player.getAccountInfo().nickname);
+		}
+
+		bool Session::enableVotekick()
+		{
+			m_player.enableVotekick();
+			return m_scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::resetVotekickDisabledUntil,
+				m_player.getAccountInfo().nickname);
 		}
 
 		void Session::setMute(Main::Structures::MuteInfo val)
@@ -1836,7 +1912,7 @@ namespace Main
 
 					// Also send 10,000 RT for each event mission + 10 coupons
 					sendRt(10'000);
-					spawnCoupon(10);
+					spawnCouponImmediate(10);
 				}
 				else
 				{
@@ -2033,7 +2109,7 @@ namespace Main
 			return m_player.getCurrentlyTradingWithAccountId();
 		}
 
-		void Session::spawnItem(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& itemSerialInfo, const std::string& action)
+		bool Session::spawnItem(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& itemSerialInfo, const std::string& action)
 		{
 			Common::Network::Packet response;
 			response.setTcpHeader(0, Common::Enums::NO_ENCRYPTION);
@@ -2044,11 +2120,19 @@ namespace Main
 			spawnedItem.serialInfo.itemNumber = m_player.getLatestItemNumber() + 1;
 			response.setData(reinterpret_cast<std::uint8_t*>(&spawnedItem), sizeof(spawnedItem));
 			asyncWrite(response);
-			addItem(spawnedItem);
 
-			Main::Structures::ItemLogInfo log{ itemSerialInfo.itemNumber, itemId, 0, action };
-			m_scheduler.addRepetitiveCallback(std::source_location::current(),
-				m_player.getAccountID(), &Main::Persistence::PersistentDatabase::insertItemLog, m_player.getAccountID(), log);
+			if (addItem(spawnedItem))
+			{
+				Main::Structures::ItemLogInfo log{ itemSerialInfo.itemNumber, itemId, 0, action };
+				m_scheduler.addRepetitiveCallback(std::source_location::current(),
+					m_player.getAccountID(), &Main::Persistence::PersistentDatabase::insertItemLog, m_player.getAccountID(), log);
+				return true;
+			}
+			else
+			{
+				sendMessage("[Session::spawnItem] error while spawning item - please report this issue");
+				return false;
+			}
 		}
 
 		bool Session::hasCsdItems()

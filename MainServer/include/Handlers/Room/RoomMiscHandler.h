@@ -48,6 +48,11 @@ namespace Main
 						{
 							session->sendMessage("Cannot votekick a staff member!");
 						}
+						else if (!session->getPlayer().isVotekickEnabled())
+						{
+							session->sendMessage("Your votekicking permissions are currently disabled.");
+							return;
+						}
 						else if (session->getAccountInfo().microPoints < 100)
 						{
 							session->sendMessage("Not enough micro points for a votekick!");

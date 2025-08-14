@@ -42,6 +42,8 @@ namespace Main
 			std::unordered_map<std::uint32_t, std::uint32_t> m_eventMissions;
 			std::unordered_set<int> m_packetReplicaWhitelist{ 71, 81, 86, 87, 101, 284 };
 
+			bool spawnCouponCommon(const std::uint32_t total, bool useAddItem);
+
 		public:
 			std::uint64_t m_matchStartTime{};
 			bool m_hasCheckedMatchBan = false;
@@ -289,11 +291,11 @@ namespace Main
 
 			void equipItem(const std::uint16_t itemNumber);
 
-			void replaceItem(const Main::Structures::ItemSerialInfo& serialInfo, std::uint32_t newItemId, const std::string& action);
+			bool replaceItem(const Main::Structures::ItemSerialInfo& serialInfo, std::uint32_t newItemId, const std::string& action);
 
 			bool spawnItemCommand(std::uint32_t itemId, const std::string& action);
-
-			bool spawnCoupon(std::uint32_t itemId);
+			bool spawnCoupon(const std::uint32_t total);
+			bool spawnCouponImmediate(const std::uint32_t total);
 
 			bool receiveGift(std::uint32_t itemId, const std::string& giftDescription);
 
@@ -334,7 +336,13 @@ namespace Main
 
 			bool enableRoomCreation();
 
+			bool disableVotekick(std::uint64_t daysDuration);
+
+			bool enableVotekick();
+
 			void setRoomCreationDisabled();
+
+			void setVotekickDisabled();
 
 			void setMute(Main::Structures::MuteInfo val);
 
@@ -411,7 +419,7 @@ namespace Main
 
 			void resetTradeInfo();
 
-			void spawnItem(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& itemSerialInfo, const std::string& action);
+			bool spawnItem(std::uint32_t itemId, const Main::Structures::ItemSerialInfo& itemSerialInfo, const std::string& action);
 
 			bool hasCsdItems();
 		};

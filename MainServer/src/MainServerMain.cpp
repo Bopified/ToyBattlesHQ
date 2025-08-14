@@ -58,7 +58,6 @@ void initializeCdbFiles()
 		Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbWeaponInfo>::getInstance());
 
 	const auto rareCapsuleItems = Main::CdbUtils::getAllRareCapsuleItems();
-	std::cout << "RareCapsuleItems.size: " << rareCapsuleItems.size() << '\n';
 	Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbItemInfo>::filterGambleItemsByRareCapsules(rareCapsuleItems);
 	Common::ConstantDatabase::CdbSingleton<Common::ConstantDatabase::CdbWeaponInfo>::filterGambleItemsByRareCapsules(rareCapsuleItems);
 

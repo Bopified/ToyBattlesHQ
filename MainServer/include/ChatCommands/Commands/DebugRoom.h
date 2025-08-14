@@ -133,16 +133,22 @@ namespace Main
 				if (targetSession)
 				{
 					const auto& ainfo = targetSession->getAccountInfo();
-					auto banInfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getBanInfoByNickname,
+					auto banInfoOpt = scheduler.immediatePersist(std::source_location::current(),
+						&Main::Persistence::PersistentDatabase::getBanInfoByNickname,
 						m_targetPlayerName);
-					auto muteInfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getMuteInfoByNickname, 
+					auto muteInfoOpt = scheduler.immediatePersist(std::source_location::current(),
+						&Main::Persistence::PersistentDatabase::getMuteInfoByNickname,
 						m_targetPlayerName);
-					auto matchBannedOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::hasBeenMatchBannedByNick, 
+					auto matchBannedOpt = scheduler.immediatePersist(std::source_location::current(),
+						&Main::Persistence::PersistentDatabase::hasBeenMatchBannedByNick,
 						m_targetPlayerName);
-					auto roomCreationDisabledUntilOpt =
-						scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getRoomCreationDisabledUntil,
-							m_targetPlayerName);
-					
+					auto roomCreationDisabledUntilOpt = scheduler.immediatePersist(std::source_location::current(),
+						&Main::Persistence::PersistentDatabase::getRoomCreationDisabledUntil,
+						m_targetPlayerName);
+					auto votekickDisabledUntilOpt = scheduler.immediatePersist(std::source_location::current(),
+						&Main::Persistence::PersistentDatabase::getVotekickDisabledUntil,
+						m_targetPlayerName);
+
 					session->sendMessage("User Information: " + m_targetPlayerName, Main::Enums::TIP);
 					session->sendMessage(" - Player Status: ONLINE");
 					session->sendMessage(" - AccountID: " + std::to_string(ainfo.accountID));
@@ -152,6 +158,7 @@ namespace Main
 					session->sendMessage(" - Level: " + std::to_string(ainfo.playerLevel));
 					session->sendMessage(" - MicroPoints: " + std::to_string(ainfo.microPoints));
 					session->sendMessage(" - RockTotens: " + std::to_string(ainfo.rockTotens));
+
 					if (matchBannedOpt && *matchBannedOpt)
 					{
 						session->sendMessage("This player is cheat banned. Ignore all their requests.", Main::Enums::TIP);
@@ -176,19 +183,27 @@ namespace Main
 						session->sendMessage("This player cannot create rooms.", Main::Enums::TIP);
 						session->sendMessage(" - Expiration (UTC): " + *roomCreationDisabledUntilOpt);
 					}
+					if (votekickDisabledUntilOpt && *votekickDisabledUntilOpt != "0" && !votekickDisabledUntilOpt->empty())
+					{
+						session->sendMessage("This player cannot start votekicks.", Main::Enums::TIP);
+						session->sendMessage(" - Expiration (UTC): " + *votekickDisabledUntilOpt);
+					}
 				}
 				else
 				{ // offline
-					auto ainfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getPlayerInfoByNickname, 
+					auto ainfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getPlayerInfoByNickname,
 						m_targetPlayerName);
-					auto banInfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getBanInfoByNickname, 
+					auto banInfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getBanInfoByNickname,
 						m_targetPlayerName);
-					auto muteInfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getMuteInfoByNickname, 
+					auto muteInfoOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getMuteInfoByNickname,
 						m_targetPlayerName);
 					auto matchBannedOpt = scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::hasBeenMatchBannedByNick,
 						m_targetPlayerName);
-					auto roomCreationDisabledUntilOpt = 
+					auto roomCreationDisabledUntilOpt =
 						scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getRoomCreationDisabledUntil,
+							m_targetPlayerName);
+					auto votekickDisabledUntilOpt =
+						scheduler.immediatePersist(std::source_location::current(), &Main::Persistence::PersistentDatabase::getVotekickDisabledUntil,
 							m_targetPlayerName);
 
 					if (ainfoOpt)
@@ -225,6 +240,11 @@ namespace Main
 						{
 							session->sendMessage("This player cannot create rooms.", Main::Enums::TIP);
 							session->sendMessage(" - Expiration (UTC): " + *roomCreationDisabledUntilOpt);
+						}
+						if (votekickDisabledUntilOpt && *votekickDisabledUntilOpt != "0" && !votekickDisabledUntilOpt->empty())
+						{
+							session->sendMessage("This player cannot initiate votekicks.", Main::Enums::TIP);
+							session->sendMessage(" - Expiration (UTC): " + *votekickDisabledUntilOpt);
 						}
 					}
 					else
