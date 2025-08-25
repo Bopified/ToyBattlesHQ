@@ -89,6 +89,12 @@ namespace Cast
 			const auto targetUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 20);
 			const std::uint16_t targetHp = Cast::Details::parseData<std::uint16_t>(request, 24);
 
+			if (room->getMode() == Common::Enums::AiBattle || room->getMode() == Common::Enums::BossBattle)
+			{
+				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+				return;
+			}
+
 			if (auto attackerSession = sessionsManager.getSession(attackerUid.session);
 				attackerSession &&
 				(attackerSession->m_team == Common::Enums::TEAM_OBSERVER || !attackerSession->m_isInMatch))
@@ -96,11 +102,6 @@ namespace Cast
 				return;
 			}
 
-			if (room->getMode() == Common::Enums::AiBattle)
-			{
-				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
-				return;
-			}
 			if (auto targetSession = sessionsManager.getSession(targetUid.session))
 			{
 				if (targetHp)
@@ -139,6 +140,7 @@ namespace Cast
 		}
 
 		// mg & shotgun
+		// issue: in boss battle, mg/shotgun work for NPCs, but they don't disappear when killed with mg/shotgun
 		inline void handleSpecialWeaponDamage(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session, 
 			Cast::Classes::RoomsManager& roomsManager,
 			Cast::Network::SessionsManager& sessionsManager,
@@ -152,16 +154,16 @@ namespace Cast
 			auto targetUid = Cast::Details::parseDataFromEnd<Main::Structures::UniqueId>(request, 8);
 			auto attackerUid = Cast::Details::parseData<Main::Structures::UniqueId>(request, 16);
 
+			if (room->getMode() == Common::Enums::AiBattle || room->getMode() == Common::Enums::BossBattle)
+			{
+				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+				return;
+			}
+
 			if (auto attackerSession = sessionsManager.getSession(attackerUid.session);
 				attackerSession &&
 				(attackerSession->m_team == Common::Enums::TEAM_OBSERVER || !attackerSession->m_isInMatch))
 			{
-				return;
-			}
-
-			if (room->getMode() == Common::Enums::AiBattle)
-			{
-				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
 				return;
 			}
 
@@ -209,15 +211,10 @@ namespace Cast
 			if (!roomOpt) return;
 			auto& room = *roomOpt;
 
-			if (request.getOption() == 0)
+		
+			if (request.getOption() == 0 || room->getMode() == Common::Enums::AiBattle || room->getMode() == Common::Enums::BossBattle)
 			{
 				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
-			}
-
-			if (room->getMode() == Common::Enums::AiBattle)
-			{
-				roomsManager.broadcastToMatch(session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
-				return;
 			}
 
 			for (std::uint32_t i = 0; i < request.getOption(); ++i)
