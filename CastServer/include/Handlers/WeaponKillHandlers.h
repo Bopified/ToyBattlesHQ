@@ -95,8 +95,8 @@ namespace Cast
 				return;
 			}
 
-			if (auto attackerSession = sessionsManager.getSession(attackerUid.session);
-				attackerSession &&
+			auto attackerSession = sessionsManager.getSession(attackerUid.session);
+			if (attackerSession &&
 				(attackerSession->m_team == Common::Enums::TEAM_OBSERVER || !attackerSession->m_isInMatch))
 			{
 				return;
@@ -130,7 +130,7 @@ namespace Cast
 						{
 							Cast::Handlers::sendPlayerStateUpdate(targetSession->getAccountId(), true);
 						}
-						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
+						if (attackerSession)
 						{
 							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession, 4, 1000, "Room Rape (flooding)", 265));
 						}
@@ -160,8 +160,8 @@ namespace Cast
 				return;
 			}
 
-			if (auto attackerSession = sessionsManager.getSession(attackerUid.session);
-				attackerSession &&
+			auto attackerSession = sessionsManager.getSession(attackerUid.session);
+			if (attackerSession &&
 				(attackerSession->m_team == Common::Enums::TEAM_OBSERVER || !attackerSession->m_isInMatch))
 			{
 				return;
@@ -194,7 +194,7 @@ namespace Cast
 						{
 							Cast::Handlers::sendPlayerStateUpdate(targetSession->getAccountId(), true);
 						}
-						if (auto attackerSession = sessionsManager.getSession(attackerUid.session))
+						if (attackerSession)
 						{
 							acManager.submitEvent(std::make_unique<Ac::PacketFloodingEvent>(attackerSession, 4, 1000, "Room Rape (flooding)", 265));
 						}
