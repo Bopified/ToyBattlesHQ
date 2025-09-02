@@ -50,7 +50,7 @@ namespace Main
 				}
 				if (Main::CdbUtils::getItemDuration(foundId.value()) != 0)
 				{
-					session->sendMessage("The gamble system can only be used for unlimited items");
+					session->sendMessage("The gamble system can only be used with unlimited items");
 					return;
 				}
 

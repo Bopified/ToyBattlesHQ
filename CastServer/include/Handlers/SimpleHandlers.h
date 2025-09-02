@@ -421,6 +421,7 @@ namespace Cast
                     singleInfoResp[i].uid = sp.uid;
                     singleInfoResp[i].playerState = targetSession->isDead ? Common::Enums::STATE_DYING : Common::Enums::STATE_NORMAL;
                     singleInfoResp[i].mode = mode == Common::Enums::MODES_MAX ? 0 : mode;
+                    singleInfoResp[i].u0 = 1000000;
                 }
             }
             auto response = request;
