@@ -71,7 +71,7 @@ namespace Main
 				}
 				else
 				{
-					session->sendMessage("[Handlers::handleGambleItem] error: no items available for this type after filtering - please report this issue");
+					session->sendMessage("[Handlers::handleGambleItem] Error: this item cannot be sealed!");
 					return;
 				}
 
