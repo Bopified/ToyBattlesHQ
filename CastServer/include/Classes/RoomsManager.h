@@ -38,7 +38,7 @@ namespace Cast
 
 			void setModeFor(std::uint64_t playerId, std::uint32_t mode);
 
-			void setRoomNumberFor(std::uint64_t playerId, std::uint32_t roomNum);
+			bool setRoomNumberFor(std::uint64_t playerId, std::uint32_t roomNum);
 
 			void endMatch(std::uint64_t hostId);
 

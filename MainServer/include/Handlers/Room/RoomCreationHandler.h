@@ -101,6 +101,7 @@ namespace Main
 			{
 				response.setExtra(RoomCreationExtra::CREATION_FAIL);
 				session->asyncWrite(response);
+				session->sendMessage("[handleRoomCreation] Could not retrieve cast IPC ACK related to room number");
 			}
 
 			END_BENCHMARK(handleRoomCreation, session)

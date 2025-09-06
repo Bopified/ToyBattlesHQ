@@ -13,7 +13,6 @@ namespace Main
 {
 	namespace Handlers
 	{
-		
 		inline bool handleRoomCreationClan(const Common::Network::Packet& request, std::shared_ptr<Main::Network::Session> session,
 			Main::Classes::RoomsManager& roomsManager)
 		{
@@ -57,6 +56,7 @@ namespace Main
 			}
 			else
 			{
+				session->sendMessage("[handleRoomCreationClan] Could not retrieve cast IPC ACK related to room number");
 				return false;
 			}
 		}

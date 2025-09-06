@@ -246,15 +246,15 @@ namespace Cast
 		}
 
 
-		void RoomsManager::setRoomNumberFor(std::uint64_t playerId, std::uint32_t roomNum)
+		bool RoomsManager::setRoomNumberFor(std::uint64_t playerId, std::uint32_t roomNum)
 		{
 			if (playerId >= m_playerSessionIdToRoom.size())
-				return;
+				return false;
 
 			auto& room = m_playerSessionIdToRoom[playerId];
 
 			if (!room)
-				return;
+				return false;
 
 			room->setRoomNumber(roomNum);
 		}

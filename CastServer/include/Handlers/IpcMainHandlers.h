@@ -54,8 +54,10 @@ namespace Cast
         inline void handleRoomNumber(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Common::Network::Session> session,
             Cast::Classes::RoomsManager& roomsManager)
         {
-            roomsManager.setRoomNumberFor(request.getSession(), request.getExtra());
-            session->asyncWrite(request);
+            if (roomsManager.setRoomNumberFor(request.getSession(), request.getExtra()))
+            {
+                session->asyncWrite(request);
+            }
         }
 
         inline void handleIpReq(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Common::Network::Session> session)
