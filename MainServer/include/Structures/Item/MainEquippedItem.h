@@ -6,13 +6,14 @@
 #include <cstdint>
 #include "MainItemSerialInfo.h"
 #include <array>
+#include "Macros.h"
 
 namespace Main
 {
 	namespace Structures
 	{
 		class Item;
-#pragma pack(push, 1)
+PACK_PUSH(1)
 		struct EquippedItem
 		{
 			std::uint32_t type : 9 = 0; 
@@ -31,10 +32,9 @@ namespace Main
 			//EquippedItem& operator=(const Item& other);
 			//EquippedItem& operator=(const EquippedItem& other);
 		};
-#pragma pack(pop)
+PACK_POP()
 
-
-#pragma pack(push, 1)
+PACK_PUSH(1)
 		struct DetailedEquippedItem : EquippedItem
 		{
 			std::uint16_t characterId{};
@@ -51,9 +51,9 @@ namespace Main
 			{
 			}
 		};
-#pragma pack(pop)
-	
-#pragma pack(push, 1)
+PACK_POP()
+
+PACK_PUSH(1)
 		struct BasicEquippedItem
 		{
 		private:
@@ -74,8 +74,9 @@ namespace Main
 		public:
 			std::array<Data, 17> items{};
 		};
-#pragma pack(pop)
+PACK_POP()
 
+PACK_PUSH(1)
 		struct BasicEquippedItemLobby
 		{
 		private:
@@ -95,7 +96,7 @@ namespace Main
 		public:
 			std::array<Data, 17> items{};
 		};
-#pragma pack(pop)
+PACK_POP()
 	}
 }
 

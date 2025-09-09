@@ -11,12 +11,13 @@
 #include "../../Detail/CdbUtils.h"
 #include "../Mailbox.h"
 #include "../TradeSystem/TradeSystemItem.h"
+#include "Macros.h"
 
 namespace Main
 {
 	namespace Structures
 	{
-#pragma pack(push, 1)
+PACK_PUSH(1)
 		struct Item
 		{
 			// note: If itemnumber = 0 AND creationDate = 0 ==> basic item
@@ -94,13 +95,13 @@ namespace Main
 				serialInfo.itemOrigin = 8;// Main::Enums::ItemFrom::SHOP;
 			}
 		};
-#pragma pack(pop)
+PACK_POP()
 
 		struct ItemLogInfo
 		{
 			std::uint64_t itemNumber{};
 			std::uint64_t itemId;
-			std::uint32_t expirationDate{};
+			std::int64_t expirationDate{};
 			std::string action;
 		};
 	}

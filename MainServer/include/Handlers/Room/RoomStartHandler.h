@@ -7,6 +7,7 @@
 #include "../../Classes/RoomsManager.h"
 #include "../../Classes/ClanRoom.h"
 #include "../../Classes/ClansManager.h"
+#include <cstring> 
 
 namespace Main
 {

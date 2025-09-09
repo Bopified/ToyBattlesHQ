@@ -5,6 +5,7 @@
 #include "Network/Session.h"
 #include "../Classes/RoomsManager.h"
 #include "../../../MainServer/include/Structures/ClientData/Structures.h"
+#include <cstring> 
 
 namespace Cast
 {

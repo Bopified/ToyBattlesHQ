@@ -14,6 +14,7 @@
 #include <asio/post.hpp>
 #include "AntiCheat/AntiCheat.h"
 #include "AntiCheat/Event.h"
+#include <cstring> 
 
 namespace Cast
 {

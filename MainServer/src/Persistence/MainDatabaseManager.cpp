@@ -18,6 +18,7 @@
 #include <mariadb/conncpp/Driver.hpp>
 #include <mariadb/conncpp/Connection.hpp>
 #include "Utils/SetupParser.h"
+#include <cstring> 
 
 namespace Main
 {

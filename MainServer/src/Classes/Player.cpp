@@ -9,6 +9,7 @@
 #include "Utils/Utils.h"
 #include "Utils/Constants.h"
 #include <ranges>
+#include <cstring> 
 
 namespace Main
 {

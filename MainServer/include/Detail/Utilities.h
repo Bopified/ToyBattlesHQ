@@ -12,6 +12,7 @@
 #include <vector>
 #include <source_location>
 #include "../Common/include/Enums/RoomEnums.h"
+#include <cstring> 
 
 namespace Main
 {

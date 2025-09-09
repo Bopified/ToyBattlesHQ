@@ -24,6 +24,8 @@
 
 #include <source_location>
 #include <ConstantDatabase/Structures/CdbCollectionInfo.h>
+#include "Macros.h"
+#include <cstring> 
 
 namespace Main
 {
@@ -1997,7 +1999,7 @@ namespace Main
 		// Trade system
 		void Session::temporarilySealAllItems()
 		{
-#pragma pack(push, 1)
+PACK_PUSH(1)
 			struct SealInfo
 			{
 				Main::Structures::ItemSerialInfo serialInfo1;
@@ -2005,7 +2007,7 @@ namespace Main
 				std::uint32_t unused2{};
 				Main::Structures::ItemSerialInfo serialInfo2;
 			};
-#pragma pack(pop)
+PACK_POP()
 
 			Common::Network::Packet response;
 			response.setTcpHeader(0, Common::Enums::NO_ENCRYPTION);

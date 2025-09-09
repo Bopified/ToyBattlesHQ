@@ -7,7 +7,7 @@
 #include "../Classes/RoomsManager.h"
 #include "../ChatCommands/ChatCommands.h"
 #include "../Classes/Room.h"
-
+#include <cstring> 
 #include <vector>
 
 namespace Main
