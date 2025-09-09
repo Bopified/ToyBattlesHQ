@@ -6,6 +6,8 @@ We now need to make sure the client is configured to connect to your local serve
 ### Download the client
 You can use any client version newer than Surge, but I personally recommend the ToyBattles client. Here's the download link: https://mega.nz/file/fR13xIJY#fYM0yGEZcaqz3MbhD5tqBaUEByIX5jHUxYV9GniXeZU
 
+**Note**: If you use the original Surge client, you will need to update the GameMaps enums since this emulator is targeted towards a modified version of the client that uses a different order of the maps.
+
 ### Install the `cgd.dip` archive with localhost IPs
 Next, download the latest cgd.dip archive from the link below. This file is already set up to point to 127.0.0.1 (localhost) and includes all necessary client data: https://www.mediafire.com/file/5uw65fwps66fsll/cgd.dip/file
 
