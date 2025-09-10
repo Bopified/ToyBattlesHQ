@@ -6,11 +6,11 @@
 
 #include <iostream>
 #include <Utils/SetupParser.h>
-
+#include "Utils/Utils.h"
 
 int main()
 {
-	SetConsoleTitleW(L"Microvolts Auth Server");
+	Common::Utils::setConsoleTitle(L"Microvolts Auth Server");
 
 	auto const time = std::chrono::current_zone()->to_local(std::chrono::system_clock::now());
 	auto const time_s = std::format("{:%Y-%m-%d %X}", time);

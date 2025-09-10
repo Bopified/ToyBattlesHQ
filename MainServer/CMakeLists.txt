@@ -1,54 +1,46 @@
-cmake_minimum_required(VERSION 3.26)
-project(MainServer LANGUAGES C CXX ASM)
+project(MainServer LANGUAGES CXX)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+file(GLOB_RECURSE MAIN_SOURCES CONFIGURE_DEPENDS
+    ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
+)
 
-file(GLOB_RECURSE MAIN_SOURCES ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp)
-add_executable(MainServer ${MAIN_SOURCES})
+add_compile_options(-Wbuiltin-macro-redefined)
 
-find_package(unofficial-mariadb-connector-cpp CONFIG REQUIRED)
-find_package(asio CONFIG REQUIRED)
-find_package(Boost REQUIRED COMPONENTS json)
-find_package(OpenSSL REQUIRED)
-find_package(CryptoPP REQUIRED)
-find_package(range-v3 REQUIRED)
 
-set(Boost_NO_BOOST_CMAKE ON)
-set(Boost_NO_WARN_NEW_VERSIONS ON)
+add_executable(MainServer
+    ${MAIN_SOURCES}
+)
 
 target_include_directories(MainServer
-    PUBLIC
-        ${CMAKE_CURRENT_LIST_DIR}
+    PRIVATE
         ${CMAKE_CURRENT_LIST_DIR}/include
-        ${CMAKE_SOURCE_DIR}/Common/include
-        ${CMAKE_SOURCE_DIR}/ExternalLibraries
-        ${CMAKE_SOURCE_DIR}/ExternalLibraries/DirectXMath/Inc
-        ${CMAKE_SOURCE_DIR}/Common/include/Utils
-        ${Boost_INCLUDE_DIRS}
 )
+
+find_path(JWT_CPP_INCLUDE_DIRS "jwt-cpp/base.h")
+target_include_directories(MainServer PRIVATE ${JWT_CPP_INCLUDE_DIRS})
 
 target_link_libraries(MainServer
     PRIVATE
         Common
-        asio::asio
         unofficial::mariadb-connector-cpp::mariadbcpp
         OpenSSL::SSL
         OpenSSL::Crypto
         cryptopp::cryptopp
         range-v3::range-v3
-        ${Boost_LIBRARIES}
+        Boost::json
 )
 
-if(WIN32)
+if (WIN32)
     target_link_libraries(MainServer PRIVATE wsock32 ws2_32)
 endif()
 
-if(MSVC)
-    add_compile_options(/W0)
+if (MSVC)
+    target_compile_options(MainServer PRIVATE /W0)
 else()
-    add_compile_options(-w)
+    target_compile_options(MainServer PRIVATE -w)
 endif()
 
-set_target_properties(MainServer PROPERTIES RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+set_target_properties(MainServer PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}
+)
+

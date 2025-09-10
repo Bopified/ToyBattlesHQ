@@ -7,6 +7,8 @@
     "jwt-cpp",
     "boost-json",
     "boost-beast",
+    "boost-system",
+    "boost-asio",
     "mariadb-connector-cpp",
     {
       "name": "cryptopp",
@@ -39,7 +41,8 @@
     "sqlitecpp",
     "vcpkg-cmake-config",
     "vcpkg-cmake-get-vars",
-    "vcpkg-cmake"
+    "vcpkg-cmake",
+    "directxmath"
   ],
   "overrides": [
     {
@@ -52,3 +55,4 @@
     }
   ]
 }
+

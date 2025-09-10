@@ -143,7 +143,8 @@ namespace Main
 
 		void Player::setPlayerName(const char* playerName)
 		{
-			strcpy_s(m_accountInfo.nickname, playerName);
+			strncpy(m_accountInfo.nickname, playerName, sizeof(m_accountInfo.nickname) - 1);
+			m_accountInfo.nickname[sizeof(m_accountInfo.nickname) - 1] = '\0';
 		}
 
 		bool Player::hasEnoughInventorySpace(std::uint16_t totalNewItems) const
@@ -696,7 +697,7 @@ namespace Main
 			auto updateEnergyAndBattery = [&](auto& item) {
 				item.energy += energyAdded;
 				m_accountInfo.battery -= energyAdded;
-				return std::pair{ item.energy, m_accountInfo.battery };
+				return std::pair{ item.energy, static_cast<std::uint64_t>(m_accountInfo.battery) };
 				};
 
 			if (auto it = m_itemsByItemNumber.find(itemSerialInfo.itemNumber); it != m_itemsByItemNumber.end())
@@ -857,7 +858,7 @@ namespace Main
 					else
 					{
 						--it->second.itemId.stock;
-						return { Common::Enums::MATCHITEM_STOCKS_REDUCED_SUCCESS, it->second.itemId.stock };
+						return { Common::Enums::MATCHITEM_STOCKS_REDUCED_SUCCESS, static_cast<std::uint32_t>(it->second.itemId.stock) };
 					}
 				}
 				else

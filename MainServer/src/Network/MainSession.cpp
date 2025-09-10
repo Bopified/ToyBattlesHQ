@@ -1486,7 +1486,8 @@ namespace Main
 				singlePlayerList.clanLogoBackId = partialAccountData.clanLogoBackId;
 				singlePlayerList.clanLogoFrontId = partialAccountData.clanLogoFrontId;
 				singlePlayerList.level = partialAccountData.playerLevel;
-				strcpy_s(singlePlayerList.name, partialAccountData.nickname);
+				strncpy(singlePlayerList.name, partialAccountData.nickname, sizeof(singlePlayerList.name) - 1);
+				singlePlayerList.name[sizeof(singlePlayerList.name) - 1] = '\0'; 
 				singlePlayerList.uniqueId.server = partialAccountData.uniqueId.server;
 				singlePlayerList.uniqueId.session = partialAccountData.uniqueId.session;
 				singlePlayerList.uniqueId.unknown = partialAccountData.uniqueId.unknown;
@@ -1525,7 +1526,8 @@ namespace Main
 					if (partialAccountData.clanId != selfAccountInfo.clanId) continue; // Skip non clan members
 					Main::Structures::SingleLobbyClanList singlePlayerList;
 					singlePlayerList.level = partialAccountData.playerLevel;
-					strcpy_s(singlePlayerList.name, partialAccountData.nickname);
+					strncpy(singlePlayerList.name, partialAccountData.nickname, sizeof(singlePlayerList.name) - 1);
+					singlePlayerList.name[sizeof(singlePlayerList.name) - 1] = '\0';
 					singlePlayerList.uniqueId.server = partialAccountData.uniqueId.server;
 					singlePlayerList.uniqueId.session = partialAccountData.uniqueId.session;
 					singlePlayerList.uniqueId.unknown = partialAccountData.uniqueId.unknown;

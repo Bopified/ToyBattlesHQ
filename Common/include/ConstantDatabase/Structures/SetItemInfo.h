@@ -3,6 +3,7 @@
 
 #include "visit_struct/visit_struct.hpp"
 #include "Macros.h"
+#include <cstdint>
 
 namespace Common
 {

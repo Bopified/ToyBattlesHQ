@@ -36,7 +36,6 @@ namespace Main
 			using Friend = Main::Structures::Friend;
 			using Mailbox = Main::Structures::Mailbox;
 			using Giftbox = Main::Structures::Giftbox;
-			using Session = Main::Network::Session;
 			using TradedItem = Main::Structures::TradeBasicItem;
 
 			AccountInfo m_accountInfo{};

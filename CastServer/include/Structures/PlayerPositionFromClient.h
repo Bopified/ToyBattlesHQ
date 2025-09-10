@@ -2,7 +2,7 @@
 #define PLAYER_POSITION_STRUCTURE_H
 
 #include <cstdint>
-#include "DirectXPackedVector.h"
+#include <directxmath/DirectXPackedVector.h>
 #include "AntiCheat/Event.h"
 #include "Macros.h"
 

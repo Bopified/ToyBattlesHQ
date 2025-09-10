@@ -15,6 +15,7 @@
 #include "AntiCheat/AntiCheat.h"
 #include "AntiCheat/Event.h"
 #include <cstring> 
+#include <thread>
 
 namespace Cast
 {

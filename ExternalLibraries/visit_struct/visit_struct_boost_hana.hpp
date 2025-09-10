@@ -1,4 +1,3 @@
-
 //  (C) Copyright 2015 - 2018 Christopher Beck
 
 //  Distributed under the Boost Software License, Version 1.0. (See accompanying

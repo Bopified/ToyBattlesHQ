@@ -1,11 +1,9 @@
-
 #ifndef MAIN_EQUIPPED_ITEM_INFO_H
 #define MAIN_EQUIPPED_ITEM_INFO_H
 
-#include <corecrt.h>
 #include <cstdint>
-#include "MainItemSerialInfo.h"
 #include <array>
+#include "MainItemSerialInfo.h"
 #include "Macros.h"
 
 namespace Main
@@ -13,12 +11,19 @@ namespace Main
 	namespace Structures
 	{
 		class Item;
+
+#ifdef _WIN32
+		using ExpirationTimeType = __time32_t;
+#else
+		using ExpirationTimeType = std::time_t;
+#endif
+
 PACK_PUSH(1)
 		struct EquippedItem
 		{
 			std::uint32_t type : 9 = 0; 
 			std::uint32_t id : 23 = 0;    
-			__time32_t expirationDate{}; 
+			ExpirationTimeType expirationDate{}; 
 			ItemSerialInfo serialInfo{};
 			std::uint16_t durability{}; 
 			std::uint16_t energy{};
@@ -101,3 +106,4 @@ PACK_POP()
 }
 
 #endif
+
