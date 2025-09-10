@@ -1,10 +1,8 @@
 project(MainServer LANGUAGES CXX)
 
 file(GLOB_RECURSE MAIN_SOURCES CONFIGURE_DEPENDS
-    ${CMAKE_CURRENT_LIST_DIR}/src/*.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/*.cpp
 )
-
-add_compile_options(-Wbuiltin-macro-redefined)
 
 
 add_executable(MainServer
@@ -17,10 +15,10 @@ target_include_directories(MainServer
 )
 
 find_path(JWT_CPP_INCLUDE_DIRS "jwt-cpp/base.h")
-target_include_directories(MainServer PRIVATE ${JWT_CPP_INCLUDE_DIRS})
+target_include_directories(MainServer PUBLIC ${JWT_CPP_INCLUDE_DIRS})
 
 target_link_libraries(MainServer
-    PRIVATE
+    PUBLIC
         Common
         unofficial::mariadb-connector-cpp::mariadbcpp
         OpenSSL::SSL
@@ -31,13 +29,13 @@ target_link_libraries(MainServer
 )
 
 if (WIN32)
-    target_link_libraries(MainServer PRIVATE wsock32 ws2_32)
+    target_link_libraries(MainServer PUBLIC wsock32 ws2_32)
 endif()
 
 if (MSVC)
-    target_compile_options(MainServer PRIVATE /W0)
+    target_compile_options(MainServer PUBLIC /W0)
 else()
-    target_compile_options(MainServer PRIVATE -w)
+    target_compile_options(MainServer PUBLIC -w)
 endif()
 
 set_target_properties(MainServer PROPERTIES

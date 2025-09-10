@@ -1,23 +1,23 @@
 project(AuthServer LANGUAGES CXX)
 
-add_executable(AuthServer
-    AuthServerMain.cpp
-    src/AuthServer.cpp
-    src/AuthSession.cpp
-    src/DbPlayerInfo.cpp
+
+file(GLOB_RECURSE AUTH_SOURCES CONFIGURE_DEPENDS 
+	${CMAKE_CURRENT_LIST_DIR}/*.cpp
 )
 
+add_executable(AuthServer
+    ${AUTH_SOURCES}
+)
 
-target_include_directories(AuthServer PRIVATE ${CMAKE_CURRENT_LIST_DIR}/include)
+target_include_directories(AuthServer PUBLIC ${CMAKE_CURRENT_LIST_DIR}/include)
 
-
-target_link_libraries(AuthServer PRIVATE
+target_link_libraries(AuthServer PUBLIC
         Common
         unofficial::mariadb-connector-cpp::mariadbcpp
 )
 
 if (WIN32)
-    target_link_libraries(AuthServer PRIVATE wsock32 ws2_32)
+    target_link_libraries(AuthServer PUBLIC wsock32 ws2_32)
 endif()
 
 
