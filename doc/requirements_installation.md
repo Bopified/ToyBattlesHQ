@@ -43,3 +43,34 @@ The resulting .exe files will be placed in your project's x64 output folder.
 ## Next
 [3.2 Setting up the emulator](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/setting_up.md)
 
+
+
+### TBA
+WINDOWS
+
+1. clone vcpkg in ExternalLibraries
+git clone https://github.com/microsoft/vcpkg.git ExternalLibraries/vcpkg
+
+2. Bootstrap it
+.\ExternalLibraries\vcpkg\bootstrap-vcpkg.bat
+
+3. move vcpkg.json to new vcpkg folder
+move vcpkg.json ExternalLibraries\vcpkg\
+
+4. install vcpkg.json dependencies
+- cd ExternalLibraries/vcpkg
+- vcpkg install --triplet x64-windows
+
+5. Generate build files
+- cd .. 
+- cd ..
+- cmake -B build -S . -A x64 -DCMAKE_TOOLCHAIN_FILE=ExternalLibraries/vcpkg/scripts/buildsystems/vcpkg.cmake
+
+6. Build
+cmake --build build --config Release
+
+
+=> Executables will be inside MicrovoltsEmulator/Release/
+=> Common.lib will be inside MicrovoltsEmulator/ExternalLibraries/CommonLib/
+
+
