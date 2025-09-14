@@ -1,9 +1,7 @@
-
 cmake_minimum_required(VERSION 3.16)
 
 project(MainServer LANGUAGES CXX)
 
-# Collect sources
 file(GLOB_RECURSE MAIN_SOURCES CONFIGURE_DEPENDS
     ${CMAKE_CURRENT_LIST_DIR}/*.cpp
 )
@@ -17,7 +15,6 @@ target_include_directories(MainServer
         ${CMAKE_CURRENT_LIST_DIR}/include
 )
 
-# Dependencies
 find_path(JWT_CPP_INCLUDE_DIRS "jwt-cpp/base.h")
 target_include_directories(MainServer PUBLIC ${JWT_CPP_INCLUDE_DIRS})
 
