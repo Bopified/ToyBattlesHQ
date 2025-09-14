@@ -46,31 +46,12 @@ The resulting .exe files will be placed in your project's x64 output folder.
 
 
 ### TBA
-WINDOWS
+1) Clone repository then go to its folder: cd <YourEmulatorProjectPath>
+2) Clone vcpkg inside ExternalLibraries: git clone https://github.com/microsoft/vcpkg.git ExternalLibraries\vcpkg
+3) Bootstrap it: .\ExternalLibraries\vcpkg\bootstrap-vcpkg.bat
+4) Generate build files: cmake -B build -S . -A x64 -DCMAKE_TOOLCHAIN_FILE=ExternalLibraries/vcpkg/scripts/buildsystems/vcpkg.cmake
+5) Build the project: cmake --build build --config Release
+6) Output (exes) inside Release folder
 
-1. clone vcpkg in ExternalLibraries
-git clone https://github.com/microsoft/vcpkg.git ExternalLibraries/vcpkg
-
-2. Bootstrap it
-.\ExternalLibraries\vcpkg\bootstrap-vcpkg.bat
-
-3. move vcpkg.json to new vcpkg folder
-move vcpkg.json ExternalLibraries\vcpkg\
-
-4. install vcpkg.json dependencies
-- cd ExternalLibraries/vcpkg
-- vcpkg install --triplet x64-windows
-
-5. Generate build files
-- cd .. 
-- cd ..
-- cmake -B build -S . -A x64 -DCMAKE_TOOLCHAIN_FILE=ExternalLibraries/vcpkg/scripts/buildsystems/vcpkg.cmake
-
-6. Build
-cmake --build build --config Release
-
-
-=> Executables will be inside MicrovoltsEmulator/Release/
-=> Common.lib will be inside MicrovoltsEmulator/ExternalLibraries/CommonLib/
 
 
