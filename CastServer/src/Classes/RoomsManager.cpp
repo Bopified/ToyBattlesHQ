@@ -230,6 +230,7 @@ namespace Cast
 			{
 				return room->m_redAssassinPos;
 			}
+			return std::nullopt;
 		}
 
 		void RoomsManager::setModeFor(std::uint64_t playerId, std::uint32_t mode)
@@ -257,6 +258,7 @@ namespace Cast
 				return false;
 
 			room->setRoomNumber(roomNum);
+			return true;
 		}
 
 		bool RoomsManager::exists(std::uint64_t playerId)
