@@ -11,7 +11,6 @@ if (WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 else()
     set(CMAKE_EXECUTABLE_SUFFIX ".elf")
-    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wa,-mbig-obj")
     set(CMAKE_EXE_LINKER_FLAGS
         "${CMAKE_EXE_LINKER_FLAGS} -Wl,--allow-multiple-definition -Wl,-rpath=. -Wl,-rpath=/data/data/com.termux/files/usr/lib -Wl,--enable-new-dtags"
     )
