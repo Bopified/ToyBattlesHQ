@@ -1,11 +1,10 @@
 # 3.1 Requirements & Installation
 
 ## Requirements
-At the moment, this emulator runs only on Windows, and it requires either the MSVC or Clang compiler. That’s because a few compiler-specific pragmas were used along the way.
-
-Support for Linux and GCC is definitely on my radar, but that’s something planned for a future release — so stay tuned.
-
-You will also need >= Python 3.10.
+- Python >= 3.10.
+- CMake >= 3.26
+- GCC >= 13 or MSVC >= 14.10 (Clang: untested)
+- C++23 standard or newer
 
 ## Installation
 ### GUI automatic setup (WINDOWS)
