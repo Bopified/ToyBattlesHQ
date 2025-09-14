@@ -4,6 +4,9 @@ project(Microvolts-Emulator-V2 LANGUAGES C CXX ASM)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(Boost_NO_BOOST_CMAKE ON)
+set(Boost_NO_BOOST_VERSION_CHECK ON)
+
 if (WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS}")
 else()
@@ -18,7 +21,7 @@ else()
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/Output)
 endif()
 
-find_package(Boost 1.73.0 REQUIRED COMPONENTS system json beast asio)
+find_package(Boost REQUIRED COMPONENTS system json beast asio)
 find_package(OpenSSL REQUIRED)
 find_package(cryptopp CONFIG REQUIRED)
 find_package(range-v3 CONFIG REQUIRED)

@@ -4,6 +4,10 @@
   "builtin-baseline": "4e08971f3ddc13018ca858a692efe92d3b6b9fce",
   "dependencies": [
     {
+      "name": "directxmath",
+      "version>=": "3.1.6"
+    },
+    {
       "name": "openssl",
       "version>=": "3.0.2"
     },
@@ -17,7 +21,7 @@
     },
     {
       "name": "boost-beast",
-      "version>=": "1.86.0"
+      "version>=": "1.83.0"
     },
     {
       "name": "mariadb-connector-cpp",
@@ -25,7 +29,7 @@
     },
     {
       "name": "boost-assert",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "cryptopp",
@@ -34,47 +38,47 @@
     },
     {
       "name": "boost-build",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-config",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-container-hash",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-container",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-core",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-describe",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-interprocess",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-intrusive",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-move",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-mp11",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-predef",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "asio",
@@ -82,39 +86,39 @@
     },
     {
       "name": "boost-preprocessor",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-static-assert",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-throw-exception",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-tuple",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-type-traits",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-uninstall",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-unordered",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-vcpkg-helpers",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "boost-winapi",
-      "version>=": "1.82.0#2"
+      "version>=": "1.83.0"
     },
     {
       "name": "range-v3",
@@ -149,6 +153,10 @@
     {
       "name": "cryptopp",
       "version": "8.9.0"
+    },
+    {
+      "name": "directxmath",
+      "version": "2024-02-14#1"
     }
   ]
 }
