@@ -1,10 +1,10 @@
 # 3.3 Setting up the database
 
 Starting from version 2.0, I introduce MariaDB. This is much better since it allows you to have multiple regionals servers connect to the same, central database.
+This section shows setup for both Windows and Linux.
 
-
-## How to Set Up the MariaDB Database
-Before running the servers, you’ll need a MariaDB database properly configured with the right tables and data. Don’t worry — it’s not hard. Here's how to do it step by step:
+## How to Set Up the MariaDB Database [WINDOWS]
+Before running the servers, you’ll need a MariaDB database properly configured with the right tables and data. Here's how to do it step by step:
 
 ### Step 0 (Optional but recommended for an easy setup)
 - Find `my.ini` inside your MariaDB folder. (Usually it can be found in `"C:\Program Files\MariaDB 11.6\data\my.ini"`
