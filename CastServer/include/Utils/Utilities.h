@@ -4,6 +4,7 @@
 #include <type_traits>
 #include <Network/Packet.h>
 #include <source_location>
+#include <cstring> 
 
 namespace Cast
 {

@@ -5,6 +5,7 @@
 #include "../../../include/Structures/AccountInfo/MainAccountInfo.h"
 #include "Network/Packet.h"
 #include "../../Detail/Utilities.h"
+#include <cstring> 
 
 namespace Main
 {

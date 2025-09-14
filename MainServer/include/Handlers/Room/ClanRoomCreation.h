@@ -8,6 +8,7 @@
 #include "../../Classes/RoomsManager.h"
 #include "../../Classes/Room.h"
 #include "../../Detail/IpcUtils.h"
+#include <cstring> 
 
 namespace Main
 {

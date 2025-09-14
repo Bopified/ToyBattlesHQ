@@ -11,6 +11,7 @@
 #include "AntiCheat/Event.h"
 #include "../Utils/Utilities.h"
 #include <Utils/Utils.h>
+#include <cstring> 
 
 namespace Cast
 {

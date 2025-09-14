@@ -24,6 +24,8 @@
 
 #include <source_location>
 #include <ConstantDatabase/Structures/CdbCollectionInfo.h>
+#include "Macros.h"
+#include <cstring> 
 
 namespace Main
 {
@@ -1484,7 +1486,8 @@ namespace Main
 				singlePlayerList.clanLogoBackId = partialAccountData.clanLogoBackId;
 				singlePlayerList.clanLogoFrontId = partialAccountData.clanLogoFrontId;
 				singlePlayerList.level = partialAccountData.playerLevel;
-				strcpy_s(singlePlayerList.name, partialAccountData.nickname);
+				strncpy(singlePlayerList.name, partialAccountData.nickname, sizeof(singlePlayerList.name) - 1);
+				singlePlayerList.name[sizeof(singlePlayerList.name) - 1] = '\0'; 
 				singlePlayerList.uniqueId.server = partialAccountData.uniqueId.server;
 				singlePlayerList.uniqueId.session = partialAccountData.uniqueId.session;
 				singlePlayerList.uniqueId.unknown = partialAccountData.uniqueId.unknown;
@@ -1523,7 +1526,8 @@ namespace Main
 					if (partialAccountData.clanId != selfAccountInfo.clanId) continue; // Skip non clan members
 					Main::Structures::SingleLobbyClanList singlePlayerList;
 					singlePlayerList.level = partialAccountData.playerLevel;
-					strcpy_s(singlePlayerList.name, partialAccountData.nickname);
+					strncpy(singlePlayerList.name, partialAccountData.nickname, sizeof(singlePlayerList.name) - 1);
+					singlePlayerList.name[sizeof(singlePlayerList.name) - 1] = '\0';
 					singlePlayerList.uniqueId.server = partialAccountData.uniqueId.server;
 					singlePlayerList.uniqueId.session = partialAccountData.uniqueId.session;
 					singlePlayerList.uniqueId.unknown = partialAccountData.uniqueId.unknown;
@@ -1997,7 +2001,7 @@ namespace Main
 		// Trade system
 		void Session::temporarilySealAllItems()
 		{
-#pragma pack(push, 1)
+PACK_PUSH(1)
 			struct SealInfo
 			{
 				Main::Structures::ItemSerialInfo serialInfo1;
@@ -2005,7 +2009,7 @@ namespace Main
 				std::uint32_t unused2{};
 				Main::Structures::ItemSerialInfo serialInfo2;
 			};
-#pragma pack(pop)
+PACK_POP()
 
 			Common::Network::Packet response;
 			response.setTcpHeader(0, Common::Enums::NO_ENCRYPTION);

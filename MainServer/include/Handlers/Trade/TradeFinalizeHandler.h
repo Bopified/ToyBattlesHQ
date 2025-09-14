@@ -10,14 +10,14 @@
 #include <optional>
 #include <array>
 #include "../../Structures/TradeSystem/TradeAck.h"
-
+#include "Macros.h"
 
 namespace Main
 {
 	namespace Handlers
 	{
-#pragma pack(push)
-		struct TradeUnusedFinalItem
+PACK_PUSH(1)
+struct TradeUnusedFinalItem
 		{
 			char unused[8]{};
 			std::uint32_t totalNewMp{}; // This was used in the old trade system
@@ -26,7 +26,7 @@ namespace Main
 			std::uint32_t unusedTotal1{};
 			std::array<std::uint32_t, 10> itemIdsUnused{};
 		};
-#pragma pack(pop)
+PACK_POP()
 
 		inline void handleTradeFinalization(const Common::Network::Packet& request, std::shared_ptr<Main::Network::Session> session, 
 			Main::Network::SessionsManager& sessionsManager)
