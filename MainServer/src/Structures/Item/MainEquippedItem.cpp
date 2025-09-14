@@ -18,7 +18,7 @@ namespace Main
 #ifdef _WIN32
 			, expirationDate{ static_cast<__time32_t>(item.expirationDate) }
 #else
-			, expirationDate{ static_cast<std::time_t>(item.expirationDate) }
+			, expirationDate{ static_cast<std::int32_t>(item.expirationDate) }
 #endif
 			, serialInfo{ item.serialInfo }
 			, durability{ item.durability }
