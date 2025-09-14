@@ -15,7 +15,7 @@ namespace Main
 #ifdef _WIN32
 		using ExpirationTimeType = __time32_t;
 #else
-		using ExpirationTimeType = std::time_t;
+		using ExpirationTimeType = int32_t;
 #endif
 
 PACK_PUSH(1)
