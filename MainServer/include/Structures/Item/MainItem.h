@@ -46,7 +46,7 @@ PACK_PUSH(1)
 #ifdef _WIN32
                 		, expirationDate{ static_cast<__time32_t>(capsuleItem.expirationDate) }
 #else
-                		, expirationDate{ static_cast<std::time_t>(capsuleItem.expirationDate) }
+                		, expirationDate{ static_cast<std::int32_t>(capsuleItem.expirationDate) }
 #endif
 			{
 				serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
@@ -68,7 +68,7 @@ PACK_PUSH(1)
 #ifdef _WIN32
               		  	, expirationDate{ static_cast<__time32_t>(equippedItem.expirationDate) }
 #else
-                		, expirationDate{ static_cast<std::time_t>(equippedItem.expirationDate) }
+                		, expirationDate{ static_cast<std::int32_t>(equippedItem.expirationDate) }
 #endif
 			{
 			}
@@ -79,7 +79,7 @@ PACK_PUSH(1)
 #ifdef _WIN32
               		  	, expirationDate{ static_cast<__time32_t>(spawnedItem.expirationDate ) }
 #else
-                		, expirationDate{ static_cast<std::time_t>(spawnedItem.expirationDate ) }
+                		, expirationDate{ static_cast<std::int32_t>(spawnedItem.expirationDate ) }
 #endif
 			{
 				serialInfo.itemOrigin = Main::Enums::ItemFrom::SHOP;
