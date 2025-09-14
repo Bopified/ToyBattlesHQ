@@ -24,7 +24,7 @@ PACK_PUSH(1)
 #ifdef _WIN32
            		 __time32_t expirationDate{};
 #else
-            		std::time_t expirationDate{}; 
+             	 std::int32_t expirationDate{}; 
 #endif
 			ItemSerialInfo serialInfo{};
 			std::uint16_t durability{};
