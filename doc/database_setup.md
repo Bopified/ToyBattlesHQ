@@ -45,6 +45,7 @@ You’ve been provided with a file called `microvolts-db.`. This file contains t
 To import it:
 #### Option A – Using Command Line
 - `mysql -u root -p microvolts-db < path/to/microvolts-db.md`
+  
 (You’ll be prompted to enter your root password)
 
 #### Option B – Using GUI (e.g., HeidiSQL)
@@ -113,7 +114,10 @@ sudo systemctl enable mariadb
 
 ### Step 4: Set password via environment variable
 `export MICRO_DB_PW=your_db_password_here`
-If you want it to be permanent, `echo 'export MICRO_DB_PW=your_db_password_here' >> ~/.bashrc` (for bash) or `echo 'export MICRO_DB_PW=your_db_password_here' >> ~/.zshsrc` (for zsh)
+
+If you want it to be permanent:
+- For bash: `echo 'export MICRO_DB_PW=your_db_password_here' >> ~/.bashrc`
+- For zsh: `echo 'export MICRO_DB_PW=your_db_password_here' >> ~/.zshsrc` 
 
 ### Step 5: Start the service
 `sudo systemctl start mariadb`
