@@ -46,6 +46,7 @@ The resulting .exe files will be placed in your project's x64 output folder.
 
 
 ### TBA
+WINDOWS
 1) Clone repository then go to its folder: cd <YourEmulatorProjectPath>
 2) Clone vcpkg inside ExternalLibraries: git clone https://github.com/microsoft/vcpkg.git ExternalLibraries\vcpkg
 3) Bootstrap it: .\ExternalLibraries\vcpkg\bootstrap-vcpkg.bat
@@ -53,5 +54,10 @@ The resulting .exe files will be placed in your project's x64 output folder.
 5) Build the project: cmake --build build --config Release
 6) Output (exes) inside Release folder
 
-
-
+LINUX
+1) Clone repository then go to its folder: cd <YourEmulatorProjectPath
+2) Clone vcpkg inside ExternalLibraries: git clone https://github.com/microsoft/vcpkg.git
+3) Bootstrap it: ./ExternalLibraries/vcpkg/bootstrap-vcpkg.sh
+4) Generate build files: cmake -B build -S . -DCMAKE_TOOLCHAIN_FILE=ExternalLibraries/vcpkg/scripts/buildsystems/vcpkg.cmake
+5) Build the project: cmake --build build --config Release
+6) Move the generated elf files in an output folder: mkdir -p Output and next mv AuthServer.elf MainServer.elf CastServer.elf Output/
