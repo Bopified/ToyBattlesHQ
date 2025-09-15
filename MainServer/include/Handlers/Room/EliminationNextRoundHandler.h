@@ -286,11 +286,20 @@ namespace Main
 						totalMpBonus += mpBonus;
 					}
 
-					const auto gainedMp = isFarm ? 0 : ((scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + Common::Constants::matchBaseMp) * 2);
-					const auto gainedExp = isFarm ? 0 : ((scoreboardResponse.totalKills * 10 + scoreboardResponse.deaths * 5 + Common::Constants::matchBaseExp) * 2);
+					auto baseMpToAdd = room->getRoomSettings().mode == Common::Enums::FreeForAll ? Common::Constants::matchBaseMp / 2 : Common::Constants::matchBaseMp;
+					auto baseExpToAdd = room->getRoomSettings().mode == Common::Enums::FreeForAll ? Common::Constants::matchBaseExp / 2 : Common::Constants::matchBaseExp;
+					auto baseMp = (scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + baseMpToAdd) * 2;
+					auto baseExp = (scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + baseExpToAdd) * 2;
 
-					const auto finalGainedExp = gainedExp + (gainedExp * totalExpBonus / 100);
-					const auto finalGainedMp = gainedMp + (gainedMp * totalMpBonus / 100);
+					const auto elapsedMs = timeNow - targetSession->m_matchStartTime;
+					auto elapsedMinutes = static_cast<std::uint64_t>(elapsedMs / 1000 / 60);
+					elapsedMinutes = std::min<std::uint64_t>(elapsedMinutes, 15);
+					constexpr std::uint64_t mpPerMinute = 80;
+					constexpr std::uint64_t expPerMinute = 80;
+					auto gainedMp = isFarm ? 0 : baseMp + (elapsedMinutes * mpPerMinute);
+					auto gainedExp = isFarm ? 0 : baseExp + (elapsedMinutes * expPerMinute);
+					auto finalGainedExp = gainedExp + (gainedExp * totalExpBonus / 100);
+					auto finalGainedMp = gainedMp + (gainedMp * totalMpBonus / 100);
 
 					std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 					std::uint32_t finalGainedExpWithEvent = finalGainedExp;
