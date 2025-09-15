@@ -40,26 +40,19 @@ namespace Main
 			room.setSpecificSetting(request.getExtra());
 
 			// Send room number to cast server
-			if (Main::Ipc::M2C_sendRoomNumber(session->getId(), room.getRoomNumber()))
-			{
-				Common::Network::Packet response;
-				response.setTcpHeader(request.getSession(), Common::Enums::NO_ENCRYPTION);
-				response.setOrder(request.getOrder());
-				room.setStateFor(session->getAccountInfo().uniqueId, Common::Enums::STATE_WAITING);
-				session->setRoomNumber(room.getRoomNumber());
-				const std::pair<std::uint16_t, std::uint16_t> roomNum{ room.getRoomNumber() - 1, 1 }; // {roomNum, unk}
-				response.setExtra(1);
-				response.setData(reinterpret_cast<const std::uint8_t*>(&roomNum), sizeof(roomNum));
-				session->asyncWrite(response);
+			Main::Ipc::M2C_sendRoomNumber(session->getId(), room.getRoomNumber());
+			Common::Network::Packet response;
+			response.setTcpHeader(request.getSession(), Common::Enums::NO_ENCRYPTION);
+			response.setOrder(request.getOrder());
+			room.setStateFor(session->getAccountInfo().uniqueId, Common::Enums::STATE_WAITING);
+			session->setRoomNumber(room.getRoomNumber());
+			const std::pair<std::uint16_t, std::uint16_t> roomNum{ room.getRoomNumber() - 1, 1 }; // {roomNum, unk}
+			response.setExtra(1);
+			response.setData(reinterpret_cast<const std::uint8_t*>(&roomNum), sizeof(roomNum));
+			session->asyncWrite(response);
 
-				roomsManager.addRoom(std::move(room));
-				return true;
-			}
-			else
-			{
-				session->sendMessage("[handleRoomCreationClan] Could not retrieve cast IPC ACK related to room number");
-				return false;
-			}
+			roomsManager.addRoom(std::move(room));
+			return true;
 		}
 	}
 }
