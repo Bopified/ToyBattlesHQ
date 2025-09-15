@@ -86,7 +86,7 @@ namespace Cast
 		// Unknown
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(280, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) {
-				m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+				m_roomsManager.playerForwardToHost(session->getId(), request.getSession(), const_cast<Common::Network::UnecryptedPacket&>(request));
 			});
 
 		// AI Battle
