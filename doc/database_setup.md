@@ -6,12 +6,15 @@ This section shows setup for both Windows and Linux.
 ## How to Set Up the MariaDB Database [WINDOWS]
 Before running the servers, you’ll need a MariaDB database properly configured with the right tables and data. Here's how to do it step by step:
 
-### Step 1: Install MariaDB
+### Step 0: Install MariaDB
 If you haven’t already installed MariaDB:
 
 - Go to https://mariadb.org/download/
 - Download the version that matches your OS
 - During installation, make sure to remember the root password (you’ll need it shortly)
+
+### Step 1: Start mariaDB
+Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
 
 ### Step 2: Create the Database
 Once MariaDB is installed:
@@ -68,13 +71,9 @@ plugin-dir="C:/Program Files/MariaDB 11.6/lib/plugin"
 
 Of course, make sure the paths are correct for you and that you have the necessary things installed (like innoDB).
 
-### Step 6: Start mariaDB
-Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
-
-
 
 ## How to Set Up the MariaDB Database [LINUX]
-### Step 1: Install MariaDB
+### Step 0: Install MariaDB
 - Debian/Ubuntu: 
 ```cpp
 sudo apt update
@@ -88,6 +87,10 @@ Start and enable the service:
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 ```
+
+### Step 1: Start the service
+`sudo systemctl start mariadb`
+You can check if it's running with `sudo systemctl status mariadb`
 
 ### Step 2: Create the database
 - `sudo mariadb -u root`
@@ -118,10 +121,6 @@ innodb_buffer_pool_size=1967M
 port=3305
 ```
 Make sure paths correspond to your installation. `datadir` generally defaults to `/var/lib/mysql`
-
-### Step 6: Start the service
-`sudo systemctl start mariadb`
-You can check if it's running with `sudo systemctl status mariadb`
 
 
 
