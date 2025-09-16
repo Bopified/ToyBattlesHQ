@@ -30,7 +30,7 @@ You’ve been provided with a file called `microvolts-db.`. This file contains t
 
 To import it:
 #### Option A – Using Command Line
-- `mysql -u root -p microvolts-db < path/to/microvolts-db.md`
+- `mysql -u root -p microvolts-db < path/to/microvolts-db.sql`
   
 (You’ll be prompted to enter your root password)
 
@@ -59,7 +59,6 @@ Done!
 - Replace its contents with the following:
 ```cpp
 [mysqld]
-skip-grant-tables
 datadir="C:/Program Files/MariaDB 11.6/data"
 port=3305
 innodb_buffer_pool_size=1967M
@@ -112,7 +111,6 @@ If you want it to be permanent:
 - Add or modify the following sections:
 ```cpp
 [mysqld]
-skip-grant-tables
 datadir=/var/lib/mysql
 port=3305
 innodb_buffer_pool_size=1967M
