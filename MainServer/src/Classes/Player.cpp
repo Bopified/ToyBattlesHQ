@@ -531,7 +531,10 @@ namespace Main
 			const std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
 			const std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
 
-			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
+			if (endIndex > m_equippedItemByCharacter.size())
+				return unlimitedItems;
+
+			for (std::size_t i = startIndex; i < endIndex; ++i)
 			{
 				const auto& item = m_equippedItemByCharacter[i];
 				if (item.id != 0 && item.expirationDate == 0 && Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type)))
@@ -646,18 +649,24 @@ namespace Main
 			if (characterID >= Common::Enums::MAX_CHARACTERS)
 				return damages;
 
-			std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
-			std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
+			const std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
+			const std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
+
+			if (endIndex > m_equippedItemByCharacter.size())
+				return damages;
+
 			damages.reserve(endIndex - startIndex);
 
-			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
+			for (std::size_t i = startIndex; i < endIndex; ++i)
 			{
 				auto& item = m_equippedItemByCharacter[i];
-				if (item.id == 0 || item.expirationDate != 0 
-					|| !Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type))) continue;
+				if (item.id == 0 || item.expirationDate != 0
+					|| !Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type)))
+					continue;
 
 				const auto baseDurability = Main::CdbUtils::getItemDurability(item.id);
-				if (!baseDurability || *baseDurability == 0) continue;
+				if (!baseDurability || *baseDurability == 0)
+					continue;
 
 				const std::uint32_t reduction = (*baseDurability / 100) * 1;
 				const std::uint32_t newDurability = (*baseDurability > reduction) ? (*baseDurability - reduction) : 0;
@@ -681,6 +690,11 @@ namespace Main
 			}
 
 			const std::size_t offset = m_accountInfo.latestSelectedCharacter * Common::Enums::MAX_ITEMTYPE;
+			if (offset + Common::Enums::MAX_ITEMTYPE > m_equippedItemByCharacter.size())
+			{
+				return false;
+			}
+
 			for (std::size_t i = 0; i < Common::Enums::MAX_ITEMTYPE; ++i)
 			{
 				auto& equippedItem = m_equippedItemByCharacter[offset + i];

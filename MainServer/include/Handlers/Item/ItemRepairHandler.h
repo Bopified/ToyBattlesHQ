@@ -41,12 +41,12 @@ namespace Main
             Main::ClientData::ItemRepair itemRepair;
             itemRepair.newTotalRT = ainfo.rockTotens;
             itemRepair.newTotalMP = ainfo.microPoints;
-            itemRepair.serialInfo.reserve(request.getOption());
+            itemRepair.serialInfo.reserve(request.getOption() * sizeof(Main::Structures::ItemSerialInfo));
 
             // check whether enough MP
             std::uint32_t totalMpNeeded = 0;
             std::vector<Main::Structures::ItemSerialInfo> serialInfos;
-            serialInfos.reserve(request.getOption());
+            serialInfos.reserve(request.getOption() * sizeof(Main::Structures::ItemSerialInfo));
 
             for (std::size_t i = 0; i < request.getOption(); ++i)
             {
