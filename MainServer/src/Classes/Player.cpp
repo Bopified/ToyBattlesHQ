@@ -531,10 +531,7 @@ namespace Main
 			const std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
 			const std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
 
-			if (endIndex > m_equippedItemByCharacter.size())
-				return unlimitedItems;
-
-			for (std::size_t i = startIndex; i < endIndex; ++i)
+			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
 			{
 				const auto& item = m_equippedItemByCharacter[i];
 				if (item.id != 0 && item.expirationDate == 0 && Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type)))
@@ -646,18 +643,10 @@ namespace Main
 		{
 			std::vector<Main::ClientData::SingleWeaponDurabilityDamage> damages;
 
-			if (characterID >= Common::Enums::MAX_CHARACTERS)
-				return damages;
-
 			const std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
 			const std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
 
-			if (endIndex > m_equippedItemByCharacter.size())
-				return damages;
-
-			damages.reserve(endIndex - startIndex);
-
-			for (std::size_t i = startIndex; i < endIndex; ++i)
+			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
 			{
 				auto& item = m_equippedItemByCharacter[i];
 				if (item.id == 0 || item.expirationDate != 0
@@ -718,15 +707,19 @@ namespace Main
 			{
 				return updateEnergyAndBattery(it->second);
 			}
+
 			const std::size_t offset = m_accountInfo.latestSelectedCharacter * Common::Enums::MAX_ITEMTYPE;
 			for (std::size_t i = 0; i < Common::Enums::MAX_ITEMTYPE; ++i)
 			{
+				if (offset + i >= m_equippedItemByCharacter.size()) continue;
+
 				auto& equippedItem = m_equippedItemByCharacter[offset + i];
 				if (equippedItem.serialInfo.itemNumber == itemSerialInfo.itemNumber)
 				{
 					return updateEnergyAndBattery(equippedItem);
 				}
 			}
+
 			return std::nullopt;
 		}
 
@@ -740,6 +733,8 @@ namespace Main
 			const std::size_t offset = m_accountInfo.latestSelectedCharacter * Common::Enums::MAX_ITEMTYPE;
 			for (std::size_t i = 0; i < Common::Enums::MAX_ITEMTYPE; ++i)
 			{
+				if (offset + i >= m_equippedItemByCharacter.size()) continue;
+
 				const auto& equippedItem = m_equippedItemByCharacter[offset + i];
 				if (equippedItem.serialInfo.itemNumber == itemSerialInfo.itemNumber)
 				{
@@ -786,7 +781,12 @@ namespace Main
 			}
 
 			const std::size_t charIndex = character == -1 ? m_accountInfo.latestSelectedCharacter : character;
-			const auto& setItem = m_equippedItemByCharacter[charIndex * Common::Enums::MAX_ITEMTYPE + Common::Enums::ItemType::SET];
+			const std::size_t setIndex = charIndex * Common::Enums::MAX_ITEMTYPE + Common::Enums::ItemType::SET;
+
+			if (setIndex >= m_equippedItemByCharacter.size())
+				return; 
+
+			const auto& setItem = m_equippedItemByCharacter[setIndex];
 
 			if (const auto entry = setItems::getInstance().getEntry(setItem.id);
 				entry && setItem.serialInfo.itemNumber)
@@ -890,6 +890,9 @@ namespace Main
 			const std::size_t startIndex = characterId * Common::Enums::MAX_ITEMTYPE;
 			for (std::size_t itemIndex = 0; itemIndex < Common::Enums::MAX_ITEMTYPE; ++itemIndex)
 			{
+				if (startIndex + itemIndex >= m_equippedItemByCharacter.size())
+					break;
+
 				const auto& equippedItem = m_equippedItemByCharacter[startIndex + itemIndex];
 				if (equippedItem.serialInfo.itemNumber == itemNumber)
 				{
@@ -903,16 +906,18 @@ namespace Main
 		void Player::equipItemIfNotEquipped(std::uint64_t itemNumber, std::uint32_t characterId, Main::Persistence::MainScheduler& scheduler)
 		{
 			if (characterId >= Common::Enums::MAX_CHARACTERS) return;
+
 			const std::size_t startIndex = characterId * Common::Enums::MAX_ITEMTYPE;
 			for (std::size_t itemIndex = 0; itemIndex < Common::Enums::MAX_ITEMTYPE; ++itemIndex)
 			{
 				if (startIndex + itemIndex >= m_equippedItemByCharacter.size()) continue;
+
 				const auto& equippedItem = m_equippedItemByCharacter[startIndex + itemIndex];
 				if (equippedItem.serialInfo.itemNumber == itemNumber) return;
 			}
+
 			equipItem(static_cast<std::uint16_t>(itemNumber), scheduler, characterId);
 		}
-
 
 		std::pair<std::array<std::uint32_t, 10>, std::array<std::uint32_t, 7>> Player::getEquippedItemsSeparated() const
 		{
