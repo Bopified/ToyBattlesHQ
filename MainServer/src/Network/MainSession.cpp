@@ -1309,16 +1309,6 @@ namespace Main
 			asyncWrite(m_packet);
 		}
 
-		void Session::sendCurrency(std::uint32_t newMP, std::uint32_t newRT)
-		{ 
-			m_packet.setCommand(307, 0, 0, 0);
-			const auto& accountInfo = m_player.getAccountInfo();
-			struct CurrencyData { std::uint32_t rt; std::uint32_t mp; std::uint32_t coins; };
-			CurrencyData message{ newMP, newRT, accountInfo.coins };
-			m_packet.setData(reinterpret_cast<std::uint8_t*>(&message), sizeof(std::uint32_t) * 3);
-			asyncWrite(m_packet);
-		}
-
 		void Session::switchItemEquip(std::uint32_t characterId, std::uint64_t itemNumber)
 		{
 			if (characterId != -1 && characterId >= Common::Enums::MAX_CHARACTERS) return;
