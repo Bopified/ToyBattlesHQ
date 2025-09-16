@@ -13,6 +13,23 @@ If you haven’t already installed MariaDB:
 - Download the version that matches your OS
 - During installation, make sure to remember the root password (you’ll need it shortly)
 
+### Step 0.1 (Optional but recommended for an easy setup)
+- Find `my.ini` inside your MariaDB folder. (Usually it can be found in `"C:\Program Files\MariaDB 11.6\data\my.ini"`
+- Replace its contents with the following:
+```cpp
+[mysqld]
+datadir="C:/Program Files/MariaDB 11.6/data"
+port=3305
+innodb_buffer_pool_size=1967M
+
+[client]
+port=3305
+plugin-dir="C:/Program Files/MariaDB 11.6/lib/plugin"
+```
+
+Of course, make sure the paths are correct for you and that you have the necessary things installed (like innoDB).
+
+
 ### Step 1: Start mariaDB
 Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
 
@@ -54,23 +71,6 @@ On Windows:
 Done!
 
 
-### Step 5 (Optional but recommended for an easy setup)
-- Find `my.ini` inside your MariaDB folder. (Usually it can be found in `"C:\Program Files\MariaDB 11.6\data\my.ini"`
-- Replace its contents with the following:
-```cpp
-[mysqld]
-datadir="C:/Program Files/MariaDB 11.6/data"
-port=3305
-innodb_buffer_pool_size=1967M
-
-[client]
-port=3305
-plugin-dir="C:/Program Files/MariaDB 11.6/lib/plugin"
-```
-
-Of course, make sure the paths are correct for you and that you have the necessary things installed (like innoDB).
-
-
 ## How to Set Up the MariaDB Database [LINUX]
 ### Step 0: Install MariaDB
 - Debian/Ubuntu: 
@@ -86,6 +86,21 @@ Start and enable the service:
 sudo systemctl start mariadb
 sudo systemctl enable mariadb
 ```
+
+### Step 0.1 (Optional but recommended for an easy setup)
+- Edit the MariaDB configuration file (usually found at `/etc/mysql/mariadb.conf.d/50-server.cnf or /etc/my.cnf`)
+- Add or modify the following sections:
+```cpp
+[mysqld]
+datadir=/var/lib/mysql
+port=3305
+innodb_buffer_pool_size=1967M
+
+[client]
+port=3305
+```
+Make sure paths correspond to your installation. `datadir` generally defaults to `/var/lib/mysql`
+
 
 ### Step 1: Start the service
 `sudo systemctl start mariadb`
@@ -105,21 +120,6 @@ You can check if it's running with `sudo systemctl status mariadb`
 If you want it to be permanent:
 - For bash: `echo 'export MICRO_DB_PW=your_db_password_here' >> ~/.bashrc`
 - For zsh: `echo 'export MICRO_DB_PW=your_db_password_here' >> ~/.zshsrc` 
-
-### Step 5 (Optional but recommended for an easy setup)
-- Edit the MariaDB configuration file (usually found at `/etc/mysql/mariadb.conf.d/50-server.cnf or /etc/my.cnf`)
-- Add or modify the following sections:
-```cpp
-[mysqld]
-datadir=/var/lib/mysql
-port=3305
-innodb_buffer_pool_size=1967M
-
-[client]
-port=3305
-```
-Make sure paths correspond to your installation. `datadir` generally defaults to `/var/lib/mysql`
-
 
 
 ## Next
