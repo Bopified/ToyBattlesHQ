@@ -286,10 +286,8 @@ namespace Main
 						totalMpBonus += mpBonus;
 					}
 
-					auto baseMpToAdd = room->getRoomSettings().mode == Common::Enums::FreeForAll ? Common::Constants::matchBaseMp / 2 : Common::Constants::matchBaseMp;
-					auto baseExpToAdd = room->getRoomSettings().mode == Common::Enums::FreeForAll ? Common::Constants::matchBaseExp / 2 : Common::Constants::matchBaseExp;
-					auto baseMp = (scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + baseMpToAdd) * 2;
-					auto baseExp = (scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + baseExpToAdd) * 2;
+					auto baseMp = (scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + Common::Constants::matchBaseMp) * 2;
+					auto baseExp = (scoreboardResponse.totalKills * 15 + scoreboardResponse.deaths * 5 + Common::Constants::matchBaseExp) * 2;
 
 					const auto elapsedMs = timeNow - targetSession->m_matchStartTime;
 					auto elapsedMinutes = static_cast<std::uint64_t>(elapsedMs / 1000 / 60);
@@ -302,8 +300,9 @@ namespace Main
 					auto finalGainedMp = gainedMp + (gainedMp * totalMpBonus / 100);
 
 					std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
-					std::uint32_t finalGainedExpWithEvent = finalGainedExp;
-					std::uint32_t finalGainedMpWithEvent = finalGainedMp;
+					auto mode = room->getRoomSettings().mode;
+					std::uint32_t finalGainedExpWithEvent = mode == Common::Enums::FreeForAll ? (finalGainedExp / 2) : finalGainedExp;
+					std::uint32_t finalGainedMpWithEvent = mode == Common::Enums::FreeForAll ? (finalGainedMp / 2) : finalGainedMp;
 
 					if (now <= expMpBonusInfo.endDate)
 					{
