@@ -377,7 +377,7 @@ namespace Main
 						targetSession->sendRt(static_cast<std::uint32_t>(static_cast<double>(clampedMp)/3));
 						if (room->getRoomSettings().mode != Common::Enums::SquareMode && room->getRoomSettings().mode != Common::Enums::AiBattle)
 						{
-							targetSession->reduceEquippedItemsDurability();
+							targetSession->reduceEquippedItemsDurability(room->getRoomSettings().weaponRestriction);
 						}
 					}
 				}

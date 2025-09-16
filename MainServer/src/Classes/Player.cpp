@@ -639,19 +639,42 @@ namespace Main
 			}
 		}
 
-		std::vector<Main::ClientData::SingleWeaponDurabilityDamage> Player::reduceEquippedItemsDurabilities(std::size_t characterID)
+		std::vector<Main::ClientData::SingleWeaponDurabilityDamage> Player::reduceEquippedItemsDurabilities(
+			std::size_t characterID, std::uint32_t weaponRestrictionValue)
 		{
+			using namespace Common::Enums;
+
+			WeaponRestriction weaponRestriction = static_cast<WeaponRestriction>(weaponRestrictionValue);
 			std::vector<Main::ClientData::SingleWeaponDurabilityDamage> damages;
 
-			const std::size_t startIndex = characterID * Common::Enums::MAX_ITEMTYPE;
-			const std::size_t endIndex = startIndex + Common::Enums::MAX_ITEMTYPE;
+			const std::size_t startIndex = characterID * MAX_ITEMTYPE;
+			const std::size_t endIndex = startIndex + MAX_ITEMTYPE;
 
 			for (std::size_t i = startIndex; i < endIndex && i < m_equippedItemByCharacter.size(); ++i)
 			{
 				auto& item = m_equippedItemByCharacter[i];
-				if (item.id == 0 || item.expirationDate != 0
-					|| !Common::Enums::isWeapon(static_cast<Common::Enums::ItemType>(item.type)))
+
+				if (item.id == 0 || item.expirationDate != 0 || !isWeapon(static_cast<ItemType>(item.type)))
 					continue;
+
+				if (weaponRestriction != All && weaponRestriction != WeaponSelect)
+				{
+					ItemType restrictedType;
+					switch (weaponRestriction)
+					{
+					case MeleeOnly:  restrictedType = MELEE; break;
+					case RifleOnly:  restrictedType = RIFLE; break;
+					case ShotgunOnly: restrictedType = SHOTGUN; break;
+					case SniperOnly: restrictedType = SNIPER; break;
+					case GatlingOnly: restrictedType = MG; break;
+					case BazookaOnly: restrictedType = BAZOOKA; break;
+					case GrenadeOnly: restrictedType = GRENADE; break;
+					default: continue;
+					}
+
+					if (item.type != static_cast<std::uint32_t>(restrictedType))
+						continue;
+				}
 
 				const auto baseDurability = Main::CdbUtils::getItemDurability(item.id);
 				if (!baseDurability || *baseDurability == 0)
