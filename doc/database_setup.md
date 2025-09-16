@@ -31,7 +31,7 @@ Of course, make sure the paths are correct for you and that you have the necessa
 
 
 ### Step 1: Start mariaDB
-Simply open a terminal and type `net start mariadb`. By default this will run on port 3306, so make sure to use the correct database port on the `config.ini` file!
+Simply open a terminal and type `net start mariadb`. By default this will run on port 3306 (unless you did the optional step 0.1, in which case the port will be 3305), so make sure to use the correct database port on the `config.ini` file!
 
 ### Step 2: Create the Database
 Once MariaDB is installed:
