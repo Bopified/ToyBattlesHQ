@@ -20,7 +20,7 @@ else()
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/Output)
 endif()
 
-find_package(Boost REQUIRED COMPONENTS system json beast asio)
+find_package(Boost REQUIRED COMPONENTS system json beast)
 find_package(OpenSSL REQUIRED)
 find_package(cryptopp CONFIG REQUIRED)
 find_package(range-v3 CONFIG REQUIRED)
