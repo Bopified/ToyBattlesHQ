@@ -17,14 +17,9 @@ namespace Cast
 {
     namespace Handlers
     {
-        std::uint32_t getPositionTickMs(std::uint64_t timeSinceLastRestart, std::uint64_t roomTick)
-        {
-            return Common::Utils::getCurrentTimestampMs() - timeSinceLastRestart;
-        }
-
         inline void handlePlayerPosition(const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session,
             Cast::Classes::RoomsManager& roomsManager, std::uint32_t serverId, Cast::Network::SessionsManager& sm,
-            Ac::AntiCheatManager& acManager, std::uint64_t timeSinceLastRestart)
+            Ac::AntiCheatManager& acManager)
         {
             using namespace Cast::Structures;
 
@@ -64,7 +59,6 @@ namespace Cast
             const auto fullSize = request.getFullSize();
             
 
-            // Note: melee worked without warping, and the only thing melee doesn't have is bullets! That may be the issue with all-weapons FFA warps
             if (fullSize == 36) 
             {
                 Cast::Structures::ClientPlayerInfoBullet playerPositionBullet{};
@@ -72,7 +66,6 @@ namespace Cast
                 if (playerPositionBullet.isBad())  return;
 
                 PlayerInfoResponseWithBullets playerInfoResponseWithBullets;
-              //  playerInfoResponseWithBullets.tick = playerPositionFromClient.matchTick;
                 playerInfoResponseWithBullets.specificInfo.enableBullet = true;
                 playerInfoResponseWithBullets.specificInfo.enableJump = false;
                 playerInfoResponseWithBullets.position = playerPositionFromClient.position;
@@ -157,8 +150,6 @@ namespace Cast
                 }
             }
             
-            // reminder: this is correct, dont use exceptSelf as that causes log errors in SysLog (host receives [322] command not found) 
-           // room->broadcastToRoom(response);
             room->enqueuePosition(std::move(response));
         }
     }

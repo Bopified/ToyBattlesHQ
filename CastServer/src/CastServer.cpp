@@ -126,7 +126,7 @@ namespace Cast
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(281, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerPosition(request, session, m_roomsManager, m_serverId, m_sessionsManager,
-				m_acManager, m_timeSinceLastRestart); });
+				m_acManager); });
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(253, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handleCrash(request, session, m_roomsManager, m_serverId); });
