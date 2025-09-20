@@ -13,6 +13,7 @@ namespace Cast
 			if (playerId < m_playerSessionIdToRoom.size())
 			{
 				m_playerSessionIdToRoom[playerId] = room;
+				m_rooms.push_back(std::move(room));
 			}
 		}
 
@@ -308,6 +309,8 @@ namespace Cast
 
 			if (mustRoomBeRemoved)
 			{
+				m_rooms.erase(std::remove(m_rooms.begin(), m_rooms.end(), roomToRemove), m_rooms.end());
+
 				for (auto& roomSlot : m_playerSessionIdToRoom)
 				{
 					if (roomSlot == roomToRemove)

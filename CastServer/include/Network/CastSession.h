@@ -30,6 +30,10 @@ namespace Cast
             bool m_isInMatch{ 0 };
             std::string m_nickname;
             bool m_isInvisible{};
+            Cast::Structures::ClientPlayerInfoBasic m_lastClientPosition{};
+            std::uint32_t m_lastRotation1{};
+            std::uint32_t m_lastRotation2{};
+            std::uint32_t m_lastRotation3{};
 
         public:
             explicit Session(asio::ip::tcp::socket&& socket, std::function<void(std::size_t)> fnct)

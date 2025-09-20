@@ -73,7 +73,7 @@ namespace Cast
 			return parseDataImpl<T, Common::Network::UnecryptedPacket, Warn>(request, offset, location);
 		}
 
-		bool mustBroadcastDeath(std::uint32_t mode)
+		inline bool mustBroadcastDeath(std::uint32_t mode)
 		{
 			return (mode == Common::Enums::Elimination || mode == Common::Enums::CaptureTheBattery
 				|| mode == Common::Enums::BombBattle || mode == Common::Enums::Clan_BombBattle

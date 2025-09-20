@@ -133,6 +133,13 @@ PACK_PUSH(1)
             {
                 return position.isBadPos() || direction.isBadDir();
             }
+
+            bool hasMoved(const PositionStruct& newPos) const
+            {
+                return position.positionX != newPos.positionX ||
+                    position.positionY != newPos.positionY ||
+                    position.positionZ != newPos.positionZ;
+            }
         };
 PACK_POP()
 

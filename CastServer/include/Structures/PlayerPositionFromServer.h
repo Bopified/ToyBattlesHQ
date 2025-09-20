@@ -28,7 +28,7 @@ PACK_POP()
 PACK_PUSH(1)
         struct PlayerInfoBasicResponse
         {
-            std::uint32_t tick{};
+           // std::uint32_t tick{};
             SpecificInfo specificInfo{}; 
             Cast::Structures::PositionStruct position;   
             Cast::Structures::DirectionStruct direction; 
@@ -50,7 +50,7 @@ PACK_POP()
 PACK_PUSH(1)
         struct PlayerInfoResponseWithBullets
         {
-            std::uint32_t tick{}; 
+           // std::uint32_t tick{}; 
             SpecificInfo specificInfo{}; 
             Cast::Structures::PositionStruct position; 
             Cast::Structures::DirectionStruct direction; 

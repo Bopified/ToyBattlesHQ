@@ -4,9 +4,20 @@
 #include "../include/Handlers/PlayerPositionHandler.h"
 #include "../include/Handlers/IpcMainHandlers.h"
 #include "../include/Handlers/WeaponKillHandlers.h"
+#include <chrono>
 
 namespace Cast
 {
+	void CastServer::tickPositionFlush()
+	{
+		for (auto& room : m_roomsManager.getAllRooms()) 
+		{
+			room->flushPendingPositions();
+		}
+
+		m_positionTimer->expires_after(std::chrono::milliseconds(50));
+		m_positionTimer->async_wait([this](auto) { tickPositionFlush(); });
+	}
 
 	CastServer::CastServer(ioContext& io_context, const std::string& serverIp, std::uint16_t port, std::uint16_t mainPort, std::uint16_t serverId)
 		: m_io_context{ io_context }
@@ -14,6 +25,12 @@ namespace Cast
 		, m_serverId{ serverId }
 		, m_mainServerAcceptor{ io_context, tcp::endpoint(asio::ip::address::from_string(Common::Utils::SetupParser::getInstance().getSelfCastServerInfo().ip), mainPort) }
 	{
+		using namespace std::chrono;
+		
+		m_sessionsManager.setRoomsManager(&m_roomsManager);
+		m_positionTimer = std::make_shared<asio::steady_timer>(m_io_context);
+		tickPositionFlush();
+
 		namespace CN = Common::Network;
 		using namespace Cast::Network;
 
@@ -109,7 +126,7 @@ namespace Cast
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(281, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handlePlayerPosition(request, session, m_roomsManager, m_serverId, m_sessionsManager,
-				m_acManager); });
+				m_acManager, m_timeSinceLastRestart); });
 
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(253, [&](const Common::Network::UnecryptedPacket& request,
 			std::shared_ptr<Cast::Network::Session> session) { Cast::Handlers::handleCrash(request, session, m_roomsManager, m_serverId); });
@@ -153,9 +170,13 @@ namespace Cast
 		// Room tick sync request:
 		// When Option==9 in packet order 257: the non host's client sends packet 79 to the server, which dispatches to the host
 		// This packet asks the host to provide the room sync to the non-host
-		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(79, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) {	m_roomsManager.playerForwardToHost(request.getSession(), session->getId(),
-				const_cast<Common::Network::UnecryptedPacket&>(request)); });
+		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(
+			79,
+			[&](const Common::Network::UnecryptedPacket& request, std::shared_ptr<Cast::Network::Session> session) {
+				m_roomsManager.playerForwardToHost(request.getSession(), session->getId(), const_cast<Common::Network::UnecryptedPacket&>(request));
+			}
+		);
+
 
 		// In-room info request, apparenly contains "isDeath" data??
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(306, [&](const Common::Network::UnecryptedPacket& request,
@@ -215,8 +236,12 @@ namespace Cast
 		// After the host client receives packet 78 from the non-host, it provides the non-host with the updated room tick
 		// Without this handler, the player never respawns (not even TAB shows anything) => The player keeps being in a waiting initial state
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(408, [&](const Common::Network::UnecryptedPacket& request,
-			std::shared_ptr<Cast::Network::Session> session) { m_roomsManager.hostForwardToPlayer(session->getId(), request.getSession(),
-				const_cast<Common::Network::UnecryptedPacket&>(request)); });
+				std::shared_ptr<Cast::Network::Session> session) {
+				m_roomsManager.hostForwardToPlayer(session->getId(), request.getSession(),
+					const_cast<Common::Network::UnecryptedPacket&>(request));
+			}
+		);
+
 
 		// Items respawning
 		Common::Network::Session::addCallback<CN::PacketType::UNECRYPTED, Session>(260, [&](const Common::Network::UnecryptedPacket& request,
@@ -336,8 +361,6 @@ namespace Cast
 		m_socket.emplace(m_io_context);
 		m_acceptor.async_accept(*m_socket, [&](asio::error_code error)
 			{
-				m_sessionsManager.setRoomsManager(&m_roomsManager);
-
 				auto client = std::make_shared<Cast::Network::Session>(std::move(*CastServer::m_socket),
 					std::bind(&Cast::Network::SessionsManager::removeSession, &m_sessionsManager, std::placeholders::_1));
 				client->m_checkValidSession = true;
