@@ -164,6 +164,7 @@ namespace Main
 					if (room->isHost(selfUniqueId)) 
 					{ // broadcast the tick to the room
 						const std::uint64_t roomTick = Details::getUtcTimeMs() - timeSinceLastServerRestart;
+						std::cout << "Generated RoomTick: " << roomTick << '\n';
 						response.setCommand(258, 0, 1, 0);  // What's extra 5 here?
 						response.setData(reinterpret_cast<const std::uint8_t*>(&roomTick), sizeof(roomTick));
 						room->broadcastToRoom(response);
