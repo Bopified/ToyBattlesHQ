@@ -9,6 +9,7 @@
     "boost-json",
     "boost-beast",
     "boost-system",
+    "boost-asio",
     "mariadb-connector-cpp",
     {
       "name": "cryptopp",
