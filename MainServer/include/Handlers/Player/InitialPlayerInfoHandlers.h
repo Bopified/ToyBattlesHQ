@@ -16,13 +16,13 @@ namespace Main
 		inline void handleInitialPlayerInfos(const Common::Network::Packet& request, std::shared_ptr<Main::Network::Session> session,
 			Main::Network::SessionsManager& sessionsManager, Main::Persistence::MainScheduler& scheduler, std::uint64_t timeSinceLastServerRestart,
 			std::uint32_t serverId, bool isServerOffline, bool isPublic, const Main::Structures::EventMissionInfo& eventMissionInfo,
-			const Main::Structures::ExpMpBonusInfo& expMpBonusInfo)
+			const Main::Structures::ExpMpBonusInfo& expMpBonusInfo, Main::Classes::ReportManager& reportManager)
 		{
-			if (auto accountInfo = handleAuthorization(request, session, sessionsManager.getAllSessions().size(), isServerOffline, scheduler, isPublic); accountInfo)
+			if (auto accountInfo = handleAuthorization(request, session, sessionsManager.getAllSessions().size(), isServerOffline, scheduler, isPublic, reportManager); accountInfo)
 			{
 				START_BENCHMARK
 
-				handleAccountInformation(request, session, sessionsManager, scheduler, *accountInfo, timeSinceLastServerRestart, serverId);
+					handleAccountInformation(request, session, sessionsManager, scheduler, *accountInfo, timeSinceLastServerRestart, serverId);
 
 				session->sendInventory(*reinterpret_cast<const std::uint32_t*>(request.getData()));
 

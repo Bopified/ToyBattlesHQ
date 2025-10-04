@@ -42,6 +42,7 @@ namespace Main
 		Main::Classes::RoomsManager m_roomsManager;
 		Main::Classes::ClansManager m_clansManager;
 		Main::Command::ChatCommands m_chatCommands;
+		Main::Classes::ReportManager m_reportManager;
 		std::unordered_map<std::uint32_t, std::function<void(std::shared_ptr<Main::Network::Session>)>> m_generalItemCallbacks;
 		std::unordered_map<std::uint32_t, std::function<void(std::shared_ptr<Main::Network::Session>)>> m_cashItemsCallbacks;
 		std::unordered_map<std::uint32_t, std::function<bool(std::shared_ptr<Main::Network::Session>, const Main::Structures::ItemSerialInfo&,
@@ -73,6 +74,8 @@ namespace Main
 		constexpr void setServerOffline(bool v) { m_isServerOffline = v; }
 		constexpr void setRoomCreationTo(bool v) { m_roomCreationEnabled = v; }
 		constexpr bool getRoomCreation() const noexcept { return m_roomCreationEnabled; };
+		Main::Classes::ReportManager& getReportManager() { return m_reportManager; }
+
 	};
 }
 

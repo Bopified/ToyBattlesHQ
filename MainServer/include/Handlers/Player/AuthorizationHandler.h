@@ -42,7 +42,8 @@ namespace Main
             std::size_t totalOnlinePlayers,
             bool isServerOffline,
             Main::Persistence::MainScheduler& scheduler,
-            bool isPublic)
+            bool isPublic,
+            Main::Classes::ReportManager& reportManager)
         {
             START_BENCHMARK
 
@@ -102,12 +103,30 @@ namespace Main
                 session->setHasBeenMatchBanned(*hasBeenMatchBannedOpt);
                 session->asyncWrite(response);
                 session->sendMessage("Welcome! To see all commands, type /commands", Main::Enums::ChatExtra::INFO);
-                session->sendMessage(
-                    "Client Version: " +
-                    std::to_string(clientInfo.clientVersion.ver2) + "." +
-                    std::to_string(clientInfo.clientVersion.ver3) + "." +
-                    std::to_string(clientInfo.clientVersion.ver4)
-                );
+
+                Common::Enums::PlayerGrade playerGrade = static_cast<Common::Enums::PlayerGrade>(accountInfoOpt->playerGrade);
+                if (playerGrade == Common::Enums::PlayerGrade::GRADE_MOD ||
+                    playerGrade == Common::Enums::PlayerGrade::GRADE_TESTER ||
+                    playerGrade == Common::Enums::PlayerGrade::GRADE_GM)
+                {
+                    std::size_t pendingReports = reportManager.getUnacknowledgedReportsCount();
+                    if (pendingReports > 0)
+                    {
+                        session->sendMessage("You got " + std::to_string(pendingReports) + " pending reports /reports", Main::Enums::TIP);
+                    }
+                    else
+                    {
+                        session->sendMessage("No pending reports", Main::Enums::TIP);
+                    }
+                }
+
+                
+                    session->sendMessage(
+                        "Client Version: " +
+                        std::to_string(clientInfo.clientVersion.ver2) + "." +
+                        std::to_string(clientInfo.clientVersion.ver3) + "." +
+                        std::to_string(clientInfo.clientVersion.ver4)
+                    );
 
                 END_BENCHMARK(handleAuthorization, session)
                 return *accountInfoOpt;
