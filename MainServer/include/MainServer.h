@@ -16,6 +16,7 @@
 #include <boost/asio.hpp>
 
 #include <AntiCheat/AntiCheat.h>
+#include <Classes/ReportManager.h>
 
 namespace Main
 {
