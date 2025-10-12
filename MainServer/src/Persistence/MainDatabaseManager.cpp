@@ -3135,6 +3135,7 @@ namespace Main
 
                 query->setUInt(1, accountId);
                 query->setUInt64(2, mailbox.timestamp); // uniqueId (3) ignored for now
+				query->setUInt64(3, 0);
                 query->setString(4, senderNickname);
                 query->setString(5, mailbox.message);
                 query->setBoolean(6, false);
