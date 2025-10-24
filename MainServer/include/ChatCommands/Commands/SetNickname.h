@@ -45,6 +45,8 @@ namespace Main
 					return;
 				}
 
+				if (!session->setPlayerName()) return;
+				
 				struct SetName {
 					std::uint32_t unknown0;
 					std::uint32_t unknown1;
