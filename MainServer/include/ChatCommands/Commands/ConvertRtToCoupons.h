@@ -32,7 +32,7 @@ namespace Main
 
 		public:
 			explicit Rt2Coupons(const Common::Enums::PlayerGrade requiredGrade)
-                : ICommand{ requiredGrade, "/rt2coupons <total rocktokens> (1 coupon = 3000 RT)", R"(^\S+\s(\d+)$)" }
+                : ICommand{ requiredGrade, "/rt2coupons <total rocktokens> (1 coupon = 5000 RT)", R"(^\S+\s(\d+)$)" }
             {
 			}
 
