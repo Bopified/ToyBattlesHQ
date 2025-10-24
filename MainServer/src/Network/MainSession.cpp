@@ -913,25 +913,30 @@ namespace Main
 		}
 
 		// This function is exclusively used for /setnickname cmd
-		void Session::setPlayerName(const std::string& playerName)
+		bool Session::setPlayerName(const std::string& playerName)
 		{
-			if (playerName.size() >= 16)
-			{
-				sendMessage("error: the nickname cannot have more than 16 characters");
-				return;
-			}
-			const bool changed = m_scheduler.immediatePersist(std::source_location::current(), 
-				&Main::Persistence::PersistentDatabase::updatePlayerName, m_player.getAccountID(), playerName.c_str());
-			if (!changed) 
-			{
-				sendMessage("error: there's already a player with this nickname");
-				return;
-			}
-			else
-			{
-				m_player.setPlayerName(playerName.c_str());
-				sendMessage("success (relog)");
-			}
+		    if (playerName.size() >= 16)
+		    {
+		        sendMessage("error: the nickname cannot have more than 16 characters");
+		        return false;
+		    }
+		
+		    const bool changed = m_scheduler.immediatePersist(
+		        std::source_location::current(),
+		        &Main::Persistence::PersistentDatabase::updatePlayerName,
+		        m_player.getAccountID(),
+		        playerName.c_str()
+		    );
+		
+		    if (!changed) 
+		    {
+		        sendMessage("error: there's already a player with this nickname");
+		        return false;
+		    }
+		
+		    m_player.setPlayerName(playerName.c_str());
+		    sendMessage("success (relog)");
+		    return true;
 		}
 
 		// option and mission are probably related to the upgrade type (power, firing rate, etc)
