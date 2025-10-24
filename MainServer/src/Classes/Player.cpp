@@ -54,6 +54,7 @@ namespace Main
 			{
 				m_accountInfo.battery += m_batteryObtainedInMatch;
 			}
+			m_batteryObtainedInMatch = 0;
 		}
 
 		const AccountInfo& Player::getAccountInfo() const
