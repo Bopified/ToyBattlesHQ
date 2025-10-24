@@ -30,6 +30,7 @@
 #include "../include/ChatCommands/Commands/Shutdown.h"
 #include "../include/ChatCommands/Commands/TestCommand.h"
 #include "../include/ChatCommands/Commands/Unban.h"
+#include "../include/ChatCommands/Commands/StaffCommand.h"
 #include "../include/ChatCommands/Commands/Report.h"
 #include "../include/ChatCommands/Commands/ReportReceived.h"
 #include "../include/ChatCommands/Commands/Reports.h"
