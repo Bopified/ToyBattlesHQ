@@ -291,7 +291,7 @@ namespace Main
 
 			bool setExperience(std::uint32_t experience);
 
-			void setPlayerName(const std::string& playerName);
+			bool setPlayerName(const std::string& playerName);
 
 			void addEnergyToItem(const Main::ClientData::ItemAddEnergy& itemAddEnergy, std::uint16_t option, std::uint16_t mission);
 
