@@ -935,7 +935,6 @@ namespace Main
 		    }
 		
 		    m_player.setPlayerName(playerName.c_str());
-		    sendMessage("success (relog)");
 		    return true;
 		}
 
