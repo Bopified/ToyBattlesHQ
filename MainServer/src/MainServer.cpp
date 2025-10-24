@@ -167,9 +167,11 @@ namespace Main
 			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleMailboxGiftSend(request, session, m_serverId); });
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(67, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session>  session) { session->displayGiftboxes(static_cast<Main::Enums::MailboxMission>(request.getMission())); });
-		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(68, [&](const Common::Network::Packet& request, 
-			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handleInitialPlayerInfos(request, session, m_sessionsManager, m_scheduler, m_timeSinceLastRestart,
-				m_serverId, m_isServerOffline, m_isPublic, m_eventMissionInfo, m_expMpEvent); });
+		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(68, [&](const Common::Network::Packet& request,
+			std::shared_ptr<Main::Network::Session> session) {
+				Main::Handlers::handleInitialPlayerInfos(request, session, m_sessionsManager, m_scheduler, m_timeSinceLastRestart,
+					m_serverId, m_isServerOffline, m_isPublic, m_eventMissionInfo, m_expMpEvent, m_reportManager);
+			});
 		CN::Session::addCallback<CN::PacketType::ENCRYPTED, MN::Session>(71, [&](const Common::Network::Packet& request,
 			std::shared_ptr<Main::Network::Session> session) { Main::Handlers::handlePing(request, session, m_roomsManager, Details::parseData<Main::ClientData::Ping>(request), m_scheduler); });
 
