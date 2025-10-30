@@ -1,13 +1,13 @@
 # 1.2 Overview of the different projects (MainServer, CastServer, AuthServer, Common, Client)
 
-Before introducing the requirement and the installation process, I'd like to discuss quickly what the different sub-projects of this project are, and some important stuff that you may notice once you have your setup ready.
+Before introducing the requirements and the installation process, let's first discuss quickly what the different sub-projects of this project are, and some important stuff that you may notice once you have your setup ready.
 
 <a href="https://ibb.co/WWSVc6Ky"><img src="https://i.ibb.co/N6wTLsYj/server-setup.webp" alt="server-setup" border="0" /></a>
 
 ## Common
 This is a static library (.lib) that includes shared utilities used by all the servers — Auth, Main, and Cast.
 
-It acts as the foundation for several core features like networking (handling communication between the server and client), cryptography, CDB data structures, and other essential components that are reused across the project.
+It acts as the foundation for many core features like networking (handling communication between the server and client), cryptography, CDB data structures, and other essential components that are reused across the project.
 
 
 ## Auth Server
@@ -20,7 +20,7 @@ This setting can be configured directly in the database (we’ll cover how later
 
 
 ## Main Server
-The MainServer is at the core of the emulator — it handles just about everything except login and most of the gameplay logic.
+The MainServer is at the core of the emulator - it handles just about everything except login and most of the gameplay logic.
 
 In simple terms, it’s responsible for:
 
@@ -44,12 +44,12 @@ The CastServer is responsible for handling most of the gameplay-related communic
 - Match state and updates
 - Item pickups and drops
 - Player position and movement updates
-...and more
+...and more.
 
-Since this server handles real-time gameplay, it needs to be fast. For that reason, the packets sent here are not encrypted — unlike the MainServer, which deals with more sensitive data and uses encryption accordingly.
+Since this server handles real-time gameplay, it needs to be fast. For that reason, the packets sent here are not encrypted - unlike the MainServer, which deals with more sensitive data and uses encryption accordingly.
 
 ## Client folder
-This is where I added a few utilities to help with client modifications. More details on how to use them are covered in a later section.
+This is where we added a few utilities to help with client modifications. More details on how to use them are covered in a later section.
 
 ## External Libraries
 This folder holds all the external dependencies used across the project, including header-only libraries.
@@ -57,7 +57,7 @@ This folder holds all the external dependencies used across the project, includi
 When you compile the Common project, it will generate a .lib file that gets placed here under /ExternalLibraries/CommonLib.
 
 **⚠️ Important:**: Make sure to place the unpacked `cgd.dip` archive inside the cgd_original folder here.
-This archive is essential for the Main Server — it contains key client data like:
+This archive is essential for the Main Server and contains important client data like:
 
 - Shop item prices
 - Capsule contents
@@ -67,6 +67,7 @@ This archive is essential for the Main Server — it contains key client data li
 Without it, the server won’t be able to function properly when handling anything related to (for example) game items, capsule info, etc. 
 So always make sure you’re using the most up-to-date and correctly unpacked version of `cgd.dip`.
 
+**Note**: This repository already provides a server-sided `cgd_original` folder, along with the corresponding client `cgd.dip` which it was extracted from. All the links to the client & `cgd.dip` folder are given in the next chapters.
 
 ## Next
 [2.1 Changelog from version 1.0 to version 2.0](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
