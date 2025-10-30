@@ -1,9 +1,9 @@
 # 3.3 Setting up the database
 
-Starting from version 2.0, I introduce MariaDB. This is much better since it allows you to have multiple regionals servers connect to the same, central database.
+Starting from version 2.0, we introduce MariaDB. This is much better since it allows you to have multiple regionals servers connect to the same, central database.
 This section shows setup for both Windows and Linux.
 
-## How to Set Up the MariaDB Database [WINDOWS]
+## 3.3.1 Windows Setup
 Before running the servers, you’ll need a MariaDB database properly configured with the right tables and data. Here's how to do it step by step:
 
 ### Step 0: Install MariaDB
@@ -71,7 +71,7 @@ On Windows:
 Done!
 
 
-## How to Set Up the MariaDB Database [LINUX]
+## 3.3.2 Linux Setup
 ### Step 0: Install MariaDB
 - Debian/Ubuntu: 
 ```cpp
