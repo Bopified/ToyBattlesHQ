@@ -36,7 +36,7 @@ By now, you should have completed the following steps:
 - Set up and started your MariaDB database
 - Installed the `cgd.dip` from above and replaced it in your client's `data` folder
 - Started your game client.
-- 
+  
 If everything’s in place and running correctly, you should be able to log in using the following test credentials:
 
 Username: `test`
