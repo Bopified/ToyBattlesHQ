@@ -31,17 +31,17 @@ To launch the game, you have two options:
 
 # Final Checklist: Starting Everything Up
 By now, you should have completed the following steps:
-- ✅ Compiled all the executables (Common, MainServer, AuthServer, and CastServer)
-- ✅ Launched each server executable without seeing any red error messages
-- ✅ Set up and started your MariaDB database
-- ✅ Edited your config.ini file so that all IPs point to 127.0.0.1 (localhost), if you're using the cgd.dip file from above
-- ✅ Downloaded and started the client
-
+- Compiled all the executables (Common, MainServer, AuthServer, and CastServer)
+- Launched each server executable without seeing any red error messages
+- Set up and started your MariaDB database
+- Installed the `cgd.dip` from above and replaced it in your client's `data` folder
+- Started your game client.
+- 
 If everything’s in place and running correctly, you should be able to log in using the following test credentials:
 
-Username: test
-Password: test
+Username: `test`
 
+Password: `test`
 
 ## Next
 [4.1 Config setup for localhost](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_localhost.md)
