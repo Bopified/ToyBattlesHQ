@@ -40,6 +40,9 @@
 
 ### 7. Updater & Client Tools
 - [7.1 The Updater: How the launcher retrieves updates](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/updater_overview.md)
+  - [7.1.1 Overview](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/updater_overview.md)
+  - [7.1.2 Creating Update Packages](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/updater_overview.md)
+  - [7.1.3 Using the Updater](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/updater_overview.md)
 - [7.2 Changing the client version (using the client version tool)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_version_tool.md)
 - [7.3 Changing the CGD password (using the password tool)](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/password_updater.md)
 
