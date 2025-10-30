@@ -48,7 +48,10 @@
 
 ### 8. Reporting Issues
 - [8.1 How to create bug reports via GitHub Issues](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/reporting_issues.md)
-
+  - [8.1.1 Types of Issues](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/reporting_issues.md)
+  - [8.1.2 How to Report an Issue](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/reporting_issues.md)
+  - [8.1.3 Found a fix? Feel free to open a PR!](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/reporting_issues.md)
+    
 ### 9. Acknowledgements
 - [9.1 Credits and community contributions](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/thanks.md)
 
