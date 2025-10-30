@@ -9,6 +9,9 @@
 
 ### 2. Version History
 - [2.1 Changelog from version 1.0 to version 2.0](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
+  - [2.1.1 Complete code refactoring](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
+  - [2.1.2 New Features](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
+  - [2.1.3 Miscellaneous](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/changelog1.md)
 
 ### 3. Installation & Setup
 - [3.1 Requirements & Installation](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
