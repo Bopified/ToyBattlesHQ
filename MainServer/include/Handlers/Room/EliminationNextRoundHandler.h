@@ -254,6 +254,7 @@ namespace Main
 				if (room->getRoomSettings().mode == Common::Enums::BossBattle)
 				{
 					handleBossBattleEnding(room, response, isFarm);
+					room->endMatch();
 					return;
 				}
 
