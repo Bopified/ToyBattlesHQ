@@ -1,4 +1,4 @@
-<a href="https://toybattles.net/main-logo.gif"/></a href>
+<a href="https://toybattles.net/main-logo.gif"/>
 
 ## Appendix
 ### 1. Project Overview
