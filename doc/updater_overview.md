@@ -16,6 +16,7 @@ The system supports two approaches:
 - **Partial updates** (not supported by our tool)
 
 ## Configuration Files 
+The following files can be found in the root directory of the game folder.
 ### `updateinfo.ini`
 Specifies download locations:
 ```ini
