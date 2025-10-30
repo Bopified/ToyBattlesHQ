@@ -15,6 +15,10 @@
 
 ### 3. Installation & Setup
 - [3.1 Requirements & Installation](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
+  - [3.1.1 Requirements](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
+  - [3.1.2.1 Automatic Installation: Automatic Linux Setup](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
+  - [3.1.2.2 Manual Installation: Windows](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
+  - [3.1.2.3 Manual Installation: Linux](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/requirements_installation.md)
 - [3.2 Setting up the emulator](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/setting_up.md)
 - [3.3 Setting up the database](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/database_setup.md)
 - [3.4 Setting up the client](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_setup.md)
