@@ -1,5 +1,6 @@
-## Appendix
+https://toybattles.net/main-logo.gif
 
+## Appendix
 ### 1. Project Overview
 - [1.1 What is this project about?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
   - [1.1.1 ToyBattles](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
