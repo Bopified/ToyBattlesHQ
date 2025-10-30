@@ -3,8 +3,8 @@ Starting from version 2.0, setting up the emulator should be much easier than be
 
 A new `config.ini` file was now added inside the `Setup` folder (in the root directory). 
 
-## 🔧 config.ini Configuration Guide
-This file contains all the key configuration values used by the servers (Auth, Main, Cast) and supporting components (database, client, website). Here's how to fill it out correctly:
+## config.ini Configuration Guide
+This file contains all the configuration values used by the servers (Auth, Main, Cast) and supporting components (database, client, website). Here's how to fill it out correctly:
 Note: the file is inside the `Setup` folder. It should already contain most of the things that will enable it to work for localhost (`127.0.0.1`).
 
 ### [AuthServer]
@@ -73,7 +73,7 @@ Used for version checking during client login.
 # ⚠️ Notes & Warnings
 You can configure up to 9 Main Servers and 9 Cast Servers.
 
-If anything is misconfigured (invalid IPs, missing ports, database issues, etc.), the server will print an error message on startup — so always check the console output when launching.
+If anything is misconfigured (invalid IPs, missing ports, database issues, etc.), the server will print an error message on startup, so always check the console output when launching.
 
 **Make sure that the ports you use for the emulator aren't used by other services running in your OS.**
 
