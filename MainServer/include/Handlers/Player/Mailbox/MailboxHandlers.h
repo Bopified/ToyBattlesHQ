@@ -31,6 +31,9 @@ namespace Main
 			const Main::ClientData::MailboxMessage& mailboxData)
 		{
 			START_BENCHMARK
+			// Check if the sender is muted - if so, don't allow mailbox communication
+			if (session->getPlayer().isMuted()) return;
+			
 			if (request.getOption() == 2) // option seems to always be 2
 			{
 				auto targetSession = sessionsManager.findSessionByName(mailboxData.nickname);
