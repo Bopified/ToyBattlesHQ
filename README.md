@@ -1,18 +1,3 @@
-
-# Microvolts Emulator 2.0 is available!
-
-After three years of continuous development, and one intense year focused on the 1.0 to 2.0 refactor, the latest version of the emulator is now publicly available!
-The entire project has been refactored to improve clarity, maintainability, and overall structure. Numerous bugs have been fixed, and most previously missing features are now fully functional.
-
-A special thanks to the community, especially those who actively contributed through the ToyBattles project - for your invaluable support, testing, and feedback.
-
-**Microvolts Emulator 2.0** specifically targets **Microvolts client version 1.1** (Surge).
-
-
-
-
-
-
 ## Appendix
 
 ### 1. Project Overview
