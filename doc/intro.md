@@ -24,7 +24,7 @@ This is a glimpse of what we've accomplished through the ToyBattles projects:
 
 For more information you can visit the ToyBattles website at https://toybattles.net/.
 
-### 1.1.1 ToyBattles Team
+### 1.1.1.1 ToyBattles Team
 Considering the efforts that the whole team put onto the project, it's fair to write about each member and how they contributed (or still contribute).
 
 - [SoWeBegin](https://github.com/SoWeBegin): The original author of this Emulator. Contributes to the emulator code & helps managing the ToyBattles server.
@@ -36,7 +36,9 @@ Considering the efforts that the whole team put onto the project, it's fair to w
 - Autumn: Every community ticket is taken care by this (poor) soul. Community events? Check. Player support? Check. Moderation/Event Supporter management? Check.
 - Scayla: Currently unavailable, but worth mentioning. She's been taking care of the Moderators at ToyBattles and specifically served as a community manager.
 - Kixra: She mainly works on the design side. For example, the ToyBattles custom launcher is the result of her own efforts.
-  
+
+*Note* Special mention to our Moderators and Event Supporters who actively support in mantaining a good relationship with the community.
+
 ### 1.1.2 About this emulator
 This is the first public server emulator for MicroVolts, fully written in C++.
 
