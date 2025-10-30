@@ -1,6 +1,6 @@
 # 7.1 The Updater: How the launcher retrieves updates
 
-## Update System Overview
+## 7.1.1 Update System Overview
 
 Starting with version 2.0, the Microvolts updater tool is available for creating client update packages. This document explains:
 
@@ -44,7 +44,7 @@ exe = bin/Microvolts.exe
 - The game executable path is always last
 
 
-## Creating Update Packages
+## 7.1.2 Creating Update Packages
 ### Required folder structure
 Your update server (or website, or whenever you put all your update packages) needs this exact structure:
 ```cpp
@@ -88,7 +88,7 @@ Example:
 </DeltaInfo>
 ```
 
-## Using the updater
+## 7.1.3 Using the updater
 Everything mentioned above is almost automatically done through the `updater.py` utility, that you can find inside `Client/updater.py`.
 You will need to install all the necessary packages for Python.
 
