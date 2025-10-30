@@ -1,6 +1,6 @@
 # 2.1 Changelog from version 1.0 to version 2.0
 
-A lot of things changed and the list is simply too big to fit in a page. I will try to focus on the most important aspects to give an idea how much work was put in the last year (thanks to the community who helped testing too, of course!)
+A lot of things changed and the list is simply too big to fit in a page. Let's try to focus on the most important aspects to give an idea how much work was put in the last years (thanks to the community who helped testing too, of course!)
 
 ## 2.1.1 Complete code refactoring
 One of the main goals of version 2.0 was to clean up the entire codebase — that includes the Main Server, Cast Server, Auth Server, and the Common library.
@@ -14,7 +14,7 @@ Currently, the project has been tested with Windows (MSVC) and Linux (GCC).
 ### Code Organization & Readability
 Version 2.0 changes all that. Things are now much more organized, and the code is way easier to read. If you’re opening the project for the first time, it should be a lot more approachable now.
 
-In 1.0, the logic was often all over the place and pretty hard to understand without spending a lot of time digging. With this new version, I tried to make everything feel more structured and easier to follow, so it’s not just me who can work on this — but anyone who’s interested.
+In 1.0, the logic was often all over the place and pretty hard to understand without spending a lot of time digging. With this new version, we tried to make everything feel more structured and easier to follow, so it’s not just us who can work on this - but anyone who’s interested.
 
 ### Networking performance
 Version 2.0 offers better networking performance with ASIO. Also, most of the server handlers & session management was rewritten with optimization in mind. Many data strucutres were changed:
@@ -25,7 +25,7 @@ Version 2.0 offers better networking performance with ASIO. Also, most of the se
 ### Security improvements & server stability
 The new version also had security improvements in mind.
 - Multiple exploits prevention are now available in this version: prevented various exploits such as room crashes, duplicate items, items disappearing, etc.
-- Anti-SYS flooding system: there were issues with SYS flooding in the ToyBattles project. I thus decided to add a simple anti SYS flooding system.
+- Anti-SYS flooding system: there were issues with SYS flooding in the ToyBattles project. We thus decided to add a simple anti SYS flooding system.
 - No more constant server crashes: a lot of issues related to bad memory management were fixed. The servers in version 2.0 are now much, much more stable and with less crashes than ever!
 - Added 2FA authentication for graded accounts (mandatory), and for normal accounts (if wanted).
   
@@ -50,7 +50,7 @@ Almost all bugs that existed in version 1.0 were fixed:
  ...and much more!
 
 ## 2.1.2 New Features
-I also added a lot of new features in version 2.0!
+We also added a lot of new features in version 2.0!
 - Arena Mode: this is a mode inspired by ToyHeroes, but fully server sided in this project. To enable it, all you need is to be in a room with the "Academy Training Ground" map. You can find examples of Arena Mode on youtube.
 - Assassin Mode: this is a completely new, server-sided mode. It works on Elimination and can be activated while you're the host in a room by using the chat command `/setassassinmode`. Make sure to try it out!
 - Gift System was now added. Game masters can use the `/sendgift` command to send items to players.
@@ -78,7 +78,7 @@ I also added a lot of new features in version 2.0!
 
 ## Miscellaneous
 ### 2.1.3 Database Changes
-Back in version 1.0, the emulator relied on SQLite — which worked, but wasn’t really ideal for a more serious setup. With version 2.0, everything has been moved over to MariaDB, which is a big step up in terms of flexibility and reliability.
+Back in version 1.0, the emulator relied on SQLite - which worked, but wasn’t really ideal for a more serious setup. With version 2.0, everything has been moved over to MariaDB, which is a big step up in terms of flexibility and reliability.
 
 This switch meant a full refactor of how database operations are handled. The cool part? Now you can have multiple servers (Auth, Main, Cast, etc.) all sharing the same database — something that wasn’t really possible or safe before.
 
@@ -88,7 +88,7 @@ Another big change: the client updater is now open source. That means you can us
 ### 2.1.5 External Admin Panel Support
 Version 2.0 also introduces support for external admin panels. In other words, the Main Server now has an API that allows communication with a website or web-based admin interface.
 
-Everything is protected with proper authentication — including user grades and JWT tokens — so only authorized users can access it. Through this system, you can do things like kick, ban, or mute players directly from your panel, without needing to log into the server manually. It’s all covered in the “Website API” chapter coming up.
+Everything is protected with proper authentication, including user grades and JWT tokens, so only authorized users can access it. Through this system, you can do things like kick, ban, or mute players directly from your panel, without needing to log into the server manually. It’s all covered in the “Website API” chapter coming up.
 
 
 ## Next
