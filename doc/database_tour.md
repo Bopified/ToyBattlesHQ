@@ -2,18 +2,18 @@
 
 Version 2.0 of the emulator brings a major upgrade: the database backend has been moved **from SQLite to MariaDB.**
 
-While SQLite was a simple and lightweight solution, it quickly became a bottleneck — especially when multiple servers needed to access the database at the same time.
+While SQLite was a simple and lightweight solution, it quickly became a bottleneck, especially when multiple servers needed to access the database at the same time.
 It also lacked advanced features like proper user management, networked access, and better concurrency handling, which are essential as the project grows.
 
 That said, the overall structure of the database is **still very similar to the previous version**, with a few new additions here and there.
 
 Below is a quick overview of the most important database tables. If you're planning to contribute to the emulator, I strongly recommend **opening the database with a tool like HeidiSQL** to explore everything in detail.
-This isn’t a full walkthrough — I’ll just highlight the key tables and point out some things I think are worth knowing.
+This isn’t a full walkthrough: I’ll just highlight the key tables and point out some things I think are worth knowing.
 
 ### `Users` Table
 This table contains all information regarding a specific player: accountID, usernames, nicknames, passwords, level, kills, experience, to name a few.
-- For security reasons, the password is not in plain text. Instead, you must use SHA216.
-- The 2FA for graded accounts (or even normal ones if you wish) must be setup in this table. The column name is `Secret` and it must be a base32 hash (for example: `MRSG4NJVNZSDKZDS` where the original text was `ddn55nd5dr`).
+- For security reasons, the password is not in plain text. Instead, you must use SHA256.
+- The 2FA for graded accounts (grade >= 1) (or even normal ones if you wish) must be setup in this table. The column name is `Secret` and it must be a base32 hash (for example: `MRSG4NJVNZSDKZDS`). The 2FA is time-based, any application like Google Authenticator will work.
 
 ### `UserItems` Table
 This table contains all information regarding user items. Each user is identified by an accountID, and each row represents an item that a player identified by their accountID has.
