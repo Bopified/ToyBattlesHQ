@@ -32,7 +32,7 @@ Considering the efforts that the whole team put onto the project, it's fair to w
 - [Krymel](https://github.com/orgs/ToyBattles/people/Krymelte): One of the original project members, he's the one behind all the `cgd.dip` changes, additions and modifications. He's also the one who manages the updates for ToyBattles.
 - [OGSapphire](https://github.com/orgs/ToyBattles/people/m1exe): Also one of the original project members, he likes to work on the artistic side. This includes (but isn't limited to) client UI changes, in-game item and UI changes, maps, and much more.
 - [Ren](https://github.com/orgs/ToyBattles/people/RandomMV): Ren is more on the client side. Major client patches and UI changes are all done thanks to his work.
-- Slauj: He's also on the artistic side. He's the one behind new maps but also is very knowledgeable when it gets to the client side.
+- [Slauj](https://github.com/Slauj): He's also on the artistic side. He's the one behind new maps but also is very knowledgeable when it gets to the client side.
 - Autumn: Every community ticket is taken care by this (poor) soul. Community events? Check. Player support? Check. Moderation/Event Supporter management? Check.
 - Scayla: Currently unavailable, but worth mentioning. She's been taking care of the Moderators at ToyBattles and specifically served as a community manager.
 - Kixra: She mainly works on the design side. For example, the ToyBattles custom launcher is the result of her own efforts.
