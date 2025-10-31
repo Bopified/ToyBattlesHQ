@@ -76,3 +76,9 @@
 
 ### 10. Future steps
 - [What's next?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/whats_next.md)
+
+
+## Contacts
+- For info, contributions or bug reports related to the emulator, please open an issue on this repository.
+- For general inquiries, contact us at support@toybattles.net
+- For ToyBattles related issues, contact us on [our discord server](https://discord.gg/toybattles) or via https://toybattles.net/support
