@@ -47,7 +47,6 @@ def update_patch_ini(path, versions, new_version):
     if exe_path:
         config['patch']['exe'] = exe_path
     
-    # Write with preserved order
     with open(path, 'w') as f:
         config.write(f)
 
