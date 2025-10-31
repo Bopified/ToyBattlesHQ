@@ -302,7 +302,7 @@ namespace Main
 
 					std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 					auto mode = room->getRoomSettings().mode;
-					std::uint32_t finalGainedExpWithEvent = mode == Common::Enums::FreeForAll ? (finalGainresponse / 1.3) : finalGainedExp;
+					std::uint32_t finalGainedExpWithEvent = mode == Common::Enums::FreeForAll ? (finalGainedExp / 1.3) : finalGainedExp;
 					std::uint32_t finalGainedMpWithEvent = mode == Common::Enums::FreeForAll ? (finalGainedMp / 1.3) : finalGainedMp;
 
 					if (now <= expMpBonusInfo.endDate)
