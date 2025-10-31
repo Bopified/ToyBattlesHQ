@@ -20,12 +20,8 @@ namespace Main
 		{
 			if (auto accountInfo = handleAuthorization(request, session, sessionsManager.getAllSessions().size(), isServerOffline, scheduler, isPublic, reportManager); accountInfo)
 			{
-				START_BENCHMARK
-
-					handleAccountInformation(request, session, sessionsManager, scheduler, *accountInfo, timeSinceLastServerRestart, serverId);
-
+				handleAccountInformation(request, session, sessionsManager, scheduler, *accountInfo, timeSinceLastServerRestart, serverId);
 				session->sendInventory(*reinterpret_cast<const std::uint32_t*>(request.getData()));
-
 				handleAccountInformation(request, session, sessionsManager, scheduler, *accountInfo, timeSinceLastServerRestart, serverId, 59);
 
 				session->sendWeeklyReward();
@@ -43,9 +39,6 @@ namespace Main
 					Main::Handlers::handleModeEvents(request, session, scheduler);
 					Main::Handlers::handleMapEvents(request, session, scheduler);
 				}
-
-
-				END_BENCHMARK(handleInitialPlayerInfos, session)
 			}
 		}
 	}
