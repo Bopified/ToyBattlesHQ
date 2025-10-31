@@ -1,8 +1,10 @@
 ![C++ CI](https://github.com/SoWeBegin/ToyBattlesHQ/actions/workflows/ci.yml/badge.svg)
 
 
-<img src="https://toybattles.net/main-logo.gif">
 ## Appendix
+
+<img src="https://github.com/user-attachments/assets/035e997b-65d6-43d7-90bd-4d961d7a1d61" width="300" alt="tb-ezgif com-crop" align="right" style="margin-left: 10px;">
+
 ### 1. Project Overview
 - [1.1 What is this project about?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
   - [1.1.1 ToyBattles](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
