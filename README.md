@@ -1,7 +1,5 @@
 ![C++ CI](https://github.com/SoWeBegin/ToyBattlesHQ/actions/workflows/ci.yml/badge.svg)
-
 ![Release](https://img.shields.io/github/v/release/SoWeBegin/ToyBattlesHQ)
-
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
 ![Language](https://img.shields.io/badge/language-C++-blue.svg)
