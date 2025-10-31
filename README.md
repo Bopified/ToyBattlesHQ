@@ -15,8 +15,8 @@
 
 ## Appendix
 
-<img src="https://github.com/user-attachments/assets/501e04cc-7271-4efd-bdc7-539f19a5a02b" width="240" alt="microvolts surge" align="right" style="margin-left: 10px;">
-<img src="https://github.com/user-attachments/assets/035e997b-65d6-43d7-90bd-4d961d7a1d61" width="300" alt="tb-ezgif com-crop" align="right" style="margin-left: 10px;">
+<img src="https://github.com/user-attachments/assets/501e04cc-7271-4efd-bdc7-539f19a5a02b" width="190" alt="microvolts surge" align="right" style="margin-left: 10px;">
+<img src="https://github.com/user-attachments/assets/035e997b-65d6-43d7-90bd-4d961d7a1d61" width="250" alt="tb-ezgif com-crop" align="right" style="margin-left: 10px;">
 
 ### 1. Project Overview
 - [1.1 What is this project about?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
