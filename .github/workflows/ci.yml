@@ -17,6 +17,7 @@ jobs:
         with:
           compiler: gcc 
           vcpkg: true
+          vcpkgArguments: install
           cmake: true
           ninja: true
           cppcheck: true
