@@ -28,10 +28,10 @@ For more information you can visit the ToyBattles website at https://toybattles.
 Considering the efforts that the whole team put onto the project, it's fair to write about each member and how they contributed (or still contribute).
 
 - [SoWeBegin](https://github.com/SoWeBegin): The original author of this Emulator. Contributes to the emulator code & helps managing the ToyBattles server.
-- [Mikael](https://github.com/orgs/ToyBattles/people/Mikael): An essential part of the ToyBattles project. Actively contributes to the emulator, manages the ToyBattles server, and created a bunch of essential things (like the website & admin panel) for ToyBattles.
-- [Krymel](https://github.com/orgs/ToyBattles/people/Krymelte): One of the original project members, he's the one behind all the `cgd.dip` changes, additions and modifications. He's also the one who manages the updates for ToyBattles.
-- [OGSapphire](https://github.com/orgs/ToyBattles/people/m1exe): Also one of the original project members, he likes to work on the artistic side. This includes (but isn't limited to) client UI changes, in-game item and UI changes, maps, and much more.
-- [Ren](https://github.com/orgs/ToyBattles/people/RandomMV): Ren is more on the client side. Major client patches and UI changes are all done thanks to his work.
+- [Mikael](https://github.com/Mikael): An essential part of the ToyBattles project. Actively contributes to the emulator, manages the ToyBattles server, and created a bunch of essential things (like the website & admin panel) for ToyBattles.
+- [Krymel](https://github.com/Krymelte): One of the original project members, he's the one behind all the `cgd.dip` changes, additions and modifications. He's also the one who manages the updates for ToyBattles.
+- [OGSapphire](https://github.com/m1exe): Also one of the original project members, he likes to work on the artistic side. This includes (but isn't limited to) client UI changes, in-game item and UI changes, maps, and much more.
+- [Ren](https://github.com/RandomMV): Ren is more on the client side. Major client patches and UI changes are all done thanks to his work.
 - [Slauj](https://github.com/Slauj): He's also on the artistic side. He's the one behind new maps but also is very knowledgeable when it gets to the client side.
 - [Autumn](https://github.com/GrandpaAutumn): Every community ticket is taken care by this (poor) soul. Community events? Check. Player support? Check. Moderation/Event Supporter management? Check.
 - Scayla: Currently unavailable, but worth mentioning. She's been taking care of the Moderators at ToyBattles and specifically served as a community manager.
