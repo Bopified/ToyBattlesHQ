@@ -19,25 +19,9 @@ jobs:
           cmake: true
           ninja: true
           vcpkg: true
-
-      - name: Install ccache
-        run: sudo apt-get update && sudo apt-get install -y ccache
-
-      - name: Cache ccache
-        uses: actions/cache@v4
-        with:
-          path: ~/.ccache
-          key: ${{ runner.os }}-ccache-${{ github.ref_name }}
-          restore-keys: |
-            ${{ runner.os }}-ccache-
-
+          
       - name: Configure
-        run: |
-          export CC="ccache gcc"
-          export CXX="ccache g++"
-          cmake -B build \
-                -DCMAKE_BUILD_TYPE=Release \
-                -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=/usr/local/share/vcpkg/scripts/buildsystems/vcpkg.cmake
 
       - name: Build
         run: cmake --build build --config Release
