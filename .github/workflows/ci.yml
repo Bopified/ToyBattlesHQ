@@ -12,18 +12,25 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Cache vcpkg
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/vcpkg
+            build/vcpkg_installed
+          key: ${{ runner.os }}-vcpkg-${{ hashFiles('vcpkg.json') }}
+
       - name: Setup C++
         uses: aminya/setup-cpp@v1
         with:
-          compiler: gcc 
-          vcpkg: true
-          vcpkgArguments: install
+          compiler: gcc
           cmake: true
           ninja: true
-          cppcheck: true
+          vcpkg: true
+          ccache: true
 
-      - name: Configure project
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_TOOLCHAIN_FILE=${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake
 
       - name: Build project
-        run: cmake --build build --config Release
+        run: cmake --build build --config Release --parallel
