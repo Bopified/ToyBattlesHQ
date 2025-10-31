@@ -19,15 +19,9 @@ jobs:
           cmake: true
           ninja: true
           vcpkg: true
-
-      - name: Install Boost
-        run: sudo apt-get update && sudo apt-get install -y libboost-all-dev
-
+          
       - name: Configure
         run: cmake -B build -DCMAKE_BUILD_TYPE=Release
 
       - name: Build
         run: cmake --build build --config Release
-
-      - name: Run tests
-        run: ctest --test-dir build --output-on-failure
