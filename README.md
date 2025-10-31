@@ -1,5 +1,7 @@
-<img src="https://toybattles.net/main-logo.gif">
+![C++ CI](https://github.com/SoWeBegin/ToyBattlesHQ/actions/workflows/cpp-ci.yml/badge.svg)
 
+
+<img src="https://toybattles.net/main-logo.gif">
 ## Appendix
 ### 1. Project Overview
 - [1.1 What is this project about?](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/intro.md)
