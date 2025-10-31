@@ -1,4 +1,4 @@
-![C++ CI](https://github.com/SoWeBegin/ToyBattlesHQ/actions/workflows/cpp-ci.yml/badge.svg)
+![C++ CI](https://github.com/SoWeBegin/ToyBattlesHQ/actions/workflows/ci.yml/badge.svg)
 
 
 <img src="https://toybattles.net/main-logo.gif">
