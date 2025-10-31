@@ -1,5 +1,19 @@
 ![C++ CI](https://github.com/SoWeBegin/ToyBattlesHQ/actions/workflows/ci.yml/badge.svg)
 
+![Release](https://img.shields.io/github/v/release/SoWeBegin/ToyBattlesHQ)
+
+![License](https://img.shields.io/badge/license-MIT-green.svg)
+
+![Language](https://img.shields.io/badge/language-C++-blue.svg)
+![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows-brightgreen)
+![vcpkg](https://img.shields.io/badge/vcpkg-supported-brightgreen)
+
+![Status](https://img.shields.io/badge/status-active-brightgreen)
+![Commits](https://img.shields.io/github/commit-activity/m/SoWeBegin/ToyBattlesHQ)
+
+![Stars](https://img.shields.io/github/stars/SoWeBegin/ToyBattlesHQ)
+![Forks](https://img.shields.io/github/forks/SoWeBegin/ToyBattlesHQ)
+![Contributors](https://img.shields.io/github/contributors/SoWeBegin/ToyBattlesHQ)
 
 ## Appendix
 
