@@ -13,8 +13,14 @@ This isn’t a full walkthrough: I’ll just highlight the key tables and point 
 ### `Users` Table
 This table contains all information regarding a specific player: accountID, usernames, nicknames, passwords, level, kills, experience, to name a few.
 - For security reasons, the password is not in plain text. Instead, you must use SHA256.
-- The 2FA for graded accounts (grade >= 1) (or even normal ones if you wish) must be setup in this table. The column name is `Secret` and it must be a base32 hash (for example: `MRSG4NJVNZSDKZDS`). The 2FA is time-based, any application like Google Authenticator will work.
+- The 2FA for graded accounts (grade > 1) (or even normal ones if you wish) must be setup in this table. The column name is `Secret` and it must be a base32 hash (for example: `MRSG4NJVNZSDKZDS`). The 2FA is time-based, any application like Google Authenticator will work.
 
+**Note** Graded accounts require mandatory 2FA for security reasons.
+- Grade 1: Normal users - 2fa not mandatory. (lowest grade)
+- Grade 2: Event Supporter 
+- Grade 3: Moderator
+- Grade 4: Game Master (GM)
+- Grade 7: Developer  
 ### `UserItems` Table
 This table contains all information regarding user items. Each user is identified by an accountID, and each row represents an item that a player identified by their accountID has.
 - `Stocks` represents how much the item can be used. For example: respawn items may be used 5 times, or 10 times depending on which itemID is used. This means that the Stock value will be 5 or 10 respectively.
