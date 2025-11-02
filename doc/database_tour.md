@@ -20,7 +20,13 @@ This table contains all information regarding a specific player: accountID, user
 - Grade 2: Event Supporter 
 - Grade 3: Moderator
 - Grade 4: Game Master (GM)
-- Grade 7: Developer  
+- Grade 7: Developer
+
+Notes:
+- Higher grade means higher power & more commands.
+- GM and DEV have effectively the same commsnds. DEV grade is somewhat bugged, we suggest using the GM grade as the highest one instead.
+
+  
 ### `UserItems` Table
 This table contains all information regarding user items. Each user is identified by an accountID, and each row represents an item that a player identified by their accountID has.
 - `Stocks` represents how much the item can be used. For example: respawn items may be used 5 times, or 10 times depending on which itemID is used. This means that the Stock value will be 5 or 10 respectively.
