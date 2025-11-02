@@ -24,7 +24,7 @@ This table contains all information regarding a specific player: accountID, user
 
 Notes:
 - Higher grade means higher power & more commands.
-- GM and DEV have effectively the same commsnds. DEV grade is somewhat bugged, we suggest using the GM grade as the highest one instead.
+- GM and DEV have effectively the same commands. DEV grade is somewhat bugged, we suggest using the GM grade as the highest one instead.
 
   
 ### `UserItems` Table
