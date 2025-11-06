@@ -16,7 +16,7 @@ Also, the original Surge client will not have the correct error messages in cert
 ### Start the client
 To launch the game, you have two options:
 - Run the `Launcher.bat` script, or
-- Open the client folder, go to /Bin, and run MicroVolts.exe.
+- Open the client folder, navigate to the `Bin` folder and run MicroVolts.exe.
 **Do not** run `Launcher.exe`, since that will try to connect to the ToyBattles public servers!
 
 # Final Checklist: Starting Everything Up
