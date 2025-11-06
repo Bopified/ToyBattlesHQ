@@ -32,5 +32,7 @@ Username: `test`
 
 Password: `test`
 
+After logging in, select the first channel - that's where your server is running if you used the default `config.ini` file provided on this repository.
+
 ## Next
 [4.1 Config setup for localhost](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_localhost.md)
