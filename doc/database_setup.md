@@ -40,7 +40,8 @@ Once MariaDB is installed:
 
 - Log in using your root credentials.
 
-- Run this command to create the database: `CREATE DATABASE microvolts-db;`
+- Run this command to create the database: `CREATE DATABASE `microvolts-db`;
+
 
 ### Step 3: Import the Tables
 You’ve been provided with a file called `microvolts-db.`. This file contains the entire database structure and necessary insertions. You can find it in the root directory.
@@ -55,7 +56,7 @@ To import it:
 - Open your database in the GUI
 - Open the SQL file `microvolts-db`
 - Run the whole script
-This will create all tables and insert initial data (like items, shop content, etc.)
+This will create all tables and insert initial data (like items, s`hop content, etc.)
 
 ### Step 4: Set the Password via Environment Variable
 For security, the server expects your database password to be stored in an environment variable (not directly in the config).
