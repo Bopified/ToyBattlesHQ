@@ -16,7 +16,7 @@
 ## Appendix
 
 <img src="https://github.com/user-attachments/assets/501e04cc-7271-4efd-bdc7-539f19a5a02b" width="190" alt="microvolts surge" align="left" style="margin-left: 10px;">
-<img src="https://github.com/user-attachments/assets/035e997b-65d6-43d7-90bd-4d961d7a1d61" width="250" alt="tb-ezgif com-crop" >
+<img src="https://github.com/user-attachments/assets/035e997b-65d6-43d7-90bd-4d961d7a1d61" width="230" alt="tb-ezgif com-crop" >
 
 
 ### 1. Project Overview
