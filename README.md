@@ -45,7 +45,6 @@
   - [3.3.2 Linux Setup](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/database_setup.md)
 - [3.4 Setting up the client](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_setup.md)
   - [3.4.1 Downloading the Client](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_setup.md)
-  - [3.4.2 Installing the `cgd.dip` archive with localhost](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/client_setup.md)
     
 ### 4. Configuration Examples
 - [4.1 Config setup for localhost](https://github.com/SoWeBegin/MicrovoltsEmulator/blob/mv1.1_2.0/doc/example_localhost.md)
