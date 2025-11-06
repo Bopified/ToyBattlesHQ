@@ -40,7 +40,10 @@ Once MariaDB is installed:
 
 - Log in using your root credentials.
 
-- Run this command to create the database: `CREATE DATABASE `microvolts-db`;
+- Run this command to create the database:
+```cpp
+CREATE DATABASE `microvolts-db`;
+```
 
 
 ### Step 3: Import the Tables
