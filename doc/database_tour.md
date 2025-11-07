@@ -16,8 +16,8 @@ This table contains all information regarding a specific player: accountID, user
 - The 2FA for graded accounts (grade > 1) (or even normal ones if you wish) must be setup in this table. The column name is `Secret` and it must be a base32 hash (for example: `MRSG4NJVNZSDKZDS`). The 2FA is time-based, any application like Google Authenticator will work.
 
 #### Examples
-- To change the login and password for the "test" account, use `UPDATE Users SET Login="NEW_LOGIN", Password="NEW_SHA256_PASSWORD" WHERE Username="test".
-- `. You can convert your plain-text password to SHA256 by using any online tools.
+- To change the login and password for the "test" account, use `UPDATE Users SET Login="NEW_LOGIN", Password="NEW_SHA256_PASSWORD" WHERE Username="test"`.
+- You can convert your plain-text password to SHA256 by using any online tools.
 - To give yourself ingame currency: `UPDATE Users SET MicroPoints=50000, RockTotens=50000, Coupons=250 WHERE Username="test"`
 - To create a new account: `INSERT INTO users (Username, Password, Nickname) VALUES ('test1', SHA2('test1', 256), 'test1');`
 
