@@ -54,7 +54,7 @@ This table contains all information regarding user items. Each user is identifie
 
 You generally don't need to manually add user items manually on the database since there's in-game commands for that. Use the `/?` or `/commands` in the ingame chat to view the available commands for your current grade.
 
-However, sometimes it may be useful to delete all existing items for an account. In that case, you can use: `DELETE FROM UserItems WHERE AccountID = (SELECT AccountID FROM Users WHERE Username="YOUR_ACCOUNT_USERNAME").
+However, sometimes it may be useful to delete all existing items for an account. In that case, you can use: `DELETE FROM UserItems WHERE AccountID = (SELECT AccountID FROM Users WHERE Username="YOUR_ACCOUNT_USERNAME")`.
 
 ### `ItemLogs` Table
 This table was added in version 2.0 to keep track of items that may have been lost by the players for whatever reasons (client crashing as an example).
