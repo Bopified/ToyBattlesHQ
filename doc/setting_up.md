@@ -68,7 +68,11 @@ Defines the API endpoint used for admin panel or external requests.
 ### [Client]
 Used for version checking during client login.
 
-**ClientVersion**: The version string expected by the servers (e.g., 1.1.1).
+**ClientVersion**: The version string expected by the servers (e.g., 0.0.3 for the ToyBattles Client).
+#### Important: 
+The servers check the ClientVersion. If you specify a client version (e.g. 1.1.1) but your client is actually using a different version than what you specified, you will **not be able to login** on the main servers with **non-graded accounts**. At ToyBattles we use this to force players to use the most recently updated client.
+
+Graded accounts don't have this limitation, this allows graded accounts to enter the server even with different clients, for example for testing purposes.
 
 # ⚠️ Notes & Warnings
 You can configure up to 9 Main Servers and 9 Cast Servers.
