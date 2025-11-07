@@ -15,22 +15,46 @@ This table contains all information regarding a specific player: accountID, user
 - For security reasons, the password is not in plain text. Instead, you must use SHA256.
 - The 2FA for graded accounts (grade > 1) (or even normal ones if you wish) must be setup in this table. The column name is `Secret` and it must be a base32 hash (for example: `MRSG4NJVNZSDKZDS`). The 2FA is time-based, any application like Google Authenticator will work.
 
-**Note** Graded accounts require mandatory 2FA for security reasons.
+#### Examples
+- To change the login and password for the "test" account, use `UPDATE Users SET Login="NEW_LOGIN", Password="NEW_SHA256_PASSWORD" WHERE Username="test". You can convert your plain-text password to SHA256 by using any online tools.
+- To give yourself ingame currency: `UPDATE Users SET MicroPoints=50000, RockTotens=50000, Coupons=250 WHERE Username="test"`
+- To create a new account: `INSERT INTO users (Username, Password, Nickname) VALUES ('test1', SHA2('test1', 256), 'test1');`
+
+#### Graded accounts require mandatory 2FA. To enable it:
+1) Generate a BASE32 hash [https://tools.chilkat.io/random?utm_source=chatgpt.com#macResult](here) (Use "20 bytes", select encoding "Base32". Output example: `57PAT425JLDUQGVXUFYFPTRMBWTSLS3M`
+2) Create a new Google Authenticator (or any other app you may use on your mobile device) time-based token using the generated base32 string (in our example, `57PAT425JLDUQGVXUFYFPTRMBWTSLS3M`).
+3) Set the Secret key in the database: `UPDATE Users SET Secret="YOUR_BASE32_STRING_HERE"`. In our example, this would be `UPDATE Users SET Secret="57PAT425JLDUQGVXUFYFPTRMBWTSLS3M"`.
+4) 2FA is now setup. When you login, the first password must be your normal password. The client will then prompt you to insert your 2FA token (that you can see in your mobile application like Google Authenticator) on the next login. If either the password or token is wrong, you will have to start again by inserting your password.
+   
+**Note** The following is what each user grade is.
 - Grade 1: Normal users - 2fa not mandatory. (lowest grade)
 - Grade 2: Event Supporter 
 - Grade 3: Moderator
 - Grade 4: Game Master (GM)
 - Grade 7: Developer
 
+All grades above 1 require mandatory 2FA. You won't be able to login otherwise since the server checks this. (This may be added as an optional feature that can be disabled in the future).
+
 Notes:
 - Higher grade means higher power & more commands.
 - GM and DEV have effectively the same commands. DEV grade is somewhat bugged, we suggest using the GM grade as the highest one instead.
+- The `Nickname` can be at maximum 16 characters.
 
-  
+#### Clan Creation
+1) First, add a new clan in the `Clans` Table: `"INSERT INTO Clans (ClanId, Clanname, ClanFrontIcon, ClanBackIcon) VALUES (1, "TestClan", 2, 4)"`
+2) Next, update the user's clan so it references the newly created clan: `"UPDATE Users ClanID = 1, ClanMemberType = "CaptainA" WHERE Username = ?"`
+- Note that in the above examples, we used the same ClanID in both queries!
+- Also note that ClanID is unique. Two clans cannot have the same ClanID, of course.
+- Finally, "ClanMemberType" is used only by the website (if you make one). Captains can for example accept new clan members or kick existing ones.
+
 ### `UserItems` Table
 This table contains all information regarding user items. Each user is identified by an accountID, and each row represents an item that a player identified by their accountID has.
 - `Stocks` represents how much the item can be used. For example: respawn items may be used 5 times, or 10 times depending on which itemID is used. This means that the Stock value will be 5 or 10 respectively.
 - ItemDuration is a unix timestamp. `0` means that the item is unlimited.
+
+You generally don't need to manually add user items manually on the database since there's in-game commands for that. Use the `/?` or `/commands` in the ingame chat to view the available commands for your current grade.
+
+However, sometimes it may be useful to delete all existing items for an account. In that case, you can use: `DELETE FROM UserItems WHERE AccountID = (SELECT AccountID FROM Users WHERE Username="YOUR_ACCOUNT_USERNAME").
 
 ### `ItemLogs` Table
 This table was added in version 2.0 to keep track of items that may have been lost by the players for whatever reasons (client crashing as an example).
