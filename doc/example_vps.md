@@ -43,7 +43,7 @@ Ip = 199.222.32.3
 Port = 8080
 
 [Client]
-ClientVersion = 1.1.1
+ClientVersion = 0.0.3 # For ToyBattles Client in this repository; for original MV Surge client use 1.1.1
 ```
 
 
