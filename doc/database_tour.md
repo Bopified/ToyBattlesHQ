@@ -21,9 +21,9 @@ This table contains all information regarding a specific player: accountID, user
 - To create a new account: `INSERT INTO users (Username, Password, Nickname) VALUES ('test1', SHA2('test1', 256), 'test1');`
 
 #### Graded accounts require mandatory 2FA. To enable it:
-1) Generate a BASE32 hash [https://tools.chilkat.io/random?utm_source=chatgpt.com#macResult](here) (Use "20 bytes", select encoding "Base32". Output example: `57PAT425JLDUQGVXUFYFPTRMBWTSLS3M`
-2) Create a new Google Authenticator (or any other app you may use on your mobile device) time-based token using the generated base32 string (in our example, `57PAT425JLDUQGVXUFYFPTRMBWTSLS3M`).
-3) Set the Secret key in the database: `UPDATE Users SET Secret="YOUR_BASE32_STRING_HERE"`. In our example, this would be `UPDATE Users SET Secret="57PAT425JLDUQGVXUFYFPTRMBWTSLS3M"`.
+1) Generate a BASE32 hash (for example here: https://tools.chilkat.io/random?utm_source=chatgpt.com) (Use "10 bytes", select encoding "Base32". Output example: `OUNYPQNKWG5FMKYK`
+2) Create a new Google Authenticator (or any other app you may use on your mobile device) time-based token using the generated base32 string (in our example, `OUNYPQNKWG5FMKYK`).
+3) Set the Secret key in the database: `UPDATE Users SET Secret="YOUR_BASE32_STRING_HERE"`. In our example, this would be `UPDATE Users SET Secret="OUNYPQNKWG5FMKYK"`.
 4) 2FA is now setup. When you login, the first password must be your normal password. The client will then prompt you to insert your 2FA token (that you can see in your mobile application like Google Authenticator) on the next login. If either the password or token is wrong, you will have to start again by inserting your password.
    
 **Note** The following is what each user grade is.
