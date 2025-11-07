@@ -80,7 +80,7 @@ Ip = 127.0.0.1               # We don't have a website / admin panel
 Port = 8080
 
 [Client]
-ClientVersion = 1.1.1
+ClientVersion = 0.0.3 # For ToyBattles Client in this repository; for original MV Surge client use 1.1.1
 ```
 
 ## Setup (config.ini) for the seoond VPS
@@ -131,7 +131,7 @@ Ip = 127.0.0.1               # We don't have a website / admin panel
 Port = 8080
 
 [Client]
-ClientVersion = 1.1.1
+ClientVersion = 0.0.3 # For ToyBattles Client in this repository; for original MV Surge client use 1.1.1
 ```
 
 
