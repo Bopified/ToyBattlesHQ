@@ -117,7 +117,7 @@ You can check if it's running with `sudo systemctl status mariadb`
 - `sudo mariadb -u root`
 Then:
 ```cpp
-CREATE DATABASE microvolts-db;
+CREATE DATABASE `microvolts-db`;
 ```
 And finally `EXIT;`
 
