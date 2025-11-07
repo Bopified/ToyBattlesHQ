@@ -74,6 +74,8 @@ The servers check the ClientVersion. If you specify a client version (e.g. 1.1.1
 
 Graded accounts don't have this limitation, this allows graded accounts to enter the server even with different clients, for example for testing purposes.
 
+Note that for ToyBattles Client (on the Release section on this Repository), the client version is 0.0.3. If you decide to use the original Microvolts Surge client (although discouraged) you will need to use version 1.1.1.
+
 # ⚠️ Notes & Warnings
 You can configure up to 9 Main Servers and 9 Cast Servers.
 
