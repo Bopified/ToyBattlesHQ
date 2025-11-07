@@ -38,16 +38,16 @@ Once MariaDB is installed:
 
 - Open the MariaDB command line or a GUI like HeidiSQL, DBeaver, or MySQL Workbench.
 
-- Log in using your root credentials.
+- Log in using your root credentials. In the MariaDB command line simply use use `mysql -u root -p`.
 
-- Run this command to create the database:
+- Then run this command to create the database:
 ```cpp
 CREATE DATABASE `microvolts-db`;
 ```
 
 
 ### Step 3: Import the Tables
-You’ve been provided with a file called `microvolts-db.`. This file contains the entire database structure and necessary insertions. You can find it in the root directory.
+You’ve been provided with a file called `microvolts-db.` This file contains the entire database structure and necessary insertions. You can find it in the root directory.
 
 To import it:
 #### Option A – Using Command Line
@@ -56,10 +56,13 @@ To import it:
 (You’ll be prompted to enter your root password)
 
 #### Option B – Using GUI (e.g., HeidiSQL)
-- Open your database in the GUI
-- Open the SQL file `microvolts-db`
-- Run the whole script
-This will create all tables and insert initial data (like items, s`hop content, etc.)
+- Open your database in the GUI and select your database `microvolts-db` created in the previous points (if you don't see it, click on the small "reload" button first)
+- Click File and then "Run SQL File".
+- Run the resulting queries.
+- If any message asks you to auto-detect file encoding, select Yes.
+
+This will create all tables and insert initial data (like items, s`hop content, etc.).
+You can check if it was successful by trying the query `SELECT * FROM Users`. There should be exactly 1 resulting row.
 
 ### Step 4: Set the Password via Environment Variable
 For security, the server expects your database password to be stored in an environment variable (not directly in the config).
@@ -112,7 +115,9 @@ You can check if it's running with `sudo systemctl status mariadb`
 
 ### Step 2: Create the database
 - `sudo mariadb -u root`
-- `CREATE DATABASE microvolts-db;`
+- ```cpp
+CREATE DATABASE microvolts-db;
+```
 - `EXIT;`
 
 ### Step 3: Import the tables
