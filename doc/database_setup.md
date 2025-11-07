@@ -115,10 +115,11 @@ You can check if it's running with `sudo systemctl status mariadb`
 
 ### Step 2: Create the database
 - `sudo mariadb -u root`
-- ```cpp
+Then:
+```cpp
 CREATE DATABASE microvolts-db;
 ```
-- `EXIT;`
+And finally `EXIT;`
 
 ### Step 3: Import the tables
 `mysql -u root -p microvolts-db < /path/to/microvolts-db.sql` (you can find `microvolts-db` in this repository at the root directory)
