@@ -92,6 +92,13 @@ namespace Main
 				{ // 1. Check password - mods/tester/gm can join in rooms with passwords
 					std::memcpy(roomInfo.password, room->getPassword().c_str(), Common::Constants::maxPassword);
 				}
+				// Fix: Check if room has password and player did not input any password, deny access
+				else if (roomSettings.hasPassword && !hasInputtedPassword)
+				{
+					response.setExtra(RoomJoinExtra::JOIN_INVALID_PASSWORD);
+					session->asyncWrite(response);
+					return;
+				}
 				else if (hasInputtedPassword && roomSettings.hasPassword && room->getPassword() != std::string{ requestStructure.password })
 				{
 					response.setExtra(RoomJoinExtra::JOIN_INVALID_PASSWORD);
@@ -99,13 +106,6 @@ namespace Main
 					return;
 				}
 
-				// Fix: Check if room has password and player did not input any password, deny access
-				if (roomSettings.hasPassword && !hasInputtedPassword)
-				{
-					response.setExtra(RoomJoinExtra::JOIN_INVALID_PASSWORD);
-					session->asyncWrite(response);
-					return;
-				}
 				
 				bool joinedAsObserver = false;
 				if (!joinInvisible && room->isRoomFullObserverExcluded())
