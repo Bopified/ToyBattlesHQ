@@ -79,13 +79,6 @@ namespace Main
 				auto roomInfo = room->getRoomJoinInfo();
 				const auto& roomSettings = room->getRoomSettings();
 
-				// Fix: Check if room has password and player did not input any password, deny access
-				if (roomSettings.hasPassword && !hasInputtedPassword)
-				{
-					response.setExtra(RoomJoinExtra::JOIN_INVALID_PASSWORD);
-					session->asyncWrite(response);
-					return;
-				}
 				
 				if (roomJoinCheckPassword)
 				{
@@ -106,6 +99,14 @@ namespace Main
 					return;
 				}
 
+				// Fix: Check if room has password and player did not input any password, deny access
+				if (roomSettings.hasPassword && !hasInputtedPassword)
+				{
+					response.setExtra(RoomJoinExtra::JOIN_INVALID_PASSWORD);
+					session->asyncWrite(response);
+					return;
+				}
+				
 				bool joinedAsObserver = false;
 				if (!joinInvisible && room->isRoomFullObserverExcluded())
 				{ // 2. Check whether the room is full. If so, try to join the observer team if it isn't full too. Otherwise, one cannot enter the room
