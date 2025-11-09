@@ -79,7 +79,14 @@ namespace Main
 				auto roomInfo = room->getRoomJoinInfo();
 				const auto& roomSettings = room->getRoomSettings();
 
-
+				// Fix: Check if room has password and player did not input any password, deny access
+				if (roomSettings.hasPassword && !hasInputtedPassword)
+				{
+					response.setExtra(RoomJoinExtra::JOIN_INVALID_PASSWORD);
+					session->asyncWrite(response);
+					return;
+				}
+				
 				if (roomJoinCheckPassword)
 				{
 					response.setExtra(RoomJoinExtra::JOIN_ASK_PASSWORD);
