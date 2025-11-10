@@ -140,13 +140,13 @@ namespace Main
             void readRequest()
             {
                 try {
-                boost::beast::http::read(m_socket, m_buffer, m_request); 
+                   boost::beast::http::read(m_socket, m_buffer, m_request); 
                 } catch(...) {
-                std::cerr << "Invalid HTTP request!" << std::endl;
+                   std::cerr << "Invalid HTTP request!" << std::endl;
                 return;
             }
-    handleRequest(); 
-    m_socket.close(); 
+                handleRequest(); 
+                m_socket.close(); 
             }
 
             void handleRequest()
