@@ -143,8 +143,8 @@ namespace Main
                    boost::beast::http::read(m_socket, m_buffer, m_request); 
                 } catch(...) {
                    std::cerr << "Invalid HTTP request!" << std::endl;
-                return;
-            }
+                   return;
+                }
                 handleRequest(); 
                 m_socket.close(); 
             }
