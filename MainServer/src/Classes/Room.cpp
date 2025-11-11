@@ -211,7 +211,7 @@ namespace Main
 				container.erase(container.begin() + targetPlayerIdx);
 			}
 		}
-t	rebuildPlayerIndexMaps();
+		rebuildPlayerIndexMaps();
 
 		// Refactored
 		void Room::removeAllPlayers(std::uint32_t extra)
@@ -231,7 +231,7 @@ t	rebuildPlayerIndexMaps();
 
 			removePlayers(m_players);
 			removePlayers(m_observerPlayers);
-t	rebuildPlayerIndexMaps();
+		rebuildPlayerIndexMaps();
 		}
 
 		void Room::removeAllObserverPlayers(std::uint32_t extra)
@@ -256,7 +256,7 @@ t	rebuildPlayerIndexMaps();
 				};
 
 			removePlayers(m_observerPlayers);
-t	rebuildPlayerIndexMaps();
+		rebuildPlayerIndexMaps();
 		}
 
 		// Refactored
@@ -566,8 +566,9 @@ t	rebuildPlayerIndexMaps();
 				session->leaveRoom();
 			}
 			m_players.clear();
-t	rebuildPlayerIndexMaps();
+
 			m_observerPlayers.clear();
+		rebuildPlayerIndexMaps();
 		}
 
 		// Refactored
@@ -1493,8 +1494,6 @@ t	rebuildPlayerIndexMaps();
 			return candidates[dist(gen)];
 		}
 	}
-}
-
 
 	void Room::rebuildPlayerIndexMaps()
 	{

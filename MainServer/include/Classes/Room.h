@@ -85,6 +85,7 @@ namespace Main
 			void removePlayerFromRoomAndMatch(std::uint32_t playerIdx, Main::Structures::UniqueId& originalHostUniqueId, std::uint32_t extra = 1);
 			void setStateFor(std::pair<Main::Structures::RoomPlayerInfo, std::weak_ptr<Main::Network::Session>>& player, Common::Enums::PlayerState state);
 			void toMatchExceptSelfHelper(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> session);
+		void rebuildPlayerIndexMaps();
 
 			void toMatchDeadExceptSelfHelper(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> givenSession, auto& players)
 			{
