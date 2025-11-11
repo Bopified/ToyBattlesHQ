@@ -22,19 +22,17 @@
 
 #include <algorithm>
 #include <random>
-#include <cstring> 
+#include <cstring>
 
 namespace Main
 {
 	namespace Classes
 	{
 		// Refactored
-		Room::Room(const std::string& title, const Main::Structures::RoomSettings& settings,
-			const Main::Structures::RoomPlayerInfo& player,
-			std::shared_ptr<Main::Network::Session> session, bool isClanRoom)
-			: m_title{ title }
-			, m_settings{ settings }
-			, m_isClanRoom{ isClanRoom }
+		Room::Room(const std::string &title, const Main::Structures::RoomSettings &settings,
+				   const Main::Structures::RoomPlayerInfo &player,
+				   std::shared_ptr<Main::Network::Session> session, bool isClanRoom)
+			: m_title{title}, m_settings{settings}, m_isClanRoom{isClanRoom}
 		{
 			if (isClanRoom)
 				m_number = Main::Classes::RoomNumberGenerator<Main::Enums::RoomType::Clan>::getInstance().generate().value_or(0);
@@ -50,23 +48,25 @@ namespace Main
 		// Refactored
 		Main::Structures::RoomPlayerInfo Room::createRoomPlayerInfo(std::shared_ptr<Main::Network::Session> session, std::uint32_t team) const
 		{
-			const auto& accountInfo = session->getAccountInfo();
-			return Main::Structures::RoomPlayerInfo{ accountInfo.uniqueId, static_cast<std::uint32_t>(accountInfo.latestSelectedCharacter),
-				team, static_cast<std::uint32_t>(accountInfo.playerLevel), accountInfo.nickname, Common::Enums::STATE_WAITING, session->getPlayer().getPing() };
+			const auto &accountInfo = session->getAccountInfo();
+			return Main::Structures::RoomPlayerInfo{accountInfo.uniqueId, static_cast<std::uint32_t>(accountInfo.latestSelectedCharacter),
+													team, static_cast<std::uint32_t>(accountInfo.playerLevel), accountInfo.nickname, Common::Enums::STATE_WAITING, session->getPlayer().getPing()};
 		}
 
 		void Room::addPlayer(std::shared_ptr<Main::Network::Session> session, std::uint32_t team)
 		{
-			if (!session) return;
+			if (!session)
+				return;
 
 			const auto sessionId = session->getAccountInfo().uniqueId.session;
 
-			auto isDuplicate = [&](const auto& list) {
-				return std::any_of(list.begin(), list.end(), [&](const auto& player) {
+			auto isDuplicate = [&](const auto &list)
+			{
+				return std::any_of(list.begin(), list.end(), [&](const auto &player)
+								   {
 					auto locked = player.second.lock();
-					return locked && locked->getAccountInfo().uniqueId.session == sessionId;
-					});
-				};
+					return locked && locked->getAccountInfo().uniqueId.session == sessionId; });
+			};
 
 			if (isDuplicate(m_players) || isDuplicate(m_observerPlayers))
 			{
@@ -74,22 +74,24 @@ namespace Main
 				return;
 			}
 
-			m_players.emplace_back(createRoomPlayerInfo(session, team), std::weak_ptr<Main::Network::Session>{ session });
-	m_playerIndexMap[sessionId] = m_players.size() - 1;
+			m_players.emplace_back(createRoomPlayerInfo(session, team), std::weak_ptr<Main::Network::Session>{session});
+			m_playerIndexMap[sessionId] = m_players.size() - 1;
 			session->setRoomNumber(m_number);
 		}
 
 		void Room::addObserverPlayer(std::shared_ptr<Main::Network::Session> session)
 		{
-			if (!session) return;
+			if (!session)
+				return;
 			const auto sessionId = session->getAccountInfo().uniqueId.session;
 
-			auto isDuplicate = [&](const auto& list) {
-				return std::any_of(list.begin(), list.end(), [&](const auto& player) {
+			auto isDuplicate = [&](const auto &list)
+			{
+				return std::any_of(list.begin(), list.end(), [&](const auto &player)
+								   {
 					auto locked = player.second.lock();
-					return locked && locked->getAccountInfo().uniqueId.session == sessionId;
-					});
-				};
+					return locked && locked->getAccountInfo().uniqueId.session == sessionId; });
+			};
 
 			if (isDuplicate(m_players) || isDuplicate(m_observerPlayers))
 			{
@@ -97,18 +99,18 @@ namespace Main
 				return;
 			}
 
-			m_observerPlayers.emplace_back(createRoomPlayerInfo(session, Common::Enums::TEAM_OBSERVER), std::weak_ptr<Main::Network::Session>{ session });
-	m_observerPlayerIndexMap[sessionId] = m_observerPlayers.size() - 1;
+			m_observerPlayers.emplace_back(createRoomPlayerInfo(session, Common::Enums::TEAM_OBSERVER), std::weak_ptr<Main::Network::Session>{session});
+			m_observerPlayerIndexMap[sessionId] = m_observerPlayers.size() - 1;
 			session->setRoomNumber(m_number);
 		}
 
 		// Refactored
-		void Room::setPassword(const std::string& password)
+		void Room::setPassword(const std::string &password)
 		{
 			m_password = password;
 		}
 
-		const std::string& Room::getPassword() const
+		const std::string &Room::getPassword() const
 		{
 			return m_password;
 		}
@@ -121,17 +123,18 @@ namespace Main
 		// Refactored
 		void Room::updatePlayerInfo(std::shared_ptr<Main::Network::Session> session)
 		{
-			if (!session) return;
+			if (!session)
+				return;
 
 			if (auto player = findPlayer(session->getId()); player != m_players.end())
 			{
-				const auto& accountInfo = session->getAccountInfo();
+				const auto &accountInfo = session->getAccountInfo();
 				player->first.character = accountInfo.latestSelectedCharacter;
 				player->first.level = accountInfo.playerLevel;
 			}
 			else if (auto obsPlayer = findObserverPlayer(session->getId()); obsPlayer != m_observerPlayers.end())
 			{
-				const auto& accountInfo = session->getAccountInfo();
+				const auto &accountInfo = session->getAccountInfo();
 				obsPlayer->first.character = accountInfo.latestSelectedCharacter;
 				obsPlayer->first.level = accountInfo.playerLevel;
 			}
@@ -146,9 +149,9 @@ namespace Main
 			return m_players.size();
 		}
 
-		void Room::addKickedPlayer(std::uint32_t accountId, const std::string& nickname)
+		void Room::addKickedPlayer(std::uint32_t accountId, const std::string &nickname)
 		{
-			m_kickedPlayerAccountIds.push_back(std::pair{ accountId, nickname });
+			m_kickedPlayerAccountIds.push_back(std::pair{accountId, nickname});
 		}
 
 		void Room::muteRoom()
@@ -168,12 +171,12 @@ namespace Main
 
 		// Note: At this point, the player identified by uniqueId must already been removed from m_players
 		// this function sends a "notification" to all remaining players in the room about the player who left (so they don't see them anymore)
-		void Room::playerRoomLeaveNotification(const Main::Structures::UniqueId& uniqueId, std::size_t targetPlayerIdx, decltype(m_players)& container,
-			std::uint32_t extra)
+		void Room::playerRoomLeaveNotification(const Main::Structures::UniqueId &uniqueId, std::size_t targetPlayerIdx, decltype(m_players) &container,
+											   std::uint32_t extra)
 		{
 			if (targetPlayerIdx >= container.size())
 			{
-				for (const auto& [roomInfo, sessionWeak] : ranges::views::concat(m_players, m_observerPlayers))
+				for (const auto &[roomInfo, sessionWeak] : ranges::views::concat(m_players, m_observerPlayers))
 				{
 					if (auto session = sessionWeak.lock())
 					{
@@ -185,7 +188,7 @@ namespace Main
 			}
 
 			m_packet.setCommand(422, 0, 0, targetPlayerIdx); // sessionId set inside .broadcastToRoom()
-			m_packet.setData(reinterpret_cast<const std::uint8_t*>(&uniqueId), sizeof(uniqueId));
+			m_packet.setData(reinterpret_cast<const std::uint8_t *>(&uniqueId), sizeof(uniqueId));
 			broadcastToRoomExceptSelf(m_packet, uniqueId);
 
 			if (auto session = container[targetPlayerIdx].second.lock())
@@ -216,8 +219,9 @@ namespace Main
 		// Refactored
 		void Room::removeAllPlayers(std::uint32_t extra)
 		{
-			auto removePlayers = [&](auto& players) {
-				for (auto& player : players)
+			auto removePlayers = [&](auto &players)
+			{
+				for (auto &player : players)
 				{
 					if (auto session = player.second.lock())
 					{
@@ -227,24 +231,25 @@ namespace Main
 					}
 				}
 				players.clear();
-				};
+			};
 
 			removePlayers(m_players);
 			removePlayers(m_observerPlayers);
-		rebuildPlayerIndexMaps();
+			rebuildPlayerIndexMaps();
 		}
 
 		void Room::removeAllObserverPlayers(std::uint32_t extra)
 		{
-			auto removePlayers = [&](auto& players) {
+			auto removePlayers = [&](auto &players)
+			{
 				std::size_t targetPlayerIdx = 0;
-				for (auto& player : players)
+				for (auto &player : players)
 				{
 					if (auto session = player.second.lock())
 					{
 						m_packet.setCommand(422, 0, 0, targetPlayerIdx++);
 						auto uniqueId = session->getAccountInfo().uniqueId;
-						m_packet.setData(reinterpret_cast<std::uint8_t*>(&uniqueId), sizeof(uniqueId));
+						m_packet.setData(reinterpret_cast<std::uint8_t *>(&uniqueId), sizeof(uniqueId));
 						session->asyncWrite(m_packet);
 
 						m_packet.setCommand(141, 0, extra, 0);
@@ -253,27 +258,29 @@ namespace Main
 					}
 				}
 				players.clear();
-				};
+			};
 
 			removePlayers(m_observerPlayers);
-		rebuildPlayerIndexMaps();
+			rebuildPlayerIndexMaps();
 		}
 
 		// Refactored
 		std::uint32_t Room::getBestMsIndexExceptSelf(std::uint64_t selfId, bool checkInMatch)
 		{
-			if (m_players.size() <= 1) return static_cast<std::uint32_t>(-1);
+			if (m_players.size() <= 1)
+				return static_cast<std::uint32_t>(-1);
 
 			std::uint32_t bestMs = std::numeric_limits<std::uint32_t>::max();
 			std::uint32_t bestMsPlayerIdx = std::numeric_limits<std::uint32_t>::max();
 			bool foundBestMs = false;
 
-			for (std::uint32_t currentIdx = 0; const auto & [roomInfo, weakSession] : m_players)
+			for (std::uint32_t currentIdx = 0; const auto &[roomInfo, weakSession] : m_players)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
-				const auto& player = session->getPlayer();
+				const auto &player = session->getPlayer();
 				const bool isInMatch = player.isInMatch();
 
 				if (selfId != session->getId() && (checkInMatch ? isInMatch : !isInMatch) && player.getPing() < bestMs)
@@ -305,7 +312,7 @@ namespace Main
 			}
 		}
 
-		void Room::removePlayerFromRoomAndMatch(std::uint32_t playerIdx, Main::Structures::UniqueId& originalHostUniqueId, std::uint32_t extra)
+		void Room::removePlayerFromRoomAndMatch(std::uint32_t playerIdx, Main::Structures::UniqueId &originalHostUniqueId, std::uint32_t extra)
 		{
 			if (playerIdx < m_players.size())
 			{
@@ -315,7 +322,7 @@ namespace Main
 					Common::Network::Packet removePlayerFromMatchServerRequest;
 					removePlayerFromMatchServerRequest.setTcpHeader(session->getId(), Common::Enums::NO_ENCRYPTION);
 					removePlayerFromMatchServerRequest.setOrder(256);
-					removePlayerFromMatchServerRequest.setData(reinterpret_cast<std::uint8_t*>(&originalHostUniqueId), sizeof(originalHostUniqueId));
+					removePlayerFromMatchServerRequest.setData(reinterpret_cast<std::uint8_t *>(&originalHostUniqueId), sizeof(originalHostUniqueId));
 
 					broadcastToRoomExceptSelf(removePlayerFromMatchServerRequest, originalHostUniqueId);
 				}
@@ -326,20 +333,22 @@ namespace Main
 		// Refactored
 		bool Room::removeHostFromMatch(std::uint32_t leaveTypeExtra)
 		{
-			if (m_players.empty()) return false;
+			if (m_players.empty())
+				return false;
 
 			auto hostSession = m_players[0].second.lock();
-			if (!hostSession) return false;
+			if (!hostSession)
+				return false;
 
 			Main::Structures::UniqueId originalHostUniqueId = hostSession->getAccountInfo().uniqueId;
 			const std::uint64_t originalHostSessionId = hostSession->getId();
-			hostSession->setIsInMatch(false); 
+			hostSession->setIsInMatch(false);
 
 			const std::size_t totalPlayersInMatch = std::count_if(
-				m_players.begin(), m_players.end(), [](const auto& currentPlayer) {
+				m_players.begin(), m_players.end(), [](const auto &currentPlayer)
+				{
 					auto session = currentPlayer.second.lock();
-					return session && session->getPlayer().isInMatch();
-				});
+					return session && session->getPlayer().isInMatch(); });
 			const std::uint32_t totalPlayersInRoom = static_cast<std::uint32_t>(m_players.size());
 
 			if (totalPlayersInMatch >= 1)
@@ -353,7 +362,7 @@ namespace Main
 				}
 				else
 				{
-					sendHostChangePacket(0, Common::Enums::CHANGE_HOST_FAIL); 
+					sendHostChangePacket(0, Common::Enums::CHANGE_HOST_FAIL);
 					return true; // Close the room as we cannot proceed further
 				}
 			}
@@ -366,11 +375,11 @@ namespace Main
 					// The previous host leaves the match, host->setIsInMatch(false) already set at this point
 					removePlayerFromRoomAndMatch(bestMsIndexPlayerOutsideMatch, originalHostUniqueId, leaveTypeExtra);
 					m_hasMatchStarted = false; // The host was the only one inside the match, so we end it
-					return false; // Another player got the host in the room, no need to close it
+					return false;			   // Another player got the host in the room, no need to close it
 				}
 				else
 				{
-					sendHostChangePacket(0, Common::Enums::CHANGE_HOST_FAIL); 
+					sendHostChangePacket(0, Common::Enums::CHANGE_HOST_FAIL);
 					return true;
 				}
 			}
@@ -397,7 +406,8 @@ namespace Main
 		// Refactored
 		bool Room::removePlayer(std::shared_ptr<Main::Network::Session> session, std::uint32_t extra)
 		{
-			if (m_players.empty()) return false;
+			if (m_players.empty())
+				return false;
 
 			if (auto toRemovePlayerIter = findPlayer(session->getId()); toRemovePlayerIter != m_players.end())
 			{
@@ -417,7 +427,8 @@ namespace Main
 
 							// revalidate iterator
 							toRemovePlayerIter = findPlayer(session->getId());
-							if (toRemovePlayerIter == m_players.end()) return m_players.empty();
+							if (toRemovePlayerIter == m_players.end())
+								return m_players.empty();
 						}
 						else if (m_players.size() > 1)
 						{
@@ -430,7 +441,7 @@ namespace Main
 					if (auto finalSession = toRemovePlayerIter->second.lock(); finalSession)
 					{
 						playerRoomLeaveNotification(finalSession->getAccountInfo().uniqueId, std::distance(m_players.begin(), toRemovePlayerIter),
-							m_players, extra);
+													m_players, extra);
 					}
 				}
 				return m_players.empty();
@@ -440,7 +451,7 @@ namespace Main
 				if (auto obsSession = observerIter->second.lock(); obsSession)
 				{
 					playerRoomLeaveNotification(obsSession->getAccountInfo().uniqueId, std::distance(m_observerPlayers.begin(), observerIter),
-						m_observerPlayers, extra);
+												m_observerPlayers, extra);
 				}
 			}
 			return false;
@@ -464,20 +475,21 @@ namespace Main
 			std::vector<Main::Structures::RoomPlayerInfo> allPlayers;
 			allPlayers.reserve(m_players.size() + m_observerPlayers.size());
 
-			for (const auto& [info, weakSession] : m_players)
+			for (const auto &[info, weakSession] : m_players)
 			{
-				if (weakSession.expired()) continue;
+				if (weakSession.expired())
+					continue;
 				allPlayers.push_back(info);
 			}
-			for (const auto& [info, weakSession] : m_observerPlayers)
+			for (const auto &[info, weakSession] : m_observerPlayers)
 			{
-				if (weakSession.expired()) continue;
+				if (weakSession.expired())
+					continue;
 				allPlayers.push_back(info);
 			}
 
 			return allPlayers;
 		}
-
 
 		// Refactored
 		std::vector<std::pair<Main::Structures::RoomPlayerInfo, std::shared_ptr<Main::Network::Session>>> Room::getAllPlayersWithSessions() const
@@ -485,12 +497,12 @@ namespace Main
 			std::vector<std::pair<Main::Structures::RoomPlayerInfo, std::shared_ptr<Main::Network::Session>>> allPlayersWithSessions;
 			allPlayersWithSessions.reserve(m_players.size() + m_observerPlayers.size());
 
-			for (const auto& [info, weakSession] : m_players)
+			for (const auto &[info, weakSession] : m_players)
 			{
 				if (auto session = weakSession.lock())
 					allPlayersWithSessions.emplace_back(info, session);
 			}
-			for (const auto& [info, weakSession] : m_observerPlayers)
+			for (const auto &[info, weakSession] : m_observerPlayers)
 			{
 				if (auto session = weakSession.lock())
 					allPlayersWithSessions.emplace_back(info, session);
@@ -503,17 +515,16 @@ namespace Main
 		Main::Structures::SingleRoom Room::getRoomInfo() const
 		{
 			auto session = m_players[0].second.lock();
-			if (!session) return Main::Structures::SingleRoom{};
+			if (!session)
+				return Main::Structures::SingleRoom{};
 
 			return Main::Structures::SingleRoom{m_title.c_str(), static_cast<std::uint16_t>(m_number - 1), static_cast<std::uint16_t>(m_settings.map),
-				m_settings.mode,getPlayersPerTeam(), static_cast<std::uint16_t>(m_players.size()), m_hasMatchStarted, !m_password.empty(),
-				m_settings.weaponRestriction, m_settings.isObserverModeOn, session->getPlayer().getPing()
-			};
+												m_settings.mode, getPlayersPerTeam(), static_cast<std::uint16_t>(m_players.size()), m_hasMatchStarted, !m_password.empty(),
+												m_settings.weaponRestriction, m_settings.isObserverModeOn, session->getPlayer().getPing()};
 		}
 
-
 		// Refactored
-		const Main::Structures::RoomSettings& Room::getRoomSettings() const
+		const Main::Structures::RoomSettings &Room::getRoomSettings() const
 		{
 			return m_settings;
 		}
@@ -521,19 +532,20 @@ namespace Main
 		// Refactored
 		Main::Structures::RoomJoin Room::getRoomJoinInfo() const
 		{
-			return Main::Structures::RoomJoin{ m_settings.map, m_settings.mode,
-				getPlayersPerTeam(), m_hasMatchStarted,!m_password.empty(), m_settings.isOpen, m_settings.weaponRestriction, m_isTeamBalanceOn, 
-				m_settings.isObserverModeOn, false, m_password };
+			return Main::Structures::RoomJoin{m_settings.map, m_settings.mode,
+											  getPlayersPerTeam(), m_hasMatchStarted, !m_password.empty(), m_settings.isOpen, m_settings.weaponRestriction, m_isTeamBalanceOn,
+											  m_settings.isObserverModeOn, false, m_password};
 		}
 
 		// Refactored
 		std::vector<Main::Structures::RoomPlayerItems> Room::getPlayersItems() const
 		{
 			std::vector<Main::Structures::RoomPlayerItems> ret;
-			for (const auto& [roomInfo, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
+			for (const auto &[roomInfo, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
 				Main::Structures::RoomPlayerItems roomPlayerItems;
 				const auto separatedItems = session->getPlayer().getEquippedItemsSeparated();
@@ -559,41 +571,45 @@ namespace Main
 		// Refactored
 		void Room::breakroom()
 		{
-			for (auto& [unused, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
+			for (auto &[unused, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				session->leaveRoom();
 			}
 			m_players.clear();
 
 			m_observerPlayers.clear();
-		rebuildPlayerIndexMaps();
+			rebuildPlayerIndexMaps();
 		}
 
 		// Refactored
-		void Room::broadcastToRoom(Common::Network::Packet& packet)
+		void Room::broadcastToRoom(Common::Network::Packet &packet)
 		{
-			for (auto& [u, weakSession] : m_players)
+			for (auto &[u, weakSession] : m_players)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				session->asyncWrite(packet);
 			}
-			for (auto& [u, weakSession] : m_observerPlayers)
+			for (auto &[u, weakSession] : m_observerPlayers)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				session->asyncWrite(packet);
 			}
 		}
 
-		void Room::broadcastMessage(const std::string& message)
+		void Room::broadcastMessage(const std::string &message)
 		{
-			for (auto& [info, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
+			for (auto &[info, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				session->sendMessage(message);
 			}
 		}
@@ -604,20 +620,24 @@ namespace Main
 		}
 
 		// Refactored
-		void Room::broadcastToRoomExceptSelf(Common::Network::Packet& packet, const Main::Structures::UniqueId& uniqueId)
+		void Room::broadcastToRoomExceptSelf(Common::Network::Packet &packet, const Main::Structures::UniqueId &uniqueId)
 		{
-			for (auto& [player, weakSession] : m_players)
+			for (auto &[player, weakSession] : m_players)
 			{
-				if (player.uniqueId.session == uniqueId.session) continue;
+				if (player.uniqueId.session == uniqueId.session)
+					continue;
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				session->asyncWrite(packet);
 			}
-			for (auto& [player, weakSession] : m_observerPlayers)
+			for (auto &[player, weakSession] : m_observerPlayers)
 			{
-				if (player.uniqueId.session == uniqueId.session) continue;
+				if (player.uniqueId.session == uniqueId.session)
+					continue;
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				session->asyncWrite(packet);
 			}
 		}
@@ -627,13 +647,14 @@ namespace Main
 			using namespace Main::Structures;
 			using namespace Main::Network;
 
-			std::vector<std::pair<RoomPlayerInfo*, std::shared_ptr<Session>>> blueTeam;
-			std::vector<std::pair<RoomPlayerInfo*, std::shared_ptr<Session>>> redTeam;
+			std::vector<std::pair<RoomPlayerInfo *, std::shared_ptr<Session>>> blueTeam;
+			std::vector<std::pair<RoomPlayerInfo *, std::shared_ptr<Session>>> redTeam;
 
-			for (auto& [player, weakSession] : m_players)
+			for (auto &[player, weakSession] : m_players)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
 				if (player.team == Common::Enums::TEAM_BLUE)
 					blueTeam.emplace_back(&player, session);
@@ -643,7 +664,7 @@ namespace Main
 
 			const std::size_t totalSwaps = std::min(blueTeam.size(), redTeam.size());
 
-			static std::mt19937 rng(std::random_device{}()); 
+			static std::mt19937 rng(std::random_device{}());
 			std::shuffle(blueTeam.begin(), blueTeam.end(), rng);
 			std::shuffle(redTeam.begin(), redTeam.end(), rng);
 
@@ -654,17 +675,17 @@ namespace Main
 
 			for (std::size_t i = 0; i < totalSwaps; ++i)
 			{
-				auto& [bluePlayer, session1] = blueTeam[i];
-				auto& [redPlayer, session2] = redTeam[i];
+				auto &[bluePlayer, session1] = blueTeam[i];
+				auto &[redPlayer, session2] = redTeam[i];
 
 				if (session1 && session2)
 				{
 					auto uniqueId = session1->getAccountInfo().uniqueId;
-					response.setData(reinterpret_cast<std::uint8_t*>(&uniqueId), sizeof(uniqueId));
+					response.setData(reinterpret_cast<std::uint8_t *>(&uniqueId), sizeof(uniqueId));
 					broadcastToRoom(response);
 
 					uniqueId = session2->getAccountInfo().uniqueId;
-					response.setData(reinterpret_cast<std::uint8_t*>(&uniqueId), sizeof(uniqueId));
+					response.setData(reinterpret_cast<std::uint8_t *>(&uniqueId), sizeof(uniqueId));
 					broadcastToRoom(response);
 
 					auto temp = bluePlayer->team;
@@ -675,20 +696,22 @@ namespace Main
 		}
 
 		// Refactored
-		void Room::broadcastToTeamExceptSelf(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> givenSession)
+		void Room::broadcastToTeamExceptSelf(Common::Network::Packet &packet, std::shared_ptr<Main::Network::Session> givenSession)
 		{
 			if (auto it = findPlayer(givenSession->getAccountInfo().uniqueId.session); it != m_players.end())
 			{
 				auto selfSession = it->second.lock();
-				if (!selfSession) return;
+				if (!selfSession)
+					return;
 
 				const auto targetTeam = static_cast<Common::Enums::Team>(it->first.team);
 				const bool isInMatch = selfSession->getPlayer().isInMatch();
 
-				for (auto& [roomInfo, weakSession] : m_players)
+				for (auto &[roomInfo, weakSession] : m_players)
 				{
 					auto session = weakSession.lock();
-					if (!session) continue;
+					if (!session)
+						continue;
 
 					if (roomInfo.uniqueId.session != givenSession->getAccountInfo().uniqueId.session &&
 						roomInfo.team == targetTeam &&
@@ -700,12 +723,13 @@ namespace Main
 			}
 		}
 
-		void Room::broadcastToTeam(Common::Network::Packet& packet, Common::Enums::Team team)
+		void Room::broadcastToTeam(Common::Network::Packet &packet, Common::Enums::Team team)
 		{
-			for (auto& [roomInfo, weakSession] : m_players)
+			for (auto &[roomInfo, weakSession] : m_players)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
 				if (roomInfo.team == team)
 				{
@@ -714,20 +738,22 @@ namespace Main
 			}
 		}
 
-		void Room::broadcastToDeadTeamExceptSelf(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> givenSession)
+		void Room::broadcastToDeadTeamExceptSelf(Common::Network::Packet &packet, std::shared_ptr<Main::Network::Session> givenSession)
 		{
 			if (auto it = findPlayer(givenSession->getAccountInfo().uniqueId.session); it != m_players.end())
 			{
 				auto sessionSelf = it->second.lock();
-				if (!sessionSelf) return;
+				if (!sessionSelf)
+					return;
 
 				const auto targetTeam = static_cast<Common::Enums::Team>(it->first.team);
 				const bool isInMatch = sessionSelf->getPlayer().isInMatch();
 
-				for (auto& [roomInfo, weakSession] : m_players)
+				for (auto &[roomInfo, weakSession] : m_players)
 				{
 					auto session = weakSession.lock();
-					if (!session) continue;
+					if (!session)
+						continue;
 
 					if (roomInfo.uniqueId.session != givenSession->getAccountInfo().uniqueId.session &&
 						roomInfo.team == targetTeam &&
@@ -740,24 +766,28 @@ namespace Main
 			}
 		}
 
-		void Room::toMatchExceptSelfHelper(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> givenSession)
+		void Room::toMatchExceptSelfHelper(Common::Network::Packet &packet, std::shared_ptr<Main::Network::Session> givenSession)
 		{
 			const auto uniqueId = givenSession->getAccountInfo().uniqueId;
 
 			bool isSenderInPlayers = std::any_of(m_players.begin(), m_players.end(),
-				[&uniqueId](const auto& pair) { return pair.first.uniqueId == uniqueId; });
+												 [&uniqueId](const auto &pair)
+												 { return pair.first.uniqueId == uniqueId; });
 			bool isSenderInObservers = std::any_of(m_observerPlayers.begin(), m_observerPlayers.end(),
-				[&uniqueId](const auto& pair) { return pair.first.uniqueId == uniqueId; });
-		
+												   [&uniqueId](const auto &pair)
+												   { return pair.first.uniqueId == uniqueId; });
 
-			auto toMatchExceptSelf = [&packet, &uniqueId](auto& playerGroup) {
-				for (auto& [roomInfo, weakSession] : playerGroup) {
+			auto toMatchExceptSelf = [&packet, &uniqueId](auto &playerGroup)
+			{
+				for (auto &[roomInfo, weakSession] : playerGroup)
+				{
 					auto session = weakSession.lock();
-					if (!session) continue;
+					if (!session)
+						continue;
 					if (roomInfo.uniqueId != uniqueId && session->getPlayer().isInMatch())
 						session->asyncWrite(packet);
 				}
-				};
+			};
 
 			if (isSenderInPlayers || (isSenderInObservers && givenSession->getAccountInfo().playerGrade >= Common::Enums::GRADE_ES))
 			{
@@ -771,7 +801,7 @@ namespace Main
 		}
 
 		// Refactored
-		void Room::broadcastToMatchExceptSelf(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> session, std::uint32_t extra)
+		void Room::broadcastToMatchExceptSelf(Common::Network::Packet &packet, std::shared_ptr<Main::Network::Session> session, std::uint32_t extra)
 		{
 			if (extra == Main::Enums::ChatExtra::TEAM)
 			{
@@ -783,7 +813,7 @@ namespace Main
 			}
 		}
 
-		void Room::broadcastToDeadExceptSelf(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> session, std::uint32_t extra)
+		void Room::broadcastToDeadExceptSelf(Common::Network::Packet &packet, std::shared_ptr<Main::Network::Session> session, std::uint32_t extra)
 		{
 			if (extra == Main::Enums::ChatExtra::TEAM)
 			{
@@ -810,7 +840,7 @@ namespace Main
 		}
 
 		// Refactored
-		void Room::broadcastOutsideMatchExceptSelf(Common::Network::Packet& packet, std::shared_ptr<Main::Network::Session> givenSession, std::uint32_t extra)
+		void Room::broadcastOutsideMatchExceptSelf(Common::Network::Packet &packet, std::shared_ptr<Main::Network::Session> givenSession, std::uint32_t extra)
 		{
 			if (extra == Main::Enums::ChatExtra::TEAM)
 			{
@@ -818,16 +848,18 @@ namespace Main
 			}
 			else
 			{
-				for (auto& [roomInfo, weakSession] : m_players)
+				for (auto &[roomInfo, weakSession] : m_players)
 				{
 					auto session = weakSession.lock();
-					if (roomInfo.uniqueId == givenSession->getAccountInfo().uniqueId || !session || session->getPlayer().isInMatch()) continue;
+					if (roomInfo.uniqueId == givenSession->getAccountInfo().uniqueId || !session || session->getPlayer().isInMatch())
+						continue;
 					session->asyncWrite(packet);
 				}
-				for (auto& [roomInfo, weakSession] : m_observerPlayers)
+				for (auto &[roomInfo, weakSession] : m_observerPlayers)
 				{
 					auto session = weakSession.lock();
-					if (roomInfo.uniqueId == givenSession->getAccountInfo().uniqueId || !session || session->getPlayer().isInMatch()) continue;
+					if (roomInfo.uniqueId == givenSession->getAccountInfo().uniqueId || !session || session->getPlayer().isInMatch())
+						continue;
 					session->asyncWrite(packet);
 				}
 			}
@@ -840,18 +872,15 @@ namespace Main
 
 		void Room::endMatch()
 		{
-			for (auto& pair : ranges::views::concat(m_players, m_observerPlayers))
+			for (auto &pair : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				auto session = pair.second.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
 				auto playerState = session->getPlayer().getPlayerState();
 
-				if (playerState == Common::Enums::STATE_INVENTORY
-					|| playerState == Common::Enums::STATE_LOBBY
-					|| playerState == Common::Enums::STATE_SHOP
-					|| playerState == Common::Enums::STATE_CAPSULE
-					|| playerState == Common::Enums::STATE_WAITING)
+				if (playerState == Common::Enums::STATE_INVENTORY || playerState == Common::Enums::STATE_LOBBY || playerState == Common::Enums::STATE_SHOP || playerState == Common::Enums::STATE_CAPSULE || playerState == Common::Enums::STATE_WAITING)
 				{
 					continue;
 				}
@@ -869,7 +898,7 @@ namespace Main
 		std::uint32_t Room::getTotalPlayersInMatch() const
 		{
 			std::uint32_t ret = 0;
-			for (const auto& currentPlayer : m_players)
+			for (const auto &currentPlayer : m_players)
 			{
 				if (currentPlayer.first.state == Common::Enums::STATE_NORMAL)
 				{
@@ -879,19 +908,19 @@ namespace Main
 			return ret;
 		}
 
-
 		// this is used by both (!) manual AND automatic host-changes
 		bool Room::changeHost(std::size_t newHostIdx)
 		{
-			if (newHostIdx >= m_players.size() || m_players.empty()) return false;
-			std::swap(m_players[0], m_players[newHostIdx]); 
+			if (newHostIdx >= m_players.size() || m_players.empty())
+				return false;
+			std::swap(m_players[0], m_players[newHostIdx]);
 			return true;
 		}
 
-		bool Room::changeHostByNickname(const std::string& nickname)
+		bool Room::changeHostByNickname(const std::string &nickname)
 		{
 			std::uint32_t playerIndex = 0;
-			for (const auto& currentPlayer : m_players)
+			for (const auto &currentPlayer : m_players)
 			{
 				auto session = currentPlayer.second.lock();
 				if (!session)
@@ -916,16 +945,16 @@ namespace Main
 			}
 		}
 
-		std::shared_ptr<Main::Network::Session> Room::getPlayer(const Main::Structures::UniqueId& uniqueId)
+		std::shared_ptr<Main::Network::Session> Room::getPlayer(const Main::Structures::UniqueId &uniqueId)
 		{
 			auto playerIt = findPlayer(uniqueId.session);
 			if (playerIt == m_players.end())
 				return nullptr;
 
-			return playerIt->second.lock(); 
+			return playerIt->second.lock();
 		}
 
-		bool Room::isHost(const Main::Structures::UniqueId& uniqueId) const
+		bool Room::isHost(const Main::Structures::UniqueId &uniqueId) const
 		{
 			return m_players.empty() ? false : m_players[0].first.uniqueId.session == uniqueId.session;
 		}
@@ -942,7 +971,7 @@ namespace Main
 
 		std::pair<std::uint32_t, std::string> Room::getVotekickResultDetails()
 		{
-			const std::pair<std::uint32_t, std::string> ret = { m_votekickYesses, m_votekickTargetNickname };
+			const std::pair<std::uint32_t, std::string> ret = {m_votekickYesses, m_votekickTargetNickname};
 			m_votekickReason = 0;
 			m_votekickTargetUid = Main::Structures::UniqueId{};
 			m_votekickYesses = 0;
@@ -959,17 +988,17 @@ namespace Main
 			m_votekickTargetNickname = "";
 		}
 
-		bool Room::startVotekick(const Main::Structures::UniqueId& uniqueId, const std::string& targetNickname, std::uint32_t reason, std::uint32_t starterAid)
+		bool Room::startVotekick(const Main::Structures::UniqueId &uniqueId, const std::string &targetNickname, std::uint32_t reason, std::uint32_t starterAid)
 		{
 			if (std::find(m_votekickStarters.begin(), m_votekickStarters.end(), starterAid) != m_votekickStarters.end())
 			{
-				return false; 
+				return false;
 			}
 			m_votekickReason = reason;
 			m_votekickTargetUid = uniqueId;
 			++m_votekickYesses;
 			m_votekickTargetNickname = targetNickname;
-			
+
 			m_votekickStarters.push_back(starterAid);
 			return true;
 		}
@@ -980,7 +1009,7 @@ namespace Main
 		}
 
 		// Refactored
-		bool Room::changePlayerTeam(const Main::Structures::UniqueId& uniqueId, std::uint32_t newTeam)
+		bool Room::changePlayerTeam(const Main::Structures::UniqueId &uniqueId, std::uint32_t newTeam)
 		{
 			if (m_settings.mode == Common::Enums::ZombieMode && (newTeam == 1 || newTeam == 2))
 			{
@@ -997,16 +1026,17 @@ namespace Main
 			else if (auto playerIt = findPlayer(uniqueId.session); playerIt != m_players.end())
 			{
 				auto session = playerIt->second.lock();
-				if (!session || session->getPlayer().isInMatch()) return false;
+				if (!session || session->getPlayer().isInMatch())
+					return false;
 
 				if (newTeam == Common::Enums::TEAM_OBSERVER)
 				{
-					if (m_observerPlayers.size() >= Common::Constants::maxObserverPlayers) return false;
+					if (m_observerPlayers.size() >= Common::Constants::maxObserverPlayers)
+						return false;
 
 					std::swap(m_players.back(), *playerIt);
 
-					if (playerIt = findPlayer(uniqueId.session); playerIt != m_players.end()
-						&& movePlayerHelper(m_players, m_observerPlayers, playerIt, newTeam))
+					if (playerIt = findPlayer(uniqueId.session); playerIt != m_players.end() && movePlayerHelper(m_players, m_observerPlayers, playerIt, newTeam))
 					{
 						return true;
 					}
@@ -1018,34 +1048,28 @@ namespace Main
 					return true;
 				}
 			}
-			else if (auto observerIt = findObserverPlayer(uniqueId.session); observerIt != m_observerPlayers.end()
-				&& (newTeam == Common::Enums::TEAM_ALL || newTeam == Common::Enums::TEAM_RED || newTeam == Common::Enums::TEAM_BLUE))
+			else if (auto observerIt = findObserverPlayer(uniqueId.session); observerIt != m_observerPlayers.end() && (newTeam == Common::Enums::TEAM_ALL || newTeam == Common::Enums::TEAM_RED || newTeam == Common::Enums::TEAM_BLUE))
 			{
 				auto session = observerIt->second.lock();
-				if (!session || session->getPlayer().isInMatch() || m_players.size() >= getPlayersPerTeam()) return false;
+				if (!session || session->getPlayer().isInMatch() || m_players.size() >= getPlayersPerTeam())
+					return false;
 
 				observerIt->first.team = isModeTeamBased() ? calculateNewPlayerTeam() : Common::Enums::TEAM_ALL;
 				return movePlayerHelper(m_observerPlayers, m_players, observerIt, observerIt->first.team);
 			}
 			return false;
 		}
-		
+
 		// Refactored
 		bool Room::isModeTeamBased() const
 		{
-			return m_settings.mode == Common::Enums::TeamDeathMatch || m_settings.mode == Common::Enums::Elimination
-				|| m_settings.mode == Common::Enums::CaptureTheBattery || m_settings.mode == Common::Enums::ItemMatch
-				|| m_settings.mode == Common::Enums::BombBattle || m_settings.mode == Common::Enums::SniperMode
-				|| m_settings.mode == Common::Enums::CloseCombat || m_settings.mode == Common::Enums::Scrimmage
-				|| m_settings.mode == Common::Enums::SuperItemMatch
-				|| m_settings.mode == Common::Enums::Clan_BombBattle || m_settings.mode == Common::Enums::Clan_CaptureTheBattery
-				|| m_settings.mode == Common::Enums::Clan_Elimination || m_settings.mode == Common::Enums::Clan_TeamDeathMatch;
+			return m_settings.mode == Common::Enums::TeamDeathMatch || m_settings.mode == Common::Enums::Elimination || m_settings.mode == Common::Enums::CaptureTheBattery || m_settings.mode == Common::Enums::ItemMatch || m_settings.mode == Common::Enums::BombBattle || m_settings.mode == Common::Enums::SniperMode || m_settings.mode == Common::Enums::CloseCombat || m_settings.mode == Common::Enums::Scrimmage || m_settings.mode == Common::Enums::SuperItemMatch || m_settings.mode == Common::Enums::Clan_BombBattle || m_settings.mode == Common::Enums::Clan_CaptureTheBattery || m_settings.mode == Common::Enums::Clan_Elimination || m_settings.mode == Common::Enums::Clan_TeamDeathMatch;
 		}
 
 		// Refactored
 		void Room::updatePlayersTeamToTeamBased()
 		{
-			for (std::size_t i = 0; auto& [roomPlayerInfo, s] : m_players)
+			for (std::size_t i = 0; auto &[roomPlayerInfo, s] : m_players)
 			{
 				roomPlayerInfo.team = (i % 2 == 0) ? Common::Enums::TEAM_BLUE : Common::Enums::TEAM_RED;
 				++i;
@@ -1055,21 +1079,19 @@ namespace Main
 		// Refactored
 		void Room::updatePlayersTeamToNonTeamBased()
 		{
-			std::for_each(m_players.begin(), m_players.end(), [](auto& player) { player.first.team = Common::Enums::TEAM_ALL;});
+			std::for_each(m_players.begin(), m_players.end(), [](auto &player)
+						  { player.first.team = Common::Enums::TEAM_ALL; });
 		}
-		
+
 		// Refactored
 		Common::Enums::Team Room::calculateNewPlayerTeam() const
 		{
-			const auto totalBlueTeam = std::ranges::count_if(m_players, [](const auto& player) {
-				return player.first.team == Common::Enums::Team::TEAM_BLUE;
-				});
-			const auto totalRedTeam = std::ranges::count_if(m_players, [](const auto& player) {
-				return player.first.team == Common::Enums::Team::TEAM_RED;
-				});
+			const auto totalBlueTeam = std::ranges::count_if(m_players, [](const auto &player)
+															 { return player.first.team == Common::Enums::Team::TEAM_BLUE; });
+			const auto totalRedTeam = std::ranges::count_if(m_players, [](const auto &player)
+															{ return player.first.team == Common::Enums::Team::TEAM_RED; });
 			return (totalRedTeam >= totalBlueTeam) ? Common::Enums::TEAM_BLUE : Common::Enums::TEAM_RED;
 		}
-
 
 		void Room::setPlayersPerTeam(std::uint16_t playersPerTeam)
 		{
@@ -1081,7 +1103,7 @@ namespace Main
 			return m_specificSetting;
 		}
 
-		const std::string& Room::getRoomTitle() const
+		const std::string &Room::getRoomTitle() const
 		{
 			return m_title;
 		}
@@ -1092,7 +1114,7 @@ namespace Main
 		}
 
 		// Refactored
-		void Room::setStateFor(const Main::Structures::UniqueId& uniqueId, const Common::Enums::PlayerState& playerState)
+		void Room::setStateFor(const Main::Structures::UniqueId &uniqueId, const Common::Enums::PlayerState &playerState)
 		{
 			if (auto playerIt = findPlayer(uniqueId.session); playerIt != m_players.end())
 			{
@@ -1112,7 +1134,7 @@ namespace Main
 			}
 		}
 
-		void Room::setStateFor(std::pair<Main::Structures::RoomPlayerInfo, std::weak_ptr<Main::Network::Session>>& player, Common::Enums::PlayerState state)
+		void Room::setStateFor(std::pair<Main::Structures::RoomPlayerInfo, std::weak_ptr<Main::Network::Session>> &player, Common::Enums::PlayerState state)
 		{
 			auto session = player.second.lock();
 			if (!session)
@@ -1127,28 +1149,31 @@ namespace Main
 		bool Room::isEveryoneCsd() const
 		{
 			return checkWeapons(
-				[](const std::shared_ptr<Main::Network::Session>& s) { return s->hasCsdItems(); }, "is not CSD");
+				[](const std::shared_ptr<Main::Network::Session> &s)
+				{ return s->hasCsdItems(); }, "is not CSD");
 		}
 
 		bool Room::isEveryoneBasic() const
 		{
 			return checkWeapons(
-				[](const std::shared_ptr<Main::Network::Session>& s) { return s->hasBasicItems(); }, "doesn't have basic weapons");
+				[](const std::shared_ptr<Main::Network::Session> &s)
+				{ return s->hasBasicItems(); }, "doesn't have basic weapons");
 		}
-
 
 		// Refactored
 		void Room::startMatch()
 		{
-			auto& pair = m_players[0];
+			auto &pair = m_players[0];
 			auto hostSession = pair.second.lock();
-			if (!hostSession) return;
+			if (!hostSession)
+				return;
 
 			// Reset votekick stuff
 			resetVotekick();
 			m_votekickStarters.clear();
 
-			if (m_players.empty()) return;
+			if (m_players.empty())
+				return;
 			// Check that all players are CSD if the mode is enabled.
 
 			m_hasMatchStarted = true;
@@ -1156,7 +1181,7 @@ namespace Main
 			setStateFor(pair, Common::Enums::PlayerState::STATE_NORMAL);
 
 			std::vector<Main::ClientData::PlayerTeamInfo> playerTeamBatch;
-			for (auto& pair : ranges::views::concat(m_players, m_observerPlayers))
+			for (auto &pair : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				if (pair.first.state == Common::Enums::STATE_READY || hostSession->getId() == pair.first.uniqueId.session)
 				{
@@ -1182,24 +1207,26 @@ namespace Main
 				}
 			}
 		}
-		
+
 		bool Room::isObserverFull() const
 		{
 			return m_observerPlayers.size() >= Common::Constants::maxObserverPlayers;
 		}
 
 		// Refactored
-		bool Room::kickPlayer(const std::string& name)
+		bool Room::kickPlayer(const std::string &name)
 		{
-			for (auto& [roomInfo, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
+			for (auto &[roomInfo, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
 				if (std::string(session->getAccountInfo().nickname) == name)
 				{
 					// Order is important here, kick must happen before "removePlayer" call as it swaps sessions if the host is the one being kicked!
-					if (session->getAccountInfo().playerGrade >= Common::Enums::PlayerGrade::GRADE_ES) return false;
+					if (session->getAccountInfo().playerGrade >= Common::Enums::PlayerGrade::GRADE_ES)
+						return false;
 					m_kickedPlayerAccountIds.emplace_back(session->getAccountInfo().accountID, session->getAccountInfo().nickname);
 					kickPlayerImpl(std::move(session), 0x23);
 					return true;
@@ -1208,17 +1235,19 @@ namespace Main
 			return false;
 		}
 
-		bool Room::votekickPlayer(const Main::Structures::UniqueId& uniqueId)
+		bool Room::votekickPlayer(const Main::Structures::UniqueId &uniqueId)
 		{
-			for (auto& [roomInfo, weakSession] : m_players)
+			for (auto &[roomInfo, weakSession] : m_players)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 
 				if (session->getAccountInfo().uniqueId == uniqueId)
 				{
 					// Order is important here, kick must happen before "removePlayer" call as it swaps sessions if the host is the one being kicked!
-					if (session->getAccountInfo().playerGrade >= Common::Enums::PlayerGrade::GRADE_ES) return false;
+					if (session->getAccountInfo().playerGrade >= Common::Enums::PlayerGrade::GRADE_ES)
+						return false;
 					m_kickedPlayerAccountIds.emplace_back(session->getAccountInfo().accountID, session->getAccountInfo().nickname);
 					kickPlayerImpl(std::move(session), 39);
 					return true;
@@ -1231,15 +1260,16 @@ namespace Main
 		bool Room::wasPreviouslyKicked(std::uint32_t accountId) const
 		{
 			return std::ranges::find_if(m_kickedPlayerAccountIds,
-				[accountId](const auto& pair) { return pair.first == accountId; })
-				!= m_kickedPlayerAccountIds.end();
+										[accountId](const auto &pair)
+										{ return pair.first == accountId; }) != m_kickedPlayerAccountIds.end();
 		}
 
-		bool Room::removeKickedPlayerByNickname(const std::string& nickname)
+		bool Room::removeKickedPlayerByNickname(const std::string &nickname)
 		{
 			auto initialSize = m_kickedPlayerAccountIds.size();
 			std::erase_if(m_kickedPlayerAccountIds,
-				[&nickname](const auto& pair) { return pair.second == nickname; });
+						  [&nickname](const auto &pair)
+						  { return pair.second == nickname; });
 
 			return m_kickedPlayerAccountIds.size() < initialSize;
 		}
@@ -1250,7 +1280,8 @@ namespace Main
 			nicknames.reserve(m_kickedPlayerAccountIds.size());
 
 			std::ranges::transform(m_kickedPlayerAccountIds, std::back_inserter(nicknames),
-				[](const auto& pair) { return pair.second; });
+								   [](const auto &pair)
+								   { return pair.second; });
 
 			return nicknames;
 		}
@@ -1260,7 +1291,7 @@ namespace Main
 			m_settings.map = newMap;
 		}
 
-		void Room::updateRoomSettings(const Main::Structures::RoomSettingsUpdateBase& newRoomSettings, std::uint16_t newMode)
+		void Room::updateRoomSettings(const Main::Structures::RoomSettingsUpdateBase &newRoomSettings, std::uint16_t newMode)
 		{
 			m_settings.isItemOn = newRoomSettings.isItemOn;
 			m_settings.isOpen = newRoomSettings.isOpen;
@@ -1276,16 +1307,16 @@ namespace Main
 		// Refactored
 		Main::Structures::RoomSettingsUpdateTitlePassword Room::getRoomSettingsUpdate() const
 		{
-			return Main::Structures::RoomSettingsUpdateTitlePassword{ m_settings, m_password, m_title, m_specificSetting };
+			return Main::Structures::RoomSettingsUpdateTitlePassword{m_settings, m_password, m_title, m_specificSetting};
 		}
 
-		void Room::updateTitle(const std::string& newTitle)
+		void Room::updateTitle(const std::string &newTitle)
 		{
 			m_title = newTitle;
 		}
 
 		// Refactored
-		void Room::updatePassword(const std::string& newPassword)
+		void Room::updatePassword(const std::string &newPassword)
 		{
 			m_settings.hasPassword = !newPassword.empty();
 			m_password = newPassword;
@@ -1293,12 +1324,14 @@ namespace Main
 
 		void Room::addPoint(std::uint32_t team)
 		{
-			if (team == Common::Enums::TEAM_RED) ++m_redPoints;
-			else ++m_bluePoints;
+			if (team == Common::Enums::TEAM_RED)
+				++m_redPoints;
+			else
+				++m_bluePoints;
 		}
 
 		// Refactored
-		void Room::sendTo(const Main::Structures::UniqueId& uniqueId, const Common::Network::Packet& packet)
+		void Room::sendTo(const Main::Structures::UniqueId &uniqueId, const Common::Network::Packet &packet)
 		{
 			if (auto playerIt = findPlayer(uniqueId.session); playerIt != m_players.end())
 			{
@@ -1318,7 +1351,7 @@ namespace Main
 
 		std::optional<std::uint32_t> Room::getTeamForSession(std::uint32_t sessionId) const
 		{
-			for (const auto& [info, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
+			for (const auto &[info, weakSession] : ranges::views::concat(m_players, m_observerPlayers))
 			{
 				if (info.uniqueId.session == sessionId)
 				{
@@ -1328,26 +1361,24 @@ namespace Main
 			return std::nullopt; // Not found
 		}
 
-
 		// Refactored
-		void Room::storeEndMatchStatsFor(const Main::Structures::UniqueId& uniqueId, const Main::Structures::ScoreboardResponse& stats,
-			std::uint32_t blueScore, std::uint32_t redScore, bool hasLeveledUp, const Main::Structures::EventMissionInfo& eventMissionInfo)
+		void Room::storeEndMatchStatsFor(const Main::Structures::UniqueId &uniqueId, const Main::Structures::ScoreboardResponse &stats,
+										 std::uint32_t blueScore, std::uint32_t redScore, bool hasLeveledUp, const Main::Structures::EventMissionInfo &eventMissionInfo)
 		{
-			for (auto& [roomInfo, weakSession] : m_players)
+			for (auto &[roomInfo, weakSession] : m_players)
 			{
 				auto session = weakSession.lock();
-				if (!session) continue;
+				if (!session)
+					continue;
 				if (roomInfo.uniqueId == uniqueId)
 				{
 					Main::Enums::MatchEnd matchEnd = (redScore == blueScore) ? Main::Enums::MATCH_DRAW
-						: ((blueScore > redScore && roomInfo.team == Common::Enums::TEAM_BLUE) ||
-							(redScore > blueScore && roomInfo.team == Common::Enums::TEAM_RED))
-						? Main::Enums::MATCH_WON
-						: Main::Enums::MATCH_LOST;
+													 : ((blueScore > redScore && roomInfo.team == Common::Enums::TEAM_BLUE) ||
+														(redScore > blueScore && roomInfo.team == Common::Enums::TEAM_RED))
+														 ? Main::Enums::MATCH_WON
+														 : Main::Enums::MATCH_LOST;
 
-					if (m_settings.mode == Common::Enums::ZombieMode || m_settings.mode == Common::Enums::FreeForAll
-						|| m_settings.mode == Common::Enums::BossBattle || m_settings.mode == Common::Enums::ArmsRace
-						|| m_settings.mode == Common::Enums::SquareMode || m_settings.mode == Common::Enums::AiBattle)
+					if (m_settings.mode == Common::Enums::ZombieMode || m_settings.mode == Common::Enums::FreeForAll || m_settings.mode == Common::Enums::BossBattle || m_settings.mode == Common::Enums::ArmsRace || m_settings.mode == Common::Enums::SquareMode || m_settings.mode == Common::Enums::AiBattle)
 					{
 						matchEnd = Main::Enums::MATCH_DO_NOTHING;
 					}
@@ -1355,41 +1386,42 @@ namespace Main
 					const auto matchStartTime = session->getMatchStartTime();
 					const auto currentTime = Main::Details::getUtcTimeMs();
 					std::uint32_t matchDurationSeconds = 0;
-					if (matchStartTime != 0) 
+					if (matchStartTime != 0)
 					{
 						const auto durationMs = currentTime - matchStartTime;
-						if (durationMs > 0) 
+						if (durationMs > 0)
 						{
 							matchDurationSeconds = static_cast<uint32_t>(durationMs / 1000);
-							if (matchDurationSeconds > 7200) matchDurationSeconds = 0;
+							if (matchDurationSeconds > 7200)
+								matchDurationSeconds = 0;
 						}
 					}
 
 					session->storeEndMatchStats(matchDurationSeconds, stats, matchEnd, hasLeveledUp, m_settings.mode == Common::Enums::ZombieMode,
-						session->getPlayer().getRoomNumber() >= Common::Constants::clanRoomNumberStart);
+												session->getPlayer().getRoomNumber() >= Common::Constants::clanRoomNumberStart);
 
 					const std::uint32_t now = static_cast<std::uint32_t>(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()));
 					if (now >= eventMissionInfo.startDate && now <= eventMissionInfo.endDate)
 					{
 						if (m_settings.mode == Common::Enums::ZombieMode && (stats.totalKills / 3) >= 1) // >= 1 zombie kills per match = 1 pt
 						{
-							session->sendEventMission(ClientData::EventMissionPoint{ 1 });
+							session->sendEventMission(ClientData::EventMissionPoint{1});
 						}
 						if (m_settings.mode == Common::Enums::ZombieMode && stats.meleeKills >= 2) // >= 2 infections per match = 1 pt
 						{
-							session->sendEventMission(ClientData::EventMissionPoint{ 2 });
+							session->sendEventMission(ClientData::EventMissionPoint{2});
 						}
 						if (stats.headshots >= 2) // >= 2 headshots per match = 1 pt
 						{
-							session->sendEventMission(ClientData::EventMissionPoint{ 3 });
+							session->sendEventMission(ClientData::EventMissionPoint{3});
 						}
 						if (stats.totalKills >= 15) // >= total kills >= 15 per match = 1 pt
 						{
-							session->sendEventMission(ClientData::EventMissionPoint{ 4 });
+							session->sendEventMission(ClientData::EventMissionPoint{4});
 						}
 						if (stats.mgKills >= 5) // >= mgKills >= 5 per match = 1 pt
-						{ 
-							session->sendEventMission(ClientData::EventMissionPoint{ 5 });
+						{
+							session->sendEventMission(ClientData::EventMissionPoint{5});
 						}
 					}
 					return;
@@ -1397,7 +1429,7 @@ namespace Main
 			}
 		}
 
-		Main::Network::Session::AccountInfo Room::getAccountInfoFor(const Main::Structures::UniqueId& uniqueId) const
+		Main::Network::Session::AccountInfo Room::getAccountInfoFor(const Main::Structures::UniqueId &uniqueId) const
 		{
 			if (auto playerIt = findPlayer(uniqueId.session); playerIt != m_players.end())
 			{
@@ -1419,13 +1451,13 @@ namespace Main
 
 		bool Room::assassinModeEnoughPlayers() const noexcept
 		{
-			using Common::Enums::Team;
 			using Common::Enums::PlayerState;
+			using Common::Enums::Team;
 
 			std::uint32_t redReady = 0;
 			std::uint32_t blueReady = 0;
 
-			for (std::size_t i = 0; const auto & [info, weakSession] : m_players)
+			for (std::size_t i = 0; const auto &[info, weakSession] : m_players)
 			{
 				if (info.team != Team::TEAM_RED && info.team != Team::TEAM_BLUE)
 					continue;
@@ -1433,8 +1465,10 @@ namespace Main
 				if (i == 0) // host
 				{
 					++i;
-					if (info.team == Team::TEAM_RED) ++redReady;
-					else if (info.team == Team::TEAM_BLUE) ++blueReady;
+					if (info.team == Team::TEAM_RED)
+						++redReady;
+					else if (info.team == Team::TEAM_BLUE)
+						++blueReady;
 					continue;
 				}
 
@@ -1442,8 +1476,10 @@ namespace Main
 				{
 					if (session->getPlayer().getPlayerState() == PlayerState::STATE_READY)
 					{
-						if (info.team == Team::TEAM_RED) ++redReady;
-						else if (info.team == Team::TEAM_BLUE) blueReady;
+						if (info.team == Team::TEAM_RED)
+							++redReady;
+						else if (info.team == Team::TEAM_BLUE)
+							blueReady;
 					}
 				}
 			}
@@ -1456,7 +1492,7 @@ namespace Main
 			std::vector<std::pair<Main::Structures::UniqueId, std::string>> candidates;
 
 			std::size_t idx = 0;
-			for (const auto& [info, weakSession] : m_players)
+			for (const auto &[info, weakSession] : m_players)
 			{
 				if (info.team != team)
 				{
