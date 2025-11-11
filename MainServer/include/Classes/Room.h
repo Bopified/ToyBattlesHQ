@@ -4,6 +4,7 @@
 #include <cstdint>
 #include <vector>
 #include <string>
+#include <unordered_map>
 #include "../Structures/Room/ClientRoomCreationInfo.h"
 #include "../Structures/Room/RoomPlayerInfo.h"
 #include "../Structures/Room/RoomsList.h"
@@ -38,6 +39,10 @@ namespace Main
 
 			std::vector<std::pair<Main::Structures::RoomPlayerInfo, std::weak_ptr<Main::Network::Session>>> m_players{};
 			std::vector<std::pair<Main::Structures::RoomPlayerInfo, std::weak_ptr<Main::Network::Session>>> m_observerPlayers{};
+
+	// O(1) lookup maps: sessionId -> vector index
+	std::unordered_map<std::uint32_t, size_t> m_playerIndexMap{};
+	std::unordered_map<std::uint32_t, size_t> m_observerPlayerIndexMap{};
 
 			std::vector<std::pair<std::uint32_t, std::string>> m_kickedPlayerAccountIds{};
 			std::vector<std::uint32_t> m_votekickStarters{}; // each player has only 1 votekick per match

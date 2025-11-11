@@ -23,15 +23,14 @@
 #include <cryptopp/eccrypto.h>
 #include <cryptopp/osrng.h>
 #include <cryptopp/secblock.h>
-#include <cryptopp/oids.h> 
+#include <cryptopp/oids.h>
 #include <cstring>
-
 
 namespace Common
 {
 	namespace Network
 	{
-		void Session::sendMessage(const std::string& message, std::uint32_t extra)
+		void Session::sendMessage(const std::string &message, std::uint32_t extra)
 		{
 			std::string completeMessage;
 			completeMessage.reserve(16 + message.size());
@@ -41,20 +40,20 @@ namespace Common
 			Common::Network::Packet response;
 			response.setTcpHeader(getId(), Common::Enums::NO_ENCRYPTION);
 			response.setCommand(316, 0, extra, completeMessage.size());
-			response.setData(reinterpret_cast<std::uint8_t*>(completeMessage.data()), completeMessage.size());
+			response.setData(reinterpret_cast<std::uint8_t *>(completeMessage.data()), completeMessage.size());
 			asyncWrite(response);
 		}
 
-		bool Session::asyncWrite(const Common::Network::Packet& message)
+		bool Session::asyncWrite(const Common::Network::Packet &message)
 		{
 			return asyncWriteImpl<PacketType::ENCRYPTED>(message);
 		}
 
-		bool Session::asyncWrite(const Common::Network::UnecryptedPacket& message)
+		bool Session::asyncWrite(const Common::Network::UnecryptedPacket &message)
 		{
 			return asyncWriteImpl<PacketType::UNECRYPTED>(message);
 		}
-	
+
 		void Session::asyncRead()
 		{
 			if (m_checkValidSession && m_isFirstRead)
@@ -77,11 +76,11 @@ namespace Common
 				return;
 			}
 			m_socket.async_read_some(asio::buffer(m_buffer.data(), m_buffer.size()),
-				[this, self = this->shared_from_this()](const asio::error_code& error, std::size_t bytes_transferred)
-				{
-					this->onRead(error, bytes_transferred);
-					asyncRead();
-				});
+									 [this, self = this->shared_from_this()](const asio::error_code &error, std::size_t bytes_transferred)
+									 {
+										 this->onRead(error, bytes_transferred);
+										 asyncRead();
+									 });
 		}
 
 		void Session::onRead(asio::error_code error, std::size_t bytes_transferred)
@@ -89,10 +88,18 @@ namespace Common
 			if (!error)
 			{
 				const constexpr int headerSize = sizeof(Common::Protocol::TcpHeader);
+				// Prevent unbounded buffer growth - max 64KB
+				if (m_reader.size() + bytes_transferred > 65536)
+				{
+					std::printf("Session::onRead() - Buffer overflow detected, closing connection\n");
+					closeSocket();
+					return;
+				}
+
 				m_reader.insert(m_reader.end(), m_buffer.begin(), m_buffer.begin() + bytes_transferred);
 
-				//if (!m_crypt.isUsed) Common::Parser::parse_cast(m_reader.data(), m_reader.size(), 13000, "client", "server");
-				//if (m_crypt.isUsed) Common::Parser::parse(m_reader.data(), m_reader.size(), 13000, "client", "server", m_crypt.UserKey);
+				// if (!m_crypt.isUsed) Common::Parser::parse_cast(m_reader.data(), m_reader.size(), 13000, "client", "server");
+				// if (m_crypt.isUsed) Common::Parser::parse(m_reader.data(), m_reader.size(), 13000, "client", "server", m_crypt.UserKey);
 
 				Common::Protocol::TcpHeader header;
 				Common::Cryptography::Crypt cryptography;
@@ -100,9 +107,9 @@ namespace Common
 
 				while (m_reader.size() >= headerSize)
 				{
-					if (m_crypt.isUsed) 
+					if (m_crypt.isUsed)
 					{
-						cryptography.RC5Decrypt32(reinterpret_cast<int32_t*>(m_reader.data()), &header, headerSize);
+						cryptography.RC5Decrypt32(reinterpret_cast<int32_t *>(m_reader.data()), &header, headerSize);
 					}
 					else
 					{
@@ -119,7 +126,8 @@ namespace Common
 					{
 						std::vector<std::uint8_t> data(m_reader.begin(), m_reader.begin() + header.getSize());
 						onPacket(data);
-						if (m_reader.empty()) break;
+						if (m_reader.empty())
+							break;
 
 						const auto newSize = m_reader.size() - header.getSize();
 						std::memmove(m_reader.data(), m_reader.data() + header.getSize(), newSize);
@@ -152,14 +160,13 @@ namespace Common
 
 			asio::error_code errorCode;
 			auto endPoint = m_socket.remote_endpoint(errorCode);
-			
+
 			m_socket.shutdown(tcp::socket::shutdown_both, errorCode);
 			m_socket.close(errorCode);
 		}
 
-
 		// Default implementation is used for IPC
-		void Session::onPacket(std::vector<std::uint8_t>& data)
+		void Session::onPacket(std::vector<std::uint8_t> &data)
 		{
 			Common::Network::UnecryptedPacket incomingPacket;
 			incomingPacket.processIncomingPacket(data.data(), static_cast<std::uint16_t>(data.size()));
@@ -173,8 +180,7 @@ namespace Common
 			Common::Network::Session::callbacks<Common::Network::PacketType::UNECRYPTED, Session>[callbackNum](incomingPacket, shared_from_this());
 		}
 
-
-		std::uint8_t* Session::getBufferData()
+		std::uint8_t *Session::getBufferData()
 		{
 			return m_buffer.data();
 		}
@@ -183,17 +189,17 @@ namespace Common
 		{
 			return m_buffer.size();
 		}
-		
+
 		Common::Cryptography::Crypt Session::getUserCrypt() const
 		{
 			return m_crypt;
 		}
-		
+
 		Common::Cryptography::Crypt Session::getDefaultCrypt() const
 		{
 			return m_defaultCrypt;
 		}
-		
+
 		void Session::sendConnectionACK(Common::Enums::ServerType serverType)
 		{
 			Packet connectionAck;
@@ -201,70 +207,70 @@ namespace Common
 
 			switch (serverType)
 			{
-				case Enums::AUTH_SERVER:
+			case Enums::AUTH_SERVER:
+			{
+				struct AuthAck
 				{
-					struct AuthAck
-					{
-						std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
-						std::uint32_t timestamp32 = static_cast<std::uint32_t>(std::time(nullptr));
-					} authAck;
+					std::int32_t key{static_cast<std::int32_t>(rand() + 1)};
+					std::uint32_t timestamp32 = static_cast<std::uint32_t>(std::time(nullptr));
+				} authAck;
 
-					m_crypt.KeySetup(authAck.key);
-					connectionAck.setData(reinterpret_cast<std::uint8_t*>(&authAck), sizeof(AuthAck));
-					connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::AUTH_SUCCESS), 0);
-					asyncWrite(connectionAck);
-					break;
-				}
+				m_crypt.KeySetup(authAck.key);
+				connectionAck.setData(reinterpret_cast<std::uint8_t *>(&authAck), sizeof(AuthAck));
+				connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::AUTH_SUCCESS), 0);
+				asyncWrite(connectionAck);
+				break;
+			}
 
-				case Enums::MAIN_SERVER:
+			case Enums::MAIN_SERVER:
+			{
+				struct UniqueId
 				{
-					struct UniqueId
-					{
-						std::uint32_t session : 16 = 0;
-						std::uint32_t server : 15 = 4;
-						std::uint32_t unknown : 1 = 0;
-					};
+					std::uint32_t session : 16 = 0;
+					std::uint32_t server : 15 = 4;
+					std::uint32_t unknown : 1 = 0;
+				};
 
-					struct MainAck
-					{
-						std::int32_t key;
-						UniqueId uniqueId{};
-						
-						MainAck(const Common::Cryptography::Crypt& crypt)
-							: key(static_cast<std::int32_t>(rand() + 1))
-						{
-						}
-					};
-					MainAck mainAck{ m_crypt };
-					mainAck.uniqueId.session = m_id; 
-					mainAck.uniqueId.server = 1;    
-					m_crypt.KeySetup(mainAck.key);
-					connectionAck.setData(reinterpret_cast<std::uint8_t*>(&mainAck), sizeof(MainAck));
-					connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::MAIN_SUCCESS), 1);
-					// nb. option = channel selected by user
-					// nb. success = MAIN_SUCCESS
-					asyncWrite(connectionAck);
-
-					break;
-				}
-
-				case Enums::CAST_SERVER:
+				struct MainAck
 				{
-					m_crypt.isUsed = false;
-					struct CastAck
-					{
-						std::int32_t key{ static_cast<std::int32_t>(rand() + 1) };
-					} castAck;
-					connectionAck.setData(reinterpret_cast<std::uint8_t*>(&castAck), sizeof(castAck));
-					connectionAck.setCommand(401, 0, Common::Enums::CAST_SUCCESS, 0);
-					asyncWrite(connectionAck);
-					break;
-				}
+					std::int32_t key;
+					UniqueId uniqueId{};
 
-				case Enums::IPC_SERVER:
+					MainAck(const Common::Cryptography::Crypt &crypt)
+						: key(static_cast<std::int32_t>(rand() + 1))
+					{
+					}
+				};
+				MainAck mainAck{m_crypt};
+				mainAck.uniqueId.session = m_id;
+				mainAck.uniqueId.server = 1;
+				m_crypt.KeySetup(mainAck.key);
+				connectionAck.setData(reinterpret_cast<std::uint8_t *>(&mainAck), sizeof(MainAck));
+				connectionAck.setCommand(401, 0, static_cast<int>(Common::Enums::MAIN_SUCCESS), 1);
+				// nb. option = channel selected by user
+				// nb. success = MAIN_SUCCESS
+				asyncWrite(connectionAck);
+
+				break;
+			}
+
+			case Enums::CAST_SERVER:
+			{
+				m_crypt.isUsed = false;
+				struct CastAck
 				{
-					m_crypt.isUsed = false;
-				}
+					std::int32_t key{static_cast<std::int32_t>(rand() + 1)};
+				} castAck;
+				connectionAck.setData(reinterpret_cast<std::uint8_t *>(&castAck), sizeof(castAck));
+				connectionAck.setCommand(401, 0, Common::Enums::CAST_SUCCESS, 0);
+				asyncWrite(connectionAck);
+				break;
+			}
+
+			case Enums::IPC_SERVER:
+			{
+				m_crypt.isUsed = false;
+			}
 			}
 
 			asyncRead();

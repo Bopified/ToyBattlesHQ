@@ -3,6 +3,7 @@
 
 #include <string>
 #include <thread>
+#include <memory>
 #include "../MainEnums.h"
 #include "Utils/SetupParser.h"
 #include "Utils/Logger.h"
@@ -29,7 +30,7 @@ namespace Main
 		class PersistentDatabase
 		{
 		private:
-			sql::Connection* m_con;
+			std::unique_ptr<sql::Connection> m_con;
 
 			using Item = Main::Structures::Item;
 			using BoughtItem = Main::Structures::BoughtItem;

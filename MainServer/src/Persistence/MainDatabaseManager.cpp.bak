@@ -34,8 +34,8 @@ namespace Main
             {
                 try
                 {
-                    m_con.reset(sql::mariadb::get_driver_instance()->connect("tcp://" + dbSetup.ip + ":" + std::to_string(dbSetup.port),
-                        dbSetup.username, dbSetup.password));
+                    m_con = sql::mariadb::get_driver_instance()->connect("tcp://" + dbSetup.ip + ":" + std::to_string(dbSetup.port),
+                        dbSetup.username, dbSetup.password);
                     m_con->setSchema(dbSetup.databaseName);
                     m_con->setAutoCommit(true); 
 
@@ -112,11 +112,11 @@ namespace Main
                     if (m_con)
                     {
                         m_con->close();
-                        // m_con->reset(); // Removed: unique_ptr handles cleanup
+                        m_con->reset();
                     }
 
-                    m_con.reset(sql::mariadb::get_driver_instance()->connect("tcp://" + dbSetup.ip + ":" + std::to_string(dbSetup.port),
-                        dbSetup.username, dbSetup.password));
+                    m_con = sql::mariadb::get_driver_instance()->connect("tcp://" + dbSetup.ip + ":" + std::to_string(dbSetup.port),
+                        dbSetup.username, dbSetup.password);
                     m_con->setSchema(dbSetup.databaseName);
 
                     ::Utils::Logger::log("Reconnected to MariaDB successfully.", Utils::LogType::Info, "PersistentDatabase::reconnect");

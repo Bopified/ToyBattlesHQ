@@ -75,6 +75,7 @@ namespace Main
 			}
 
 			m_players.emplace_back(createRoomPlayerInfo(session, team), std::weak_ptr<Main::Network::Session>{ session });
+	m_playerIndexMap[sessionId] = m_players.size() - 1;
 			session->setRoomNumber(m_number);
 		}
 
@@ -97,6 +98,7 @@ namespace Main
 			}
 
 			m_observerPlayers.emplace_back(createRoomPlayerInfo(session, Common::Enums::TEAM_OBSERVER), std::weak_ptr<Main::Network::Session>{ session });
+	m_observerPlayerIndexMap[sessionId] = m_observerPlayers.size() - 1;
 			session->setRoomNumber(m_number);
 		}
 
@@ -209,6 +211,7 @@ namespace Main
 				container.erase(container.begin() + targetPlayerIdx);
 			}
 		}
+t	rebuildPlayerIndexMaps();
 
 		// Refactored
 		void Room::removeAllPlayers(std::uint32_t extra)
@@ -228,6 +231,7 @@ namespace Main
 
 			removePlayers(m_players);
 			removePlayers(m_observerPlayers);
+t	rebuildPlayerIndexMaps();
 		}
 
 		void Room::removeAllObserverPlayers(std::uint32_t extra)
@@ -252,6 +256,7 @@ namespace Main
 				};
 
 			removePlayers(m_observerPlayers);
+t	rebuildPlayerIndexMaps();
 		}
 
 		// Refactored
@@ -561,6 +566,7 @@ namespace Main
 				session->leaveRoom();
 			}
 			m_players.clear();
+t	rebuildPlayerIndexMaps();
 			m_observerPlayers.clear();
 		}
 
@@ -1487,4 +1493,29 @@ namespace Main
 			return candidates[dist(gen)];
 		}
 	}
+}
+
+
+	void Room::rebuildPlayerIndexMaps()
+	{
+		m_playerIndexMap.clear();
+		m_observerPlayerIndexMap.clear();
+
+		for (size_t i = 0; i < m_players.size(); ++i)
+		{
+			if (auto session = m_players[i].second.lock())
+			{
+				m_playerIndexMap[session->getId()] = i;
+			}
+		}
+
+		for (size_t i = 0; i < m_observerPlayers.size(); ++i)
+		{
+			if (auto session = m_observerPlayers[i].second.lock())
+			{
+				m_observerPlayerIndexMap[session->getId()] = i;
+			}
+		}
+	}
+}
 }
