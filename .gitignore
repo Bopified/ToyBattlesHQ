@@ -9,6 +9,7 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.claude
 
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
@@ -423,3 +424,4 @@ E x t e r n a l L i b r a r i e s / C o m m o n . l i b
  E x t e r n a l L i b r a r i e s / C o m m o n . l i b 
  
  
+/build
